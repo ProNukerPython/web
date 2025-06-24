@@ -20,32 +20,6 @@ window.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Nav bar smooth scroll (replace tabBar logic)
-  const navLinks = document.querySelectorAll('.main-nav .nav-link');
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      const href = link.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        const section = document.querySelector(href);
-        if (section) {
-          e.preventDefault();
-          const targetY = section.getBoundingClientRect().top + window.scrollY;
-          const startY = window.scrollY;
-          const change = targetY - startY;
-          const duration = 900;
-          let startTime = null;
-          function animateScroll(currentTime) {
-            if (!startTime) startTime = currentTime;
-            const timeElapsed = currentTime - startTime;
-            const progress = Math.min(timeElapsed / duration, 1);
-            window.scrollTo(0, startY + change * progress);
-            if (progress < 1) requestAnimationFrame(animateScroll);
-          }
-          requestAnimationFrame(animateScroll);
-        }
-      }
-    }, { passive: false });
-  });
 
   const fixedHeader = document.querySelector('.fixed-header');
   const mainHeader = document.querySelector('.main-header');
@@ -128,14 +102,35 @@ window.addEventListener('DOMContentLoaded', function() {
         reelVideo.msRequestFullscreen();
       }
     });
-    reelVideo.addEventListener('ended', function() {
+    function resetReelPlayer() {
+      reelVideo.pause();
+      reelVideo.currentTime = 0;
       reelVideo.style.display = 'none';
       reelPreview.style.display = '';
       reelPlayBtn.style.display = '';
+    }
+    reelVideo.addEventListener('ended', function() {
+      resetReelPlayer();
       if (document.fullscreenElement === reelVideo && document.exitFullscreen) {
         document.exitFullscreen();
       }
     });
+    // Fix: Hide video and show preview when exiting fullscreen manually
+    function onFullscreenChange() {
+      if (
+        !document.fullscreenElement &&
+        !document.webkitFullscreenElement &&
+        !document.msFullscreenElement
+      ) {
+        if (!reelVideo.paused) {
+          reelVideo.pause();
+        }
+        resetReelPlayer();
+      }
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    document.addEventListener('msfullscreenchange', onFullscreenChange);
   }
 
   // Fade-in animation for contact section on scroll (Apple-style)
@@ -271,3 +266,57 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+// 5. Add reel-video-wrapper animation when scrolling to the reel section reel card gets smaller
+(function() {
+  const reelWrapper = document.getElementById('reel-video-wrapper');
+  const reelPreview = document.querySelector('.reel-preview');
+  if (!reelWrapper || !reelPreview) return;
+
+  function updateReelWrapperScale() {
+    const rect = reelWrapper.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    // When the card is entering the viewport, animate scale and border-radius
+    const start = windowHeight * 0.7; // start animating when card is 70% from top
+    const end = windowHeight * 0.25;  // finish animating when card is 25% from top
+    let progress = 0;
+    if (rect.top < start) {
+      progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
+    }
+    // Interpolate scale and border-radius
+    const scale = 1.24 - 0.12 * progress;
+    const radius = 0 + 32 * progress; // px
+    reelWrapper.style.transform = `scale(${scale})`;
+    reelWrapper.style.borderRadius = `${radius}px`;
+    reelPreview.style.borderRadius = `${radius}px`;
+    reelWrapper.style.boxShadow = progress > 0.1
+      ? '0 4px 32px 0 rgba(0,0,0,0.22)'
+      : '0 8px 48px 0 rgba(0,0,0,0.18)';
+  }
+
+  window.addEventListener('scroll', updateReelWrapperScale, { passive: true });
+  window.addEventListener('resize', updateReelWrapperScale);
+  updateReelWrapperScale();
+})();
+
+// Fade in and slide up project cards as you scroll to them
+(function() {
+  const projectCards = document.querySelectorAll('.project-card');
+  if (!projectCards.length) return;
+
+  function revealProjectCardsOnScroll() {
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    projectCards.forEach((card, idx) => {
+      if (card.classList.contains('visible')) return;
+      const rect = card.getBoundingClientRect();
+      if (rect.top < windowHeight * 0.92 && rect.bottom > 0) {
+        // Stagger animation for a nice effect
+        setTimeout(() => card.classList.add('visible'), idx * 120);
+      }
+    });
+  }
+  window.addEventListener('scroll', revealProjectCardsOnScroll, { passive: true });
+  window.addEventListener('resize', revealProjectCardsOnScroll);
+  // Initial check in case some cards are already visible
+  revealProjectCardsOnScroll();
+})();
