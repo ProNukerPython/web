@@ -179,13 +179,26 @@ window.addEventListener('DOMContentLoaded', function() {
   const scrollToTopBtn = document.getElementById('scrollToTopBtn');
   function updateScrollToTopBtn() {
     if (!scrollToTopBtn) return;
-    if (window.scrollY > window.innerHeight * 0.5) {
+    const mainHeader = document.querySelector('.main-header');
+    let inMainHeader = false;
+    if (mainHeader) {
+      const rect = mainHeader.getBoundingClientRect();
+      // If the top of the main header is visible in the viewport
+      inMainHeader = rect.bottom > 0 && rect.top < window.innerHeight;
+    }
+    if (inMainHeader) {
+      document.body.classList.add('in-main-header');
+    } else {
+      document.body.classList.remove('in-main-header');
+    }
+    if (window.scrollY > window.innerHeight * 0.5 && !inMainHeader) {
       scrollToTopBtn.classList.add('visible');
     } else {
       scrollToTopBtn.classList.remove('visible');
     }
   }
   window.addEventListener('scroll', updateScrollToTopBtn, { passive: true });
+  window.addEventListener('resize', updateScrollToTopBtn);
   updateScrollToTopBtn();
 
   if (scrollToTopBtn) {
@@ -320,3 +333,18 @@ window.addEventListener('DOMContentLoaded', function() {
   // Initial check in case some cards are already visible
   revealProjectCardsOnScroll();
 })();
+
+// Fade-in animation for timeline items
+  function revealTimelineItems() {
+    const aboutSection = document.querySelector('.about-section');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    if (!aboutSection || !timelineItems.length) return;
+    if (aboutSection.classList.contains('visible')) {
+      timelineItems.forEach((item, idx) => {
+        setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
+      });
+      window.removeEventListener('scroll', revealTimelineItems);
+    }
+  }
+  window.addEventListener('scroll', revealTimelineItems, { passive: true });
+  revealTimelineItems();
