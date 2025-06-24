@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fullscreen Video Background</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="animated-bg-gradient"></div>
+  <div class="fixed-header">
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+    <div class="header-title">
+      <span class="header-title-marc">MARC</span>
+      <span class="header-title-castellvi">CASTELLVI</span>
+    </div>
+  </div>
+  <nav class="main-nav" id="mainNav" data-menu>
+    <a href="#reel" class="nav-link">Reel</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+  <header class="main-header">
+    <div class="black-bar top"></div>
+    <div class="black-bar bottom"></div>
+    <div class="reel-hover-area"></div>
+    <div class="centered-title">
+      <span class="title-main-MARC">MARC</span><span class="title-main-CASTELLVI">CASTELLVI</span>
+      <span class="subtitle">LIGHTING AND COMPOSITING ARTIST</span>
+    </div>
+    <video id="bg-video" autoplay loop muted playsinline loading="lazy">
+      <source src="assets/Reel-background.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="glass-overlay"></div>
+  </header>
+  <section class="about-section" id="about">
+    <div class="about-container">
+      <div class="about-image-content">
+        <!-- Example SVG skill icon usage -->
+        <svg class="skill-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" stroke="#007aff" stroke-width="2" fill="none"/><text x="16" y="21" text-anchor="middle" font-size="13" fill="#00c6fb" font-family="Montserrat,Arial,sans-serif">Py</text></svg>
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQFCqCarCZAXGw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1654204002329?e=1755734400&v=beta&t=WMejUOEsXgi7LThV8u-DqZXaPO0WVbuAXsdytXQ6gSI"
+          alt="Marc Castellví trabajando"
+          class="about-img"
+          loading="lazy"
+          decoding="async" />
+      </div>
+      <div class="about-text-content">
+        <h2 class="about-title">Hola, soy Marc Castellví</h2>
+        <p class="about-desc">
+          Lighting & Compositing Artist con experiencia en <strong>Houdini (Solaris)</strong>, <strong>Nuke</strong> y desarrollo de herramientas en <strong>Python</strong>.<br>
+          He trabajado recientemente en proyectos de <em>Skydance Animation</em> como <strong>Spellbound</strong> y <strong>Pookoo</strong>.
+        </p>
+        <p class="about-desc">
+          Me apasiona optimizar flujos de trabajo y aportar soluciones creativas en el entorno técnico-artístico de la producción 3D.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section id="reel" class="reel-section">
+    <div class="reel-container">
+      <h2 class="reel-header">REEL</h2>
+      <span class="reel-subtitle">Lighting & Compositing Highlights</span>
+      <div class="reel-video-wrapper" id="reel-video-wrapper">
+        <img class="reel-preview" src="assets/reel-preview.avif" alt="Reel preview" loading="lazy" decoding="async" />
+        <button class="reel-play-btn" id="reel-play-btn" aria-label="Play reel">
+          <svg class="reel-play-icon" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="32" fill="none"/>
+            <polygon points="25,18 25,46 48,32" fill="white"/>
+          </svg>
+        </button>
+        <video class="reel-video" id="reel-video" width="100%" controls poster="assets/reel-preview.avif" preload="none" loading="lazy">
+          <source src="assets/Reel-background.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+  <section id="projects" class="projects-section" aria-labelledby="projects-title">
+    <div class="projects-container">
+      <div class="projects-section-label">
+        <svg class="projects-section-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="13" stroke="#007aff" stroke-width="2"/>
+          <path d="M9 14l3 3 6-6" stroke="#00c6fb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="projects-section-text">Selected Projects</span>
+      </div>
+      <h2 class="projects-title" id="projects-title">
+        My Work
+        <span class="projects-title-underline"></span>
+      </h2>
+      <div class="projects-list">
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets\Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Spellbound</h3>
+            <div class="project-role">Lisghting Assistant</div>
+            <div class="project-meta">Skydance Animation · 2024</div>
+            <p class="project-desc">
+              Feature film. Responsible for lookdev, lighting, and compositing of key sequences using Houdini Solaris and Nuke.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets\pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Pookoo</h3>
+            <div class="project-role">Lighting TD & Pipeline Tools</div>
+            <div class="project-meta">Skydance Animation · 2022</div>
+            <p class="project-desc">
+              Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets\Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Short</h3>
+            <div class="project-role">Director · Lighting & Comp</div>
+            <div class="project-meta">2021</div>
+            <p class="project-desc">
+              Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets\sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Sky: The two embers</h3>
+            <div class="project-role">Lighting & Compositing</div>
+            <div class="project-meta">Personal · 2020</div>
+            <p class="project-desc">
+              Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets\QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">The Quinta's Ghost</h3>
+            <div class="project-role">CG Lighting & Lookdev</div>
+            <div class="project-meta">Freelance · 2023</div>
+            <p class="project-desc">
+              Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Projects and Colaborations</h3>
+            <div class="project-role">Lighting, Tools & Experiments</div>
+            <div class="project-meta">Ongoing</div>
+            <p class="project-desc">
+              A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="contact-section">
+    <div class="contact-content">
+      <h2>Contact</h2>
+      <p>
+        Interested in working together or have a question?<br>
+        Email me at <a href="mailto:marc@example.com">marc@example.com</a>
+      </p>
+    </div>
+  </section>
+  <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="16" r="15" stroke="#007aff" stroke-width="2"/>
+      <path d="M10 18l6-6 6 6" stroke="#00c6fb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <script src="main.js" defer></script>
+</body>
+</html>
+
