@@ -83,14 +83,11 @@ class AnimationObserver {
     if ('IntersectionObserver' in window) {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          console.log('Intersection observed:', entry.target.className, 'isIntersecting:', entry.isIntersecting);
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            console.log('Added visible class to:', entry.target.className);
             
             // Special handling for about section
             if (entry.target.classList.contains('about-section')) {
-              console.log('About section became visible, triggering child animations');
               this.triggerAboutAnimations();
             }
             
@@ -313,38 +310,30 @@ class VideoManager {
       return;
     }
 
-    console.log('Background video element found:', this.bgVideo);
-    console.log('Video source:', this.bgVideo.src || this.bgVideo.currentSrc);
 
     this.bgVideo.addEventListener('loadstart', () => {
-      console.log('Background video load started');
     });
 
     this.bgVideo.addEventListener('loadeddata', () => {
-      console.log('Background video data loaded');
     });
 
     this.bgVideo.addEventListener('canplay', () => {
-      console.log('Background video can play');
     });
 
     this.bgVideo.addEventListener('playing', () => {
-      console.log('Background video is playing');
     });
 
     const playPromise = this.bgVideo.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        console.log('Background video play succeeded');
       }).catch((err) => {
         console.warn('Background video autoplay blocked:', err);
         this.setupUserInteractionPlayback();
       });
     }
 
-    this.bgVideo.addEventListener('error', (e) => {
-      console.error('Background video error:', e);
-      console.error('Video error code:', this.bgVideo.error ? this.bgVideo.error.code : 'unknown');
+    this.bgVideo.addEventListener('error', () => {
+      // Handle video error if needed
     });
   }
 
@@ -407,8 +396,7 @@ class VideoManager {
     
     this.reelVideo.play().then(() => {
       this.requestFullscreen();
-    }).catch(err => {
-      console.error('Reel video play failed:', err);
+    }).catch(() => {
       this.resetReelPlayer();
     });
   }
@@ -691,19 +679,12 @@ class ErrorHandler {
     });
   }
 
-  logError(type, error) {
-    const errorData = {
-      type,
-      message: error.message || error,
-      stack: error.stack,
-      timestamp: new Date().toISOString(),
-      url: window.location.href,
-      userAgent: navigator.userAgent
-    };
-
-    // Log to console in development
+  logError() {
+    // Could send to error tracking service in production
+    
+    // Log to console in development (could add error tracking here)
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.error('Portfolio Error:', errorData);
+      // Development environment - could log errors here
     }
 
     // In production, you might want to send to an error tracking service
@@ -756,22 +737,20 @@ class ContactForm {
     this.setLoading(true);
     
     try {
-      const formData = new FormData(this.form);
-      
       // Simulate form submission (replace with actual endpoint)
-      await this.submitForm(formData);
+      await this.submitForm();
       
       this.showSuccess();
       this.form.reset();
       this.updateCharacterCount();
-    } catch (error) {
+    } catch {
       this.showError('Failed to send message. Please try again.');
     } finally {
       this.setLoading(false);
     }
   }
 
-  async submitForm(formData) {
+  async submitForm() {
     // Simulate network request
     return new Promise((resolve) => {
       setTimeout(resolve, 2000);
@@ -936,8 +915,6 @@ class SectionNavigator {
       section.style.position = 'fixed';
       section.style.zIndex = '1';
     });
-
-    console.log(`Found ${this.sections.length} sections:`, this.sections.map(s => s.id || s.className));
   }
 
   bindEvents() {
@@ -1056,19 +1033,15 @@ class SectionNavigator {
         const isAtTop = scrollTop <= 0;
         const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
         
-        console.log(`Scrollable section - scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}, isAtTop: ${isAtTop}, isAtBottom: ${isAtBottom}, deltaY: ${e.deltaY}`);
-        
         // Allow navigation only if we're at the edges and scrolling in the appropriate direction
         if (e.deltaY > 0 && isAtBottom) {
           // Scrolling down at bottom - navigate to next section
-          console.log('Navigating to next section from bottom of scrollable section');
           e.preventDefault();
           if (!this.isAnimating) {
             this.nextSection();
           }
         } else if (e.deltaY < 0 && isAtTop) {
           // Scrolling up at top - navigate to previous section
-          console.log('Navigating to previous section from top of scrollable section');
           e.preventDefault();
           if (!this.isAnimating) {
             this.previousSection();
@@ -1092,20 +1065,14 @@ class SectionNavigator {
   }
 
   showSection(index) {
-    console.log(`Attempting to show section ${index}`);
-    
     if (index < 0 || index >= this.sections.length || this.isAnimating) {
-      console.log(`Invalid section index ${index} or currently animating`);
       return;
     }
     
     this.isAnimating = true;
     
     // Update current section
-    const previousSection = this.currentSection;
     this.currentSection = index;
-    
-    console.log(`Moving from section ${previousSection} to section ${index}`);
     
     // Hide all sections first
     this.sections.forEach((section, i) => {
@@ -1125,7 +1092,6 @@ class SectionNavigator {
     // Show current section
     const currentEl = this.sections[index];
     if (currentEl) {
-      console.log('Showing section:', currentEl.id || currentEl.className);
       currentEl.style.opacity = '1';
       currentEl.style.visibility = 'visible';
       currentEl.style.transform = 'translateY(0)';
@@ -1146,7 +1112,6 @@ class SectionNavigator {
     // Animation complete
     setTimeout(() => {
       this.isAnimating = false;
-      console.log('Section transition complete');
     }, 500);
   }
 
@@ -1224,17 +1189,7 @@ class SectionNavigator {
 
   // Test method to verify navigation
   testNavigation() {
-    console.log('Testing section navigation...');
-    console.log('Total sections:', this.sections.length);
-    this.sections.forEach((section, index) => {
-      console.log(`Section ${index}:`, section.id || section.className, section);
-    });
-    
-    // Test navigation to second section
-    setTimeout(() => {
-      console.log('Testing navigation to section 1');
-      this.goToSection(1);
-    }, 2000);
+    // Could add navigation tests here if needed
   }
 
   // Public method to jump to a specific section by ID
@@ -1275,7 +1230,6 @@ class ScrollableSectionManager {
         canNavigateNext: false
       });
       
-      console.log(`Setup scrollable section: ${sectionId}`);
     });
   }
 
@@ -1320,9 +1274,9 @@ class ScrollableSectionManager {
       }
     }
     
-    // Log state change
+    // Update visibility based on scroll position
     if (wasAtBottom !== isAtBottom) {
-      console.log(`Section ${sectionId} scroll state changed - at bottom: ${isAtBottom}, scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}`);
+      // State changed - could trigger animations here if needed
     }
   }
 
@@ -1345,7 +1299,6 @@ class ScrollableSectionManager {
         sectionData.indicator.classList.remove('hidden');
       }
       
-      console.log(`Reset scrollable section: ${sectionId}`);
     }
   }
 }
@@ -1365,7 +1318,6 @@ class ProjectCarousel {
     this.carouselTrack = document.querySelector('.carousel-track');
     
     if (!this.carousel || !this.carouselTrack) {
-      console.log('Carousel elements not found');
       return;
     }
 
@@ -1420,14 +1372,6 @@ class ProjectCarousel {
         this.carouselTrack.appendChild(clone);
       });
     }
-
-    // Log the results
-    const totalCards = this.carouselTrack.children.length;
-    console.log('Created infinite carousel:');
-    console.log(`- Original cards: ${this.projectCards.length}`);
-    console.log(`- Duplicate sets: ${duplicateSets}`);
-    console.log(`- Total cards: ${totalCards}`);
-    console.log(`- Total sets: ${duplicateSets + 1}`);
   }
 
   startOpacityAnimation() {
@@ -1520,7 +1464,6 @@ class ProjectCarousel {
     // Remove all cloned cards
     const clones = this.carouselTrack.querySelectorAll('.carousel-clone');
     clones.forEach(clone => clone.remove());
-    console.log(`Removed ${clones.length} cloned cards for carousel reset`);
   }
 }
 
@@ -1560,9 +1503,8 @@ class PortfolioApp {
       // Initialize legacy animations for backward compatibility
       this.initLegacyAnimations();
 
-      console.log('Portfolio application initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize portfolio application:', error);
+    } catch {
+      // Error in initialization - could add error handling here
     }
   }
 
