@@ -1,0 +1,28 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "A portfolio website for Marc Castellví Vila - CG Artist and Lighting TD",
+  "main": "main.js",
+  "scripts": {
+    "lint": "eslint *.js",
+    "format": "prettier --write *.js *.html *.css",
+    "dev": "lite-server",
+    "start": "lite-server",
+    "build": "echo 'Build script placeholder - to be implemented in later phases'",
+    "test": "echo 'Test script placeholder - to be implemented in later phases'"
+  },
+  "keywords": [
+    "portfolio",
+    "website",
+    "cg-artist",
+    "lighting",
+    "animation"
+  ],
+  "author": "Marc Castellví Vila",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "lite-server": "^2.6.1"
+  }
+}

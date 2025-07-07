@@ -1,4 +1,21 @@
-window.addEventListener('DOMContentLoaded', function() {
+/**
+ * @fileoverview Main JavaScript file for Marc Castellví Vila's portfolio website.
+ * Handles interactive animations, scroll effects, video playback, and responsive navigation.
+ *
+ * This file contains:
+ * - Background video autoplay handling
+ * - Scroll-triggered animations for sections
+ * - Header visibility and parallax effects
+ * - Mobile navigation menu functionality
+ * - Project card reveal animations
+ * - Reel video player controls
+ *
+ * @author Marc Castellví Vila
+ * @version 1.0.0
+ * @since 2024
+ */
+
+window.addEventListener('DOMContentLoaded', function () {
   const video = document.getElementById('bg-video');
   if (video) {
     const playPromise = video.play();
@@ -6,7 +23,7 @@ window.addEventListener('DOMContentLoaded', function() {
       playPromise.catch((err) => {
         console.error('Autoplay blocked or error:', err);
         const tryPlay = () => {
-          video.play().catch(e => console.error('Play failed:', e));
+          video.play().catch((e) => console.error('Play failed:', e));
           window.removeEventListener('click', tryPlay);
           window.removeEventListener('keydown', tryPlay);
         };
@@ -14,12 +31,11 @@ window.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('keydown', tryPlay);
       });
     }
-    video.addEventListener('error', function(e) {
+    video.addEventListener('error', function (e) {
       console.error('Video error:', e);
       alert('Video could not be loaded. Check the filename and path.');
     });
   }
-
 
   const fixedHeader = document.querySelector('.fixed-header');
   const mainHeader = document.querySelector('.main-header');
@@ -89,7 +105,7 @@ window.addEventListener('DOMContentLoaded', function() {
   const reelPreview = document.querySelector('.reel-preview');
   const reelVideo = document.getElementById('reel-video');
   if (reelPlayBtn && reelPreview && reelVideo) {
-    reelPlayBtn.addEventListener('click', function() {
+    reelPlayBtn.addEventListener('click', function () {
       reelPreview.style.display = 'none';
       reelPlayBtn.style.display = 'none';
       reelVideo.style.display = 'block';
@@ -109,7 +125,7 @@ window.addEventListener('DOMContentLoaded', function() {
       reelPreview.style.display = '';
       reelPlayBtn.style.display = '';
     }
-    reelVideo.addEventListener('ended', function() {
+    reelVideo.addEventListener('ended', function () {
       resetReelPlayer();
       if (document.fullscreenElement === reelVideo && document.exitFullscreen) {
         document.exitFullscreen();
@@ -151,8 +167,8 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
   // Floating label accessibility: ensure label floats on autofill
-  document.querySelectorAll('.contactus-input, .contactus-textarea').forEach(function(input) {
-    input.addEventListener('input', function() {
+  document.querySelectorAll('.contactus-input, .contactus-textarea').forEach(function (input) {
+    input.addEventListener('input', function () {
       if (input.value) {
         input.classList.add('has-value');
       } else {
@@ -164,13 +180,15 @@ window.addEventListener('DOMContentLoaded', function() {
   // Form submit feedback
   const contactUsForm = document.querySelector('.contactus-form');
   if (contactUsForm) {
-    contactUsForm.addEventListener('submit', function(e) {
+    contactUsForm.addEventListener('submit', function (e) {
       e.preventDefault();
       contactUsForm.reset();
       const btn = contactUsForm.querySelector('.contactus-btn span');
       if (btn) {
         btn.textContent = 'Sent!';
-        setTimeout(() => { btn.textContent = 'Send'; }, 1800);
+        setTimeout(() => {
+          btn.textContent = 'Send';
+        }, 1800);
       }
     });
   }
@@ -202,10 +220,10 @@ window.addEventListener('DOMContentLoaded', function() {
   updateScrollToTopBtn();
 
   if (scrollToTopBtn) {
-    scrollToTopBtn.addEventListener('click', function() {
+    scrollToTopBtn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    scrollToTopBtn.addEventListener('keydown', function(e) {
+    scrollToTopBtn.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -213,7 +231,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
   // 1. Insert animated background gradient overlay
-  (function() {
+  (function () {
     if (!document.querySelector('.animated-bg-gradient')) {
       const bg = document.createElement('div');
       bg.className = 'animated-bg-gradient';
@@ -242,7 +260,7 @@ window.addEventListener('DOMContentLoaded', function() {
   animateSectionOnScroll(document.querySelector('.contact-section'));
 
   // 3. Sticky nav transitions background/blur as you scroll
-  (function() {
+  (function () {
     const header = document.querySelector('.fixed-header');
     function updateNavSticky() {
       if (!header) return;
@@ -270,7 +288,7 @@ window.addEventListener('DOMContentLoaded', function() {
         hamburger.classList.toggle('is-active', isOpen);
         hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
-      nav.querySelectorAll('.nav-link').forEach(link => {
+      nav.querySelectorAll('.nav-link').forEach((link) => {
         link.addEventListener('click', closeMenu);
       });
       document.addEventListener('keydown', function (e) {
@@ -281,7 +299,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 // 5. Add reel-video-wrapper animation when scrolling to the reel section reel card gets smaller
-(function() {
+(function () {
   const reelWrapper = document.getElementById('reel-video-wrapper');
   const reelPreview = document.querySelector('.reel-preview');
   if (!reelWrapper || !reelPreview) return;
@@ -291,7 +309,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const windowHeight = window.innerHeight || document.documentElement.clientHeight;
     // When the card is entering the viewport, animate scale and border-radius
     const start = windowHeight * 0.7; // start animating when card is 70% from top
-    const end = windowHeight * 0.25;  // finish animating when card is 25% from top
+    const end = windowHeight * 0.25; // finish animating when card is 25% from top
     let progress = 0;
     if (rect.top < start) {
       progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
@@ -302,9 +320,8 @@ window.addEventListener('DOMContentLoaded', function() {
     reelWrapper.style.transform = `scale(${scale})`;
     reelWrapper.style.borderRadius = `${radius}px`;
     reelPreview.style.borderRadius = `${radius}px`;
-    reelWrapper.style.boxShadow = progress > 0.1
-      ? '0 4px 32px 0 rgba(0,0,0,0.22)'
-      : '0 8px 48px 0 rgba(0,0,0,0.18)';
+    reelWrapper.style.boxShadow =
+      progress > 0.1 ? '0 4px 32px 0 rgba(0,0,0,0.22)' : '0 8px 48px 0 rgba(0,0,0,0.18)';
   }
 
   window.addEventListener('scroll', updateReelWrapperScale, { passive: true });
@@ -313,7 +330,7 @@ window.addEventListener('DOMContentLoaded', function() {
 })();
 
 // Fade in and slide up project cards as you scroll to them
-(function() {
+(function () {
   const projectCards = document.querySelectorAll('.project-card');
   if (!projectCards.length) return;
 
@@ -335,16 +352,16 @@ window.addEventListener('DOMContentLoaded', function() {
 })();
 
 // Fade-in animation for timeline items
-  function revealTimelineItems() {
-    const aboutSection = document.querySelector('.about-section');
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    if (!aboutSection || !timelineItems.length) return;
-    if (aboutSection.classList.contains('visible')) {
-      timelineItems.forEach((item, idx) => {
-        setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
-      });
-      window.removeEventListener('scroll', revealTimelineItems);
-    }
+function revealTimelineItems() {
+  const aboutSection = document.querySelector('.about-section');
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  if (!aboutSection || !timelineItems.length) return;
+  if (aboutSection.classList.contains('visible')) {
+    timelineItems.forEach((item, idx) => {
+      setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
+    });
+    window.removeEventListener('scroll', revealTimelineItems);
   }
-  window.addEventListener('scroll', revealTimelineItems, { passive: true });
-  revealTimelineItems();
+}
+window.addEventListener('scroll', revealTimelineItems, { passive: true });
+revealTimelineItems();
