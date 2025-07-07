@@ -1,3 +1,69 @@
+// Floating Skills Window logic
+document.addEventListener('DOMContentLoaded', () => {
+  const openBtn = document.getElementById('skills-float-btn');
+  const floatWin = document.getElementById('skills-float-window');
+  const closeBtn = document.getElementById('skills-float-close');
+  if (!openBtn || !floatWin || !closeBtn) return;
+
+  // Always start hidden
+  floatWin.hidden = true;
+  floatWin.classList.remove('closing');
+  floatWin.style.opacity = '';
+
+  function openSkills() {
+    floatWin.classList.remove('closing');
+    floatWin.hidden = false;
+    // Force reflow to allow transition
+    void floatWin.offsetWidth;
+    floatWin.style.opacity = '';
+    floatWin.focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSkills() {
+    floatWin.classList.add('closing');
+    floatWin.style.opacity = '0';
+    setTimeout(() => {
+      floatWin.hidden = true;
+      floatWin.classList.remove('closing');
+      floatWin.style.opacity = '';
+      document.body.style.overflow = '';
+      openBtn.focus();
+    }, 320); // match CSS transition duration
+  }
+  openBtn.addEventListener('click', openSkills);
+  closeBtn.addEventListener('click', closeSkills);
+  floatWin.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSkills();
+  });
+  // Click outside to close
+  document.addEventListener('mousedown', (e) => {
+    if (!floatWin.hidden && !floatWin.contains(e.target) && e.target !== openBtn) {
+      closeSkills();
+    }
+  });
+});
+// Parallax effect for "watch my reel" PNG label
+document.addEventListener('DOMContentLoaded', () => {
+  const reelWrapper = document.getElementById('reel-video-wrapper');
+  const playCard = document.getElementById('reel-play-card');
+  const reelLabel = document.querySelector('.reel-reel-label');
+  if (!reelWrapper || !playCard || !reelLabel) return;
+
+  playCard.addEventListener('mousemove', (e) => {
+    const rect = playCard.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const percentX = (x / rect.width - 0.5) * 2;
+    const percentY = (y / rect.height - 0.5) * 2;
+    const maxOffset = 7; // px, reduced for subtle effect
+    const offsetX = percentX * maxOffset;
+    const offsetY = percentY * maxOffset;
+    reelLabel.style.transform = `translate(-50%, 0) translate(${offsetX}px, ${offsetY}px)`;
+  });
+  playCard.addEventListener('mouseleave', () => {
+    reelLabel.style.transform = 'translate(-50%, 0)';
+  });
+});
 /**
  * Marc Castellvi Portfolio - Enhanced JavaScript
  * Modern ES6+ implementation with  observeEle  fallbackAnimations() {
@@ -298,7 +364,7 @@ class VideoManager {
     this.bgVideo = document.getElementById('bg-video');
     this.reelVideo = document.getElementById('reel-video');
     this.reelPreview = document.querySelector('.reel-preview');
-    this.reelPlayBtn = document.getElementById('reel-play-btn');
+    this.reelPlayCard = document.getElementById('reel-play-card');
     this.init();
   }
 
@@ -360,16 +426,24 @@ class VideoManager {
   }
 
   initReelVideo() {
-    if (!this.reelPlayBtn || !this.reelVideo || !this.reelPreview) return;
+    if (!this.reelPlayCard || !this.reelVideo || !this.reelPreview) return;
 
-    this.reelPlayBtn.addEventListener('click', () => this.playReelVideo());
+    // Play on click
+    this.reelPlayCard.addEventListener('click', () => this.playReelVideo());
+    // Play on Enter/Space
+    this.reelPlayCard.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.playReelVideo();
+      }
+    });
     this.reelVideo.addEventListener('ended', () => this.resetReelPlayer());
-    
+
     // Handle fullscreen changes
     ['fullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange'].forEach(event => {
       document.addEventListener(event, () => this.handleFullscreenChange());
     });
-    
+
     // Add reel card scroll animation
     this.initReelScrollAnimation();
   }
@@ -402,9 +476,9 @@ class VideoManager {
 
   playReelVideo() {
     this.reelPreview.style.display = 'none';
-    this.reelPlayBtn.style.display = 'none';
+    if (this.reelPlayCard) this.reelPlayCard.style.display = 'none';
     this.reelVideo.style.display = 'block';
-    
+
     this.reelVideo.play().then(() => {
       this.requestFullscreen();
     }).catch(err => {
@@ -434,8 +508,8 @@ class VideoManager {
       this.reelPreview.style.display = '';
     }
     
-    if (this.reelPlayBtn) {
-      this.reelPlayBtn.style.display = '';
+    if (this.reelPlayCard) {
+      this.reelPlayCard.style.display = '';
     }
   }
 
@@ -908,11 +982,7 @@ class SectionNavigator {
     this.setupSections();
     this.bindEvents();
     this.showSection(0);
-    
-    // Test navigation after initialization
-    setTimeout(() => {
-      this.testNavigation();
-    }, 1000);
+    // REMOVE auto navigation to "about me" section
   }
 
   setupSections() {
@@ -1608,6 +1678,7 @@ class PortfolioApp {
 // Initialize the application
 const app = new PortfolioApp();
 
+
 // Make app globally accessible for section navigation
 window.portfolioApp = app;
 
@@ -1615,3 +1686,33 @@ window.portfolioApp = app;
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PortfolioApp };
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('projects-toggle-btn');
+  // Find the closest .projects-list to the toggle button (robust for DOM changes)
+  let projectsList = null;
+  if (toggleBtn) {
+    // Look for .projects-list in the whole document, but only inside #project-cards
+    const projectCardsSection = document.getElementById('project-cards');
+    if (projectCardsSection) {
+      projectsList = projectCardsSection.querySelector('.projects-list');
+    }
+  }
+  if (!toggleBtn || !projectsList) return;
+  toggleBtn.addEventListener('click', () => {
+    const isList = projectsList.classList.toggle('list-view');
+    toggleBtn.setAttribute('aria-pressed', isList ? 'true' : 'false');
+    const label = toggleBtn.querySelector('.toggle-label');
+    const icon = toggleBtn.querySelector('.toggle-icon');
+    if (isList) {
+      label.textContent = 'Show as Carousel';
+      icon.textContent = '☰';
+    } else {
+      label.textContent = 'Show as List';
+      icon.textContent = '☰';
+    }
+    // Add a quick highlight effect for feedback
+    projectsList.classList.add('toggle-highlight');
+    setTimeout(() => projectsList.classList.remove('toggle-highlight'), 350);
+  });
+});
