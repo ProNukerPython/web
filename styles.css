@@ -1,3 +1,174 @@
+.skills-float-btn {
+  margin-left: 1.2em;
+}
+/* .skills-float-btn now only provides margin. All button styles use .action-btn */
+
+.skills-float-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  background: var(--bg-glass);
+  color: var(--text-primary, #fff);
+  border-radius: 1.5em;
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: var(--glass-blur) var(--glass-saturation);
+  border: var(--glass-border);
+  padding: 2.5em 2.5em 2em 2.5em;
+  z-index: 1002;
+  min-width: 320px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: skillsFloatIn 0.32s cubic-bezier(.25,.8,.25,1);
+  opacity: 1;
+  transition: opacity 0.32s cubic-bezier(.25,.8,.25,1);
+}
+.skills-float-window.closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.skills-float-window[hidden] {
+  display: none !important;
+  opacity: 0 !important;
+}
+.skills-float-close {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: var(--text-primary, #fff);
+  cursor: pointer;
+  line-height: 1;
+  z-index: 1003;
+  padding: 0 0.2em;
+  transition: color 0.2s;
+}
+.skills-float-close:hover, .skills-float-close:focus {
+  color: #00c6fb;
+}
+@keyframes skillsFloatIn {
+  0% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.simple-skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 2em auto 0 auto;
+  max-width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em 2em;
+  justify-content: center;
+}
+.simple-skills-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1.15em;
+  background: rgba(0,0,0,0.04);
+  border-radius: 1.2em;
+  padding: 0.4em 1em 0.4em 0.7em;
+  margin: 0;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  transition: background 0.2s;
+}
+.simple-skills-list li:hover {
+  background: rgba(0,198,251,0.10);
+}
+.skill-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 0.7em;
+  vertical-align: middle;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10));
+  color: #fff;
+  fill: #fff;
+}
+
+/* Make skill icons black in light theme */
+[data-theme='light'] .skill-icon,
+[data-theme='light'] .skill-icon svg {
+  color: #181c24;
+  fill: #181c24;
+}
+/* Ensure inline SVGs in .skill-icon are white */
+.skill-icon svg {
+  color: inherit;
+  fill: inherit;
+}
+/* Reel Play Card - Make the whole card interactive and animate play icon on hover/focus */
+.reel-play-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.08);
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.reel-play-card:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+
+.reel-play-card:hover,
+.reel-play-card:focus-visible {
+  background: rgba(0,0,0,0.12);
+}
+
+.reel-play-card .reel-play-icon {
+  width: 80px;
+  height: 80px;
+  fill: var(--primary-color);
+  filter: drop-shadow(0 2px 8px rgba(0,198,251,0.18));
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.reel-play-card:hover .reel-play-icon,
+.reel-play-card:focus-visible .reel-play-icon {
+  filter: drop-shadow(0 4px 16px rgba(0,198,251,0.25));
+  transform: scale(1.12) rotate(-2deg);
+}
+
+@media (max-width: 768px) {
+  .reel-play-card .reel-play-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reel-play-card .reel-play-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+/* Center reel section content both vertically and horizontally */
+.center-reel-content .section-content,
+.center-reel-content .projects-container,
+.center-reel-content .reel-video-wrapper {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 /**
  * Marc Castellvi Portfolio - Enhanced Styles
  * Integrates with theme.css design system
@@ -34,9 +205,7 @@ body {
 
 body {
   padding-top: 0; /* Remove top padding since we're doing fullscreen */
-
   --header-anim-progress: 0;
-
   transition: background-color var(--transition-normal), color var(--transition-normal);
   position: relative;
 }
@@ -186,7 +355,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: rgb(255 255 255 / 5%);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px) saturate(120%);
   pointer-events: none;
   transition: opacity var(--transition-slow);
@@ -530,7 +699,6 @@ body .main-header .black-bar.bottom {
 .about-section {
   background: var(--bg-primary);
   color: var(--text-primary);
-
   /* Remove conflicting position styles - handled by .section */
 }
 
@@ -542,7 +710,7 @@ body .main-header .black-bar.bottom {
   background: linear-gradient(
       to bottom,
       var(--bg-primary) 0%,
-      rgb(0 0 0 / 0%) 38%,
+      rgba(0, 0, 0, 0) 38%,
       var(--bg-primary) 100%
     ),
     url('assets/banner.jpg') center center/cover no-repeat;
@@ -639,18 +807,13 @@ body .main-header .black-bar.bottom {
   flex-wrap: wrap;
 }
 
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .about-actions {
     flex-direction: column;
     gap: var(--spacing-md);
     align-items: center;
   }
   
-  .about-actions .contact-btn {
-    width: 100%;
-    justify-content: center;
-    max-width: 280px;
-  }
 }
 
 /* Experience Timeline */
@@ -750,13 +913,25 @@ body .main-header .black-bar.bottom {
 }
 
 /* Enhanced Projects Section */
+
 .projects-section {
   background: var(--bg-secondary);
   color: var(--text-primary);
-
   /* Remove conflicting display/position styles - handled by .section */
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+.project-cards-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  margin-top: auto;
+  text-align: center;
+}
 .projects-container {
   width: 100%;
   max-width: 3200px;
@@ -765,6 +940,8 @@ body .main-header .black-bar.bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
 }
 
 .projects-intro {
@@ -776,7 +953,7 @@ body .main-header .black-bar.bottom {
   color: var(--text-primary);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-relaxed);
-  margin-bottom: var(--spacing-3xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .projects-intro-icon {
@@ -785,12 +962,27 @@ body .main-header .black-bar.bottom {
 }
 
 /* Projects Carousel */
+
 .projects-list {
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: var(--spacing-xl) 0;
 }
+/* Make section-content in projects scrollable */
+.projects-section.scrollable .section-content {
+}
+
+/* Reel section scrollable content (merged and optimized) */
+.reel-section.scrollable .section-content {
+  overflow-y: auto;
+  max-height: 100vh;
+  height: 100%;
+  padding-bottom: var(--spacing-2xl);
+  padding-top: calc(60px + var(--spacing-xl)); /* Account for fixed header */
+}
+
+
 
 /* Reel Header in Projects Section - REMOVED (now integrated with play button) */
 
@@ -803,27 +995,27 @@ body .main-header .black-bar.bottom {
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgb(0 0 0 / 0%) 5%,
-    rgb(0 0 0 / 20%) 10%,
-    rgb(0 0 0 / 60%) 20%,
+    rgba(0, 0, 0, 0.0) 5%,
+    rgba(0, 0, 0, 0.2) 10%,
+    rgba(0, 0, 0, 0.6) 20%,
     black 30%,
     black 70%,
-    rgb(0 0 0 / 60%) 80%,
-    rgb(0 0 0 / 20%) 90%,
-    rgb(0 0 0 / 5%) 95%,
+    rgba(0, 0, 0, 0.6) 80%,
+    rgba(0, 0, 0, 0.2) 90%,
+    rgba(0, 0, 0, 0.05) 95%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgb(0 0 0 / 0%) 5%,
-    rgb(0 0 0 / 20%) 10%,
-    rgb(0 0 0 / 60%) 20%,
+    rgba(0, 0, 0, 0.0) 5%,
+    rgba(0, 0, 0, 0.2) 10%,
+    rgba(0, 0, 0, 0.6) 20%,
     black 30%,
     black 70%,
-    rgb(0 0 0 / 60%) 80%,
-    rgb(0 0 0 / 20%) 90%,
-    rgb(0 0 0 / 5%) 95%,
+    rgba(0, 0, 0, 0.6) 80%,
+    rgba(0, 0, 0, 0.2) 90%,
+    rgba(0, 0, 0, 0.05) 95%,
     transparent 100%
   );
 }
@@ -832,15 +1024,18 @@ body .main-header .black-bar.bottom {
 .carousel-container::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(
     to right,
-    rgb(0 0 0 / 30%) 0%,
-    rgb(0 0 0 / 10%) 10%,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 10%,
     transparent 20%,
     transparent 80%,
-    rgb(0 0 0 / 10%) 90%,
-    rgb(0 0 0 / 30%) 100%
+    rgba(0, 0, 0, 0.1) 90%,
+    rgba(0, 0, 0, 0.3) 100%
   );
   pointer-events: none;
   z-index: 1;
@@ -849,12 +1044,15 @@ body .main-header .black-bar.bottom {
 .project-card::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(
     135deg,
-    rgb(255 255 255 / 10%) 0%,
+    rgba(255, 255, 255, 0.1) 0%,
     transparent 50%,
-    rgb(0 198 251 / 10%) 100%
+    rgba(0, 198, 251, 0.1) 100%
   );
   opacity: 0;
   transition: opacity var(--transition-normal);
@@ -883,8 +1081,8 @@ body .main-header .black-bar.bottom {
 .project-card:hover {
   box-shadow: 
     var(--shadow-glow), 
-    0 20px 40px rgb(0 198 251 / 15%),
-    0 0 30px rgb(0 198 251 / 10%);
+    0 20px 40px rgba(0, 198,251, 0.15),
+    0 0 30px rgba(0, 198,251, 0.1);
 }
 
 .carousel-track {
@@ -892,10 +1090,9 @@ body .main-header .black-bar.bottom {
   gap: var(--spacing-xl);
   animation: carousel-scroll 20s linear infinite;
   will-change: transform;
-  padding: 0;
+  padding: 0 0vw;
   transition: filter var(--transition-normal);
   align-items: center; /* Center cards vertically */
-
   /* Ensure hardware acceleration */
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -910,7 +1107,6 @@ body .main-header .black-bar.bottom {
   0% {
     transform: translateX(0);
   }
-
   100% {
     transform: translateX(calc(-50%));
   }
@@ -944,11 +1140,10 @@ body .main-header .black-bar.bottom {
   transform: scale(1.05) translateY(-10px);
   box-shadow: 
     var(--shadow-glow), 
-    0 20px 40px rgb(0 198 251 / 15%),
-    0 0 30px rgb(0 198 251 / 10%);
+    0 20px 40px rgba(0, 198,251, 0.15),
+    0 0 30px rgba(0, 198,251, 0.1);
   z-index: 10;
   opacity: 1;
-
   /* Ensure hover state doesn't get clipped */
   position: relative;
 }
@@ -1032,7 +1227,7 @@ body .main-header .black-bar.bottom {
   background: linear-gradient(
       to bottom,
       var(--bg-primary) 0%,
-      rgb(10 10 10 / 85%) 60%,
+      rgba(10, 10, 10, 0.85) 60%,
       transparent 100%
     ),
     url('assets/banner.jpg') center center/cover no-repeat;
@@ -1087,252 +1282,94 @@ body .main-header .black-bar.bottom {
   transition: border-radius var(--transition-normal) var(--transition-timing);
 }
 
-.reel-play-btn {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: transparent;
-  border: none;
-  border-radius: var(--border-radius-full);
-  width: auto;
-  min-width: 74px;
-  height: 74px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--transition-normal) var(--transition-timing);
-  z-index: 4;
-  outline: none;
-  padding: var(--spacing-md) var(--spacing-xl);
-  overflow: hidden;
-  position: relative;
-}
-
-.reel-play-btn .reel-text {
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: var(--font-weight-extrabold);
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  letter-spacing: 0.05em;
-  line-height: 1.1;
-  white-space: nowrap;
-  text-shadow: 
-    0 2px 4px rgb(0 0 0 / 80%),
-    0 4px 8px rgb(0 0 0 / 60%);
-  transition: all var(--transition-normal) var(--transition-timing);
-  position: relative;
-  z-index: 2;
-}
-
-.reel-play-btn .reel-play-icon {
-  width: 38px;
-  height: 38px;
-  display: block;
-  fill: var(--color-white);
-  filter: drop-shadow(0 2px 8px rgb(0 0 0 / 40%));
-  pointer-events: none;
+.reel-reel-label {
+  transition: transform 0.35s cubic-bezier(.25,.8,.25,1);
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  transition: all var(--transition-normal) var(--transition-timing);
-  z-index: 3;
-}
+  top: 16px;
+  left: 0%;
+  transform: translateX(-10%);
+  width: 300px;
+  }
 
-/* Additional glitch effects */
-.reel-play-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgb(255 0 0 / 10%) 40%,
-    rgb(0 255 0 / 10%) 50%,
-    rgb(0 0 255 / 10%) 60%,
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.reel-play-btn:hover::before {
-  opacity: 1;
-  animation: glitch-bg 0.8s ease-in-out;
-}
-
-@keyframes glitch-bg {
-  0%, 100% { 
-    background-position: 0% 0%;
+  .reel-reel-label::after
+  {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%,
+      rgba(0, 198, 251, 0.1) 100%
+    );
     opacity: 0;
+    transition: opacity var(--transition-normal);
+    pointer-events: none;
+    z-index: -1;
   }
 
-  20% { 
-    background-position: 100% 100%;
-    opacity: 0.3;
+  .reel-play-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-glass);
+    border: var(--glass-border);
+    border-radius: var(--border-radius-full);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: var(--glass-blur) var(--glass-saturation);
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    z-index: 3;
+    transition: filter var(--transition-normal), transform var(--transition-normal), background var(--transition-normal);
   }
 
-  40% { 
-    background-position: 0% 100%;
-    opacity: 0.2;
+  /* .reel-text removed for simple play button */
+
+  .reel-play-icon {
+    display: block;
+    width: 80px;
+    height: 80px;
+    fill: var(--primary-color);
+    filter: drop-shadow(0 2px 8px rgba(0,198,251,0.18));
+    transition: filter var(--transition-normal), transform var(--transition-normal);
+    background: var(--glass-blur) var(--glass-saturation);
   }
 
-  60% { 
-    background-position: 100% 0%;
-    opacity: 0.1;
+  .reel-play-btn:hover .reel-play-icon,
+  .reel-play-btn:focus-visible .reel-play-icon {
+    filter: drop-shadow(0 4px 16px rgba(0,198,251,0.25));
+    transform: scale(1.1);
   }
-
-  80% { 
-    background-position: 50% 50%;
-    opacity: 0.05;
-  }
-}
-
-/* Hover effects */
-.reel-play-btn:hover .reel-text {
-  animation: glitch-text 0.8s ease-in-out forwards;
-  text-shadow: 
-    0 2px 4px rgb(0 0 0 / 80%),
-    0 4px 8px rgb(0 0 0 / 60%),
-    -2px 0 rgb(255 0 0 / 30%),
-    2px 0 rgb(0 255 255 / 30%);
-}
-
-.reel-play-btn:hover .reel-play-icon {
-  animation: glitch-icon 0.8s ease-in-out forwards;
-  animation-delay: 0.2s;
-}
-
-.reel-play-btn:hover {
-  transform: translate(-50%, -50%) scale(1.05);
-  background: rgb(0 0 0 / 10%);
-  backdrop-filter: blur(10px);
-  border-radius: var(--border-radius-xl);
-}
-
-/* Glitch effect keyframes */
-@keyframes glitch-text {
-  0% { 
-    transform: translate(0);
-    opacity: 1;
-  }
-
-  10% { 
-    transform: translate(-2px, 2px);
-    opacity: 0.8;
-  }
-
-  20% { 
-    transform: translate(-4px, -2px);
-    opacity: 0.6;
-  }
-
-  30% { 
-    transform: translate(4px, 2px);
-    opacity: 0.4;
-  }
-
-  40% { 
-    transform: translate(-2px, -4px);
-    opacity: 0.2;
-  }
-
-  50% { 
-    transform: translate(2px, 4px);
-    opacity: 0.1;
-  }
-
-  60% { 
-    transform: translate(-4px, 2px);
-    opacity: 0.05;
-  }
-
-  70% { 
-    transform: translate(4px, -2px);
-    opacity: 0.02;
-  }
-
-  80% { 
-    transform: translate(-2px, 4px);
-    opacity: 0.01;
-  }
-
-  90% { 
-    transform: translate(2px, -4px);
-    opacity: 0;
-  }
-
-  100% { 
-    transform: translate(0);
-    opacity: 0;
-  }
-}
-
-@keyframes glitch-icon {
-  0% { 
-    transform: translate(-50%, -50%) scale(0) rotate(0deg);
-    opacity: 0;
-  }
-
-  50% { 
-    transform: translate(-50%, -50%) scale(0.5) rotate(180deg);
-    opacity: 0.5;
-  }
-
-  60% { 
-    transform: translate(-48%, -48%) scale(0.8) rotate(360deg);
-    opacity: 0.8;
-  }
-
-  70% { 
-    transform: translate(-52%, -52%) scale(1.1) rotate(360deg);
-    opacity: 0.9;
-  }
-
-  80% { 
-    transform: translate(-50%, -50%) scale(0.9) rotate(360deg);
-    opacity: 1;
-  }
-
-  90% { 
-    transform: translate(-50%, -50%) scale(1.05) rotate(360deg);
-    opacity: 1;
-  }
-
-  100% { 
-    transform: translate(-50%, -50%) scale(1) rotate(360deg);
-    opacity: 1;
-  }
-}
 
 /* Responsive adjustments */
-@media (width <= 768px) {
-  .reel-play-btn .reel-text {
-    font-size: clamp(1.5rem, 5vw, 3rem);
-  }
-  
+@media (max-width: 768px) {
   .reel-play-btn {
-    padding: var(--spacing-sm) var(--spacing-lg);
+    width: 48px;
+    height: 48px;
   }
-  
   .reel-play-btn .reel-play-icon {
     width: 32px;
     height: 32px;
   }
 }
 
-@media (width <= 480px) {
-  .reel-play-btn .reel-text {
-    font-size: clamp(1.2rem, 4vw, 2.5rem);
-  }
-  
+@media (max-width: 480px) {
   .reel-play-btn {
-    padding: var(--spacing-xs) var(--spacing-md);
+    width: 40px;
+    height: 40px;
+  }
+  .reel-play-btn .reel-play-icon {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -1347,6 +1384,7 @@ body .main-header .black-bar.bottom {
   justify-content: center;
   width: 56px;
   height: 56px;
+  border: none;
   border-radius: var(--border-radius-full);
   background: var(--bg-glass);
   box-shadow: var(--shadow-glass);
@@ -1386,7 +1424,6 @@ body.in-main-header #scrollToTopBtn {
 .skills-section {
   background: var(--bg-primary);
   color: var(--text-primary);
-
   /* Remove conflicting position/padding styles - handled by .section */
 }
 
@@ -1714,7 +1751,7 @@ body.in-main-header #scrollToTopBtn {
 .form-textarea:focus {
   border-color: var(--color-primary);
   background: var(--bg-primary);
-  box-shadow: 0 0 0 3px rgb(0 122 255 / 10%);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
 }
 
 .form-textarea {
@@ -1738,7 +1775,7 @@ body.in-main-header #scrollToTopBtn {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: rgb(255 255 255 / 30%);
+  background: rgba(255, 255, 255, 0.3);
   border: 2px solid transparent;
   cursor: pointer;
   transition: all var(--transition-normal);
@@ -1746,13 +1783,13 @@ body.in-main-header #scrollToTopBtn {
 }
 
 .section-nav-dot:hover {
-  background: rgb(255 255 255 / 50%);
+  background: rgba(255, 255, 255, 0.5);
   transform: scale(1.2);
 }
 
 .section-nav-dot.active {
   background: var(--primary-color);
-  border-color: rgb(255 255 255 / 50%);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: scale(1.3);
 }
 
@@ -1763,7 +1800,7 @@ body.in-main-header #scrollToTopBtn {
   left: 50%;
   width: 4px;
   height: 4px;
-  background: rgb(255 255 255 / 80%);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
@@ -1791,6 +1828,7 @@ body.in-main-header #scrollToTopBtn {
   justify-content: center;
   width: 56px;
   height: 56px;
+  border: none;
   border-radius: var(--border-radius-full);
   background: var(--bg-glass);
   backdrop-filter: var(--glass-blur) var(--glass-saturation);
@@ -1853,11 +1891,10 @@ body.in-main-header #scrollToTopBtn {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgb(0 122 255 / 30%);
+    box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
   }
-
   50% {
-    box-shadow: 0 0 30px rgb(0 122 255 / 60%);
+    box-shadow: 0 0 30px rgba(0, 122, 255, 0.6);
   }
 }
 
@@ -1867,7 +1904,7 @@ body.in-main-header #scrollToTopBtn {
 }
 
 /* Mobile responsiveness for section navigation */
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .section-nav {
     bottom: 120px;
     right: 50%;
@@ -1907,7 +1944,7 @@ body.in-main-header #scrollToTopBtn {
 }
 
 /* Very small screens */
-@media (width <= 480px) {
+@media (max-width: 480px) {
   .section-nav {
     bottom: 100px;
   }
@@ -1945,41 +1982,10 @@ body.in-main-header #scrollToTopBtn {
 }
 
 /* Scroll indicator for scrollable sections */
-.scroll-indicator {
-  position: fixed;
-  bottom: var(--spacing-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--text-tertiary);
-  font-size: var(--font-size-sm);
-  z-index: 1001;
-  opacity: 0.7;
-  transition: opacity var(--transition-normal);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 0.025em;
-}
 
-.scroll-indicator.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-
-.scroll-indicator .scroll-text {
-  text-align: center;
-  line-height: var(--line-height-relaxed);
-  text-transform: uppercase;
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.1em;
-  margin-bottom: var(--spacing-3xl);
-}
 
 /* Responsive carousel adjustments */
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .carousel-container {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -2002,7 +2008,7 @@ body.in-main-header #scrollToTopBtn {
   }
 }
 
-@media (width <= 480px) {
+@media (max-width: 480px) {
   .carousel-container {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -2027,8 +2033,8 @@ body.in-main-header #scrollToTopBtn {
   transform: scale(1.05) translateY(-10px);
   box-shadow: 
     var(--shadow-glow), 
-    0 20px 40px rgb(0 198 251 / 15%),
-    0 0 30px rgb(0 198 251 / 10%);
+    0 20px 40px rgba(0, 198,251, 0.15),
+    0 0 30px rgba(0, 198,251, 0.1);
   z-index: 10;
   filter: brightness(1.1) contrast(1.05);
 }
@@ -2102,7 +2108,6 @@ body.in-main-header #scrollToTopBtn {
 .contact-section {
   background: var(--bg-secondary);
   color: var(--text-primary);
-
   /* Remove conflicting styles - handled by .section */
 }
 
@@ -2113,7 +2118,7 @@ body.in-main-header #scrollToTopBtn {
   z-index: 0;
   background: radial-gradient(
     ellipse at 70% 20%,
-    rgb(0 122 255 / 20%) 0%,
+    rgba(0, 122, 255, 0.2) 0%,
     var(--bg-secondary) 80%
   );
   opacity: 0.6;
@@ -2177,14 +2182,19 @@ body.in-main-header #scrollToTopBtn {
 
 .contact-buttons {
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: row;
   gap: var(--spacing-lg);
   justify-content: center;
   width: 100%;
   margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
-.contact-btn {
+.action-btn {
+  will-change: box-shadow, filter;
+  /* Prevent layout shift on scale by using transform + backface-visibility */
+  transform: perspective(1px) translateZ(0);
+  backface-visibility: hidden;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -2203,19 +2213,8 @@ body.in-main-header #scrollToTopBtn {
   white-space: nowrap;
 }
 
-.contact-btn:hover,
-.contact-btn:focus-visible {
-  background: var(--primary-color);
-  color: var(--color-white);
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow);
-}
+/* .contact-btn:hover and :focus-visible are deprecated. Use .action-btn for all main buttons. */
 
-.contact-btn svg {
-  display: inline-block;
-  vertical-align: middle;
-  flex-shrink: 0;
-}
 
 .contact-alt {
   margin-top: var(--spacing-md);
@@ -2290,7 +2289,7 @@ body.in-main-header #scrollToTopBtn {
   grid-column: 1 / -1;
 }
 
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .contact-form {
     grid-template-columns: 1fr;
   }
@@ -2418,7 +2417,6 @@ body.in-main-header #scrollToTopBtn {
 .contact-section {
   background: var(--bg-secondary);
   color: var(--text-primary);
-
   /* Remove conflicting styles - handled by .section */
 }
 
@@ -2429,7 +2427,7 @@ body.in-main-header #scrollToTopBtn {
   z-index: 0;
   background: radial-gradient(
     ellipse at 70% 20%,
-    rgb(0 122 255 / 20%) 0%,
+    rgba(0, 122, 255, 0.2) 0%,
     var(--bg-secondary) 80%
   );
   opacity: 0.6;
@@ -2493,41 +2491,42 @@ body.in-main-header #scrollToTopBtn {
 
 .contact-buttons {
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: row;
   gap: var(--spacing-lg);
   justify-content: center;
   width: 100%;
   margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
-.contact-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
-  border: none;
-  border-radius: var(--border-radius-xl);
-  padding: var(--spacing-md) var(--spacing-lg);
-  text-decoration: none;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-normal) var(--transition-timing);
-  cursor: pointer;
-  outline: none;
-  white-space: nowrap;
-}
+/* .contact-btn is deprecated. Use .action-btn for all main buttons. */
 
-.contact-btn:hover,
-.contact-btn:focus-visible {
+/* Shared hover/focus for action buttons */
+.action-btn:hover,
+.action-btn:focus-visible {
   background: var(--primary-color);
   color: var(--color-white);
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow);
+  /* transform: scale(1.025); */
+  box-shadow: 0 2px 16px 0 rgba(0,198,251,0.10), var(--shadow-glow);
+  filter: brightness(1.03) drop-shadow(0 1px 6px rgba(0,198,251,0.08));
+  letter-spacing: 0.2px;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  transition: background 0.25s cubic-bezier(.4,1,.4,1),
+              color 0.25s cubic-bezier(.4,1,.4,1),
+              transform 0.25s cubic-bezier(.4,1,.4,1),
+              box-shadow 0.25s cubic-bezier(.4,1,.4,1),
+              filter 0.25s cubic-bezier(.4,1,.4,1),
+              letter-spacing 0.25s cubic-bezier(.4,1,.4,1),
+              outline-offset 0.25s cubic-bezier(.4,1,.4,1);
 }
 
-.contact-btn svg {
+.action-btn svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.action-btn svg {
   display: inline-block;
   vertical-align: middle;
   flex-shrink: 0;
@@ -2606,8 +2605,8 @@ body.in-main-header #scrollToTopBtn {
   grid-column: 1 / -1;
 }
 
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .contact-form {
     grid-template-columns: 1fr;
   }
-}
+/* removed orphan bracket from deprecated .contact-btn */
