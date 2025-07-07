@@ -2,35 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fullscreen Video Background</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marc Castellvi - Lighting & Compositing Artist | Portfolio</title>
+  <meta name="description" content="Marc Castellvi is a skilled Lighting and Compositing Artist specializing in Houdini, Nuke, and Python tool development for 3D production workflows.">
+  <meta name="keywords" content="lighting artist, compositing artist, houdini, nuke, python, 3d, vfx, animation, pipeline">
+  <meta name="author" content="Marc Castellvi">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://marccastellvi.com">
+  <meta property="og:title" content="Marc Castellvi - Lighting & Compositing Artist">
+  <meta property="og:description" content="Professional portfolio showcasing lighting, compositing, and technical art work in feature films and personal projects.">
+  <meta property="og:image" content="assets/profileMarc.jpg">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://marccastellvi.com">
+  <meta property="twitter:title" content="Marc Castellvi - Lighting & Compositing Artist">
+  <meta property="twitter:description" content="Professional portfolio showcasing lighting, compositing, and technical art work in feature films and personal projects.">
+  <meta property="twitter:image" content="assets/profileMarc.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="assets/Reel-background.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="theme.css" as="style">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- Theme detection script (inline for immediate execution) -->
+  <script>
+    // Apply theme immediately to prevent flash
+    const savedTheme = localStorage.getItem('theme') || 
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
 </head>
-<body>
-  <div class="animated-bg-gradient"></div>
-  <div class="fixed-header">
+<body data-theme="dark">
+  
+  <!-- Section Navigation -->
+  <div class="section-nav" id="section-nav">
+    <div class="section-nav-dot active" data-section="0" aria-label="Go to Hero section"></div>
+    <div class="section-nav-dot" data-section="1" aria-label="Go to About section"></div>
+    <div class="section-nav-dot" data-section="2" aria-label="Go to Projects section"></div>
+    <div class="section-nav-dot" data-section="3" aria-label="Go to Skills section"></div>
+    <div class="section-nav-dot" data-section="4" aria-label="Go to Tools section"></div>
+    <div class="section-nav-dot" data-section="5" aria-label="Go to Contact section"></div>
+  </div>
+  
+  <!-- Section Controls -->
+  <div class="section-controls">
+    <button class="section-btn" id="prev-section" aria-label="Previous section">‹</button>
+    <button class="section-btn" id="next-section" aria-label="Next section">›</button>
+  </div>
+  
+  <!-- Auto-scroll Button -->
+  <button class="auto-scroll-btn" id="auto-scroll-btn" aria-label="Auto-scroll through sections">▶</button>
+
+  <!-- Fixed Header with Navigation -->
+  <header class="fixed-header">>
     <div class="header-title">
       <span class="header-title-marc">MARC</span>
       <span class="header-title-castellvi">CASTELLVI</span>
     </div>
-  </div>
-  <header class="main-header">
-    <div class="black-bar top"></div>
-    <div class="black-bar bottom"></div>
-    <div class="reel-hover-area"></div>
-    <div class="centered-title">
-      <span class="title-main-MARC">MARC</span><span class="title-main-CASTELLVI">CASTELLVI</span>
-      <span class="subtitle">LIGHTING AND COMPOSITING ARTIST</span>
-    </div>
-    <video id="bg-video" autoplay loop muted playsinline loading="lazy">
-      <source src="assets/Reel-background.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div class="glass-overlay"></div>
+    
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+      <svg class="theme-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    </button>
+    
+    <!-- Hamburger Menu Button -->
+    <button id="hamburger" class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
   </header>
-  <section class="about-section" id="about">
+  
+  <!-- Overlay Navigation -->
+  <nav class="main-nav" data-menu role="navigation" aria-label="Main navigation">
+    <a href="#about" class="nav-link">About</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#skills" class="nav-link">Skills</a>
+    <a href="#Tools-section" class="nav-link">Tools</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+  <!-- Main Content -->
+  <main id="main-content">
+    <header class="main-header">
+      <div class="black-bar top"></div>
+      <div class="black-bar bottom"></div>
+      <div class="reel-hover-area"></div>
+      <div class="centered-title">
+        <span class="title-main-MARC">MARC</span><span class="title-main-CASTELLVI">CASTELLVI</span>
+        <span class="subtitle">LIGHTING AND COMPOSITING ARTIST</span>
+      </div>
+      <video id="bg-video" autoplay loop muted playsinline preload="auto">
+        <source src="assets/Reel-background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="glass-overlay"></div>
+    </header>
+  <section class="about-section section section-animate" id="about">
     <div class="about-container">
       <div class="about-image-content">
-        <img src="https://media.licdn.com/dms/image/v2/C4E03AQFCqCarCZAXGw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1654204002329?e=1755734400&v=beta&t=WMejUOEsXgi7LThV8u-DqZXaPO0WVbuAXsdytXQ6gSI"
+        <img src="assets/profileMarc.jpg"
           alt="Marc Castellví trabajando"
           class="about-img"
           loading="lazy"
@@ -41,6 +124,16 @@
         <p class="about-bio">
           Soy un artista de Lighting y Compositing apasionado por la imagen y la tecnología. Me especializo en Houdini (Solaris), Nuke y desarrollo de herramientas en Python para optimizar flujos de trabajo en producción 3D. Disfruto colaborando en equipos creativos y aportando soluciones técnicas y visuales en cada proyecto.
         </p>
+        <div class="about-actions">
+          <a href="#contact" class="contact-btn">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <rect width="22" height="22" rx="6" fill="currentColor" opacity="0.2"/>
+              <path d="M5 7.5l6 5 6-5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <rect x="5" y="7" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </svg>
+            Get In Touch
+          </a>
+        </div>
       </div>
     </div>
     <div class="about-experience">
@@ -76,14 +169,16 @@
       </ol>
     </div>
   </section>
-  <section id="projects" class="projects-section" aria-labelledby="projects-title">
-    <div class="projects-container">
+  <section id="projects" class="projects-section section scrollable section-animate" aria-labelledby="projects-title">
+    <div class="section-content">
+      <div class="projects-container">
       <div class="projects-section-label">
       </div>
 
       <div class="reel-video-wrapper" id="reel-video-wrapper">
         <img class="reel-preview" src="assets\MoreProjects-2.jpg" alt="Reel preview" loading="lazy" decoding="async" />
         <button class="reel-play-btn" id="reel-play-btn" aria-label="Play reel">
+          <span class="reel-text">See my work</span>
           <svg class="reel-play-icon" viewBox="0 0 64 64">
             <circle cx="32" cy="32" r="32" fill="none"/>
             <polygon points="25,18 25,46 48,32" fill="white"/>
@@ -102,88 +197,158 @@
         A selection of my recent work in lighting, compositing, and tool development. Click on each project for more details.
       </p>
       <div class="projects-list">
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets\Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
+        <div class="carousel-container">
+          <div class="carousel-track" id="carousel-track">
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets\Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">Spellbound</h3>
+                <div class="project-role">Lisghting Assistant</div>
+                <div class="project-meta">Skydance Animation · 2024</div>
+                <p class="project-desc">
+                  Feature film. Responsible for lookdev, lighting, and compositing of key sequences using Houdini Solaris and Nuke.
+                </p>
+              </div>
+            </article>
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets\pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">Pookoo</h3>
+                <div class="project-role">Lighting TD & Pipeline Tools</div>
+                <div class="project-meta">Skydance Animation · 2022</div>
+                <p class="project-desc">
+                  Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
+                </p>
+              </div>
+            </article>
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets\Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">Personal Short</h3>
+                <div class="project-role">Director · Lighting & Comp</div>
+                <div class="project-meta">2021</div>
+                <p class="project-desc">
+                  Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
+                </p>
+              </div>
+            </article>
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets\sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">Sky: The two embers</h3>
+                <div class="project-role">Lighting & Compositing</div>
+                <div class="project-meta">Personal · 2020</div>
+                <p class="project-desc">
+                  Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
+                </p>
+              </div>
+            </article>
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets\QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">The Quinta's Ghost</h3>
+                <div class="project-role">CG Lighting & Lookdev</div>
+                <div class="project-meta">Freelance · 2023</div>
+                <p class="project-desc">
+                  Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
+                </p>
+              </div>
+            </article>
+            <article class="project-card">
+              <div class="project-thumb">
+                <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
+              </div>
+              <div class="project-info">
+                <h3 class="project-name">Personal Projects and Colaborations</h3>
+                <div class="project-role">Lighting, Tools & Experiments</div>
+                <div class="project-meta">Ongoing</div>
+                <p class="project-desc">
+                  A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
+                </p>
+              </div>
+            </article>
           </div>
-          <div class="project-info">
-            <h3 class="project-name">Spellbound</h3>
-            <div class="project-role">Lisghting Assistant</div>
-            <div class="project-meta">Skydance Animation · 2024</div>
-            <p class="project-desc">
-              Feature film. Responsible for lookdev, lighting, and compositing of key sequences using Houdini Solaris and Nuke.
-            </p>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets\pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
-          </div>
-          <div class="project-info">
-            <h3 class="project-name">Pookoo</h3>
-            <div class="project-role">Lighting TD & Pipeline Tools</div>
-            <div class="project-meta">Skydance Animation · 2022</div>
-            <p class="project-desc">
-              Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
-            </p>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets\Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
-          </div>
-          <div class="project-info">
-            <h3 class="project-name">Personal Short</h3>
-            <div class="project-role">Director · Lighting & Comp</div>
-            <div class="project-meta">2021</div>
-            <p class="project-desc">
-              Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
-            </p>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets\sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
-          </div>
-          <div class="project-info">
-            <h3 class="project-name">Sky: The two embers</h3>
-            <div class="project-role">Lighting & Compositing</div>
-            <div class="project-meta">Personal · 2020</div>
-            <p class="project-desc">
-              Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
-            </p>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets\QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
-          </div>
-          <div class="project-info">
-            <h3 class="project-name">The Quinta's Ghost</h3>
-            <div class="project-role">CG Lighting & Lookdev</div>
-            <div class="project-meta">Freelance · 2023</div>
-            <p class="project-desc">
-              Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
-            </p>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-thumb">
-            <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
-          </div>
-          <div class="project-info">
-            <h3 class="project-name">Personal Projects and Colaborations</h3>
-            <div class="project-role">Lighting, Tools & Experiments</div>
-            <div class="project-meta">Ongoing</div>
-            <p class="project-desc">
-              A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
-            </p>
-          </div>
-        </article>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" id="projects-scroll-indicator">
+      <div class="scroll-text">Scroll to see more<br>projects</div>
+    </div>
+    </div>
+  </section>
+  
+  <section id="skills" class="skills-section section section-animate" aria-labelledby="skills-title">
+    <div class="skills-container">
+      <h2 id="skills-title" class="skills-title">Skills & Tools</h2>
+      <p class="skills-intro">
+        Technologies and software I work with daily to create stunning visuals and efficient workflows.
+      </p>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3 class="skill-category-title">3D & Compositing</h3>
+          <ul class="skill-list">
+            <li class="skill-item">Nuke</li>
+            <li class="skill-item">Maya</li>
+            <li class="skill-item">Houdini</li>
+            <li class="skill-item">Arnold</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">Post-Production</h3>
+          <ul class="skill-list">
+            <li class="skill-item">Photoshop</li>
+            <li class="skill-item">After Effects</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">Development</h3>
+          <ul class="skill-list">
+            <li class="skill-item">Python</li>
+            <li class="skill-item">GitHub</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
-  <section id="contact" class="contact-section" aria-labelledby="contact-title">
+  
+  <section class="Nuke Tools section section-animate" id="Tools-section" aria-labelledby="nuke-tools-title">
+    <div class="nuke-tools-container">
+      <h2 id="nuke-tools-title" class="nuke-tools-title">Nuke Tools</h2>
+      <p class="nuke-tools-desc">
+        A collection of custom Nuke tools I developed to streamline compositing workflows. These tools enhance productivity and improve the overall efficiency of the compositing process.
+      </p>
+      <div class="nuke-tools-list">
+        <div class="nuke-tool-card">
+          <img src="assets/BarrelBlur-before-preview.jpg" alt="BarrelBlur preview" class="nuke-tool-img-original">
+          <div class="tool-info">
+            <h3 class="nuke-tool-name">BarrelBlur</h3>
+            <p class="nuke-tool-desc">Anamorphic blur with chromatic aberration for realistic lens effects in Nuke.</p>
+          </div>
+        </div>
+        <div class="nuke-tool-card">
+          <h3 class="nuke-tool-name">Nuke Tool 2</h3>
+          <p class="nuke-tool-desc">Description of Nuke Tool 2 functionality and features.</p>
+        </div>
+        <div class="nuke-tool-card">
+          <h3 class="nuke-tool-name">Nuke Tool 3</h3>
+          <p class="nuke-tool-desc">Description of Nuke Tool 3 functionality and features.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="contact-section section section-animate" aria-labelledby="contact-title">
     <div class="contact-container">
       <div class="contact-card">
         <h2 id="contact-title" class="contact-title">Let's Connect</h2>
@@ -205,6 +370,7 @@
             LinkedIn
           </a>
         </div>
+        
         <div class="contact-alt">
           <p>If the buttons above don't work, you can contact me directly:</p>
           <ul>
@@ -216,12 +382,17 @@
       </div>
     </div>
   </section>
+  </main>
+  
+  <!-- Scroll to Top Button -->
   <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <circle cx="16" cy="16" r="15" stroke="#007aff" stroke-width="2"/>
       <path d="M10 18l6-6 6 6" stroke="#00c6fb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
+  
+  <!-- Scripts -->
   <script src="main.js" defer></script>
 </body>
 </html>

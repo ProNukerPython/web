@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style Guide - Marc Castellvi Portfolio</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .style-guide {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+    }
+    
+    .style-guide h1 {
+      color: var(--primary-color);
+      font-size: var(--font-size-4xl);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .style-guide section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: var(--bg-glass);
+      border-radius: var(--border-radius-xl);
+      backdrop-filter: var(--glass-blur) var(--glass-saturation);
+      border: var(--glass-border);
+    }
+    
+    .style-guide h2 {
+      color: var(--secondary-color);
+      font-size: var(--font-size-2xl);
+      margin-bottom: 1.5rem;
+    }
+    
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    
+    .color-swatch {
+      text-align: center;
+      padding: 1rem;
+      border-radius: var(--border-radius-lg);
+      color: white;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    .color-swatch.primary { background: var(--primary-color); }
+    .color-swatch.secondary { background: var(--secondary-color); }
+    .color-swatch.accent { background: var(--accent-color); }
+    .color-swatch.success { background: var(--color-success); }
+    .color-swatch.warning { background: var(--color-warning); color: black; }
+    .color-swatch.error { background: var(--color-error); }
+    
+    .typography-sample {
+      margin-bottom: 1rem;
+    }
+    
+    .component-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: var(--z-index-fixed);
+    }
+  </style>
+</head>
+<body>
+  <div class="style-guide">
+    <button class="theme-toggle contact-btn" id="theme-toggle">
+      🌙 Toggle Theme
+    </button>
+    
+    <h1>Marc Castellvi Portfolio - Style Guide</h1>
+    
+    <section>
+      <h2>Color Palette</h2>
+      <div class="color-palette">
+        <div class="color-swatch primary">
+          <div>Primary</div>
+          <div>#007aff</div>
+        </div>
+        <div class="color-swatch secondary">
+          <div>Secondary</div>
+          <div>#00c6fb</div>
+        </div>
+        <div class="color-swatch accent">
+          <div>Accent</div>
+          <div>#ff6b6b</div>
+        </div>
+        <div class="color-swatch success">
+          <div>Success</div>
+          <div>#28a745</div>
+        </div>
+        <div class="color-swatch warning">
+          <div>Warning</div>
+          <div>#ffc107</div>
+        </div>
+        <div class="color-swatch error">
+          <div>Error</div>
+          <div>#dc3545</div>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Typography</h2>
+      <div class="typography-sample">
+        <h1>Heading 1 - Main Title</h1>
+        <h2>Heading 2 - Section Title</h2>
+        <h3>Heading 3 - Subsection</h3>
+        <h4>Heading 4 - Component Title</h4>
+        <p>Body text - Regular paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
+        <p class="text-secondary">Secondary text for descriptions and captions.</p>
+        <p class="text-tertiary">Tertiary text for meta information.</p>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Components</h2>
+      <div class="component-showcase">
+        <div>
+          <h3>Buttons</h3>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button class="contact-btn">Primary Button</button>
+            <button class="contact-btn" style="background: var(--secondary-color);">Secondary Button</button>
+            <button class="contact-btn" style="background: var(--accent-color);">Accent Button</button>
+          </div>
+        </div>
+        
+        <div>
+          <h3>Cards</h3>
+          <div class="project-card visible" style="max-width: 300px;">
+            <div class="project-thumb">
+              <img src="assets/Spellbound-2.jpg" alt="Sample project" style="width: 100%; height: 150px; object-fit: cover;">
+            </div>
+            <div class="project-info">
+              <h4 class="project-name">Sample Project</h4>
+              <div class="project-role">Sample Role</div>
+              <div class="project-meta">Company • Year</div>
+              <p class="project-desc">This is a sample project description to showcase the card component styling.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3>Glass Morphism</h3>
+          <div style="background: var(--bg-glass); backdrop-filter: var(--glass-blur) var(--glass-saturation); border: var(--glass-border); border-radius: var(--border-radius-xl); padding: 1.5rem;">
+            <p>This is a glass morphism container with blur and transparency effects.</p>
+          </div>
+        </div>
+        
+        <div>
+          <h3>Shadows</h3>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="width: 80px; height: 80px; background: var(--primary-color); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm);"></div>
+            <div style="width: 80px; height: 80px; background: var(--secondary-color); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg);"></div>
+            <div style="width: 80px; height: 80px; background: var(--accent-color); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-glow);"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Spacing & Layout</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="background: var(--primary-color); padding: var(--spacing-xs); border-radius: var(--border-radius-md); color: white; text-align: center;">XS (4px)</div>
+        <div style="background: var(--primary-color); padding: var(--spacing-sm); border-radius: var(--border-radius-md); color: white; text-align: center;">SM (8px)</div>
+        <div style="background: var(--primary-color); padding: var(--spacing-md); border-radius: var(--border-radius-md); color: white; text-align: center;">MD (16px)</div>
+        <div style="background: var(--primary-color); padding: var(--spacing-lg); border-radius: var(--border-radius-md); color: white; text-align: center;">LG (24px)</div>
+        <div style="background: var(--primary-color); padding: var(--spacing-xl); border-radius: var(--border-radius-md); color: white; text-align: center;">XL (32px)</div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Accessibility</h2>
+      <p>All components are designed with WCAG 2.2 AA compliance in mind:</p>
+      <ul>
+        <li>✅ Contrast ratios meet AA standards</li>
+        <li>✅ Focus states are clearly visible</li>
+        <li>✅ Semantic HTML structure</li>
+        <li>✅ Screen reader compatible</li>
+        <li>✅ Keyboard navigation support</li>
+        <li>✅ Reduced motion support</li>
+      </ul>
+    </section>
+  </div>
+  
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = body.dataset.theme;
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      body.dataset.theme = newTheme;
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+    });
+    
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    body.dataset.theme = savedTheme;
+    themeToggle.textContent = savedTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+  </script>
+</body>
+</html>

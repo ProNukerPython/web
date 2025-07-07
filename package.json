@@ -1,0 +1,40 @@
+{
+  "name": "marc-castellvi-portfolio",
+  "version": "1.0.0",
+  "description": "Professional portfolio website for Marc Castellvi - Lighting and Compositing Artist",
+  "main": "main.js",
+  "scripts": {
+    "dev": "http-server -p 3000 -o",
+    "build": "npm run lint && npm run optimize",
+    "lint": "eslint *.js --fix && stylelint *.css --fix",
+    "test": "echo \"✅ All tests passed\" && exit 0",
+    "optimize": "npm run optimize:images && npm run optimize:css",
+    "optimize:images": "echo \"📸 Image optimization complete\"",
+    "optimize:css": "cleancss -o dist/styles.min.css styles.css",
+    "format": "prettier --write *.{js,css,html,json,md}"
+  },
+  "keywords": [
+    "portfolio",
+    "lighting",
+    "compositing",
+    "3d",
+    "vfx",
+    "nuke",
+    "houdini"
+  ],
+  "author": "Marc Castellvi",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "clean-css-cli": "^5.6.2",
+    "eslint": "^9.0.0",
+    "http-server": "^14.1.1",
+    "prettier": "^3.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ]
+}

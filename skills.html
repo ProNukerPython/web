@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Skills - Marc Castellvi</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .skills-page {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: var(--spacing-4xl) var(--spacing-lg);
+    }
+
+    .skills-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .skills-title {
+      text-align: center;
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-color);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .skills-visualization {
+      background: var(--bg-glass);
+      border-radius: var(--border-radius-2xl);
+      padding: var(--spacing-2xl);
+      margin-bottom: var(--spacing-2xl);
+      backdrop-filter: var(--glass-blur) var(--glass-saturation);
+      border: var(--glass-border);
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 500px;
+      position: relative;
+    }
+
+    .skill-bar {
+      fill: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .skill-bar:hover {
+      fill: var(--secondary-color);
+    }
+
+    .skill-label {
+      fill: var(--text-primary);
+      font-size: 12px;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .skill-value {
+      fill: var(--text-secondary);
+      font-size: 10px;
+    }
+
+    .category-title {
+      fill: var(--text-accent);
+      font-size: 14px;
+      font-weight: var(--font-weight-bold);
+    }
+
+    .tooltip {
+      position: absolute;
+      background: var(--bg-overlay);
+      border: var(--glass-border);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-md);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: var(--z-index-tooltip);
+      backdrop-filter: var(--glass-blur);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+    }
+
+    .toggle-buttons {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .toggle-btn {
+      background: var(--bg-glass);
+      border: var(--glass-border);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .toggle-btn:hover,
+    .toggle-btn.active {
+      background: var(--primary-color);
+      color: var(--color-white);
+    }
+
+    .back-button {
+      position: fixed;
+      top: var(--spacing-lg);
+      left: var(--spacing-lg);
+      z-index: var(--z-index-fixed);
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-2xl);
+      margin-top: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: var(--border-radius-sm);
+    }
+
+    @media (max-width: 768px) {
+      .chart-container {
+        height: 400px;
+      }
+      
+      .toggle-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .toggle-btn {
+        width: 200px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="skills-page">
+    <a href="index.html" class="back-button contact-btn">← Back to Portfolio</a>
+    
+    <div class="skills-container">
+      <h1 class="skills-title">Interactive Skills Visualization</h1>
+      
+      <div class="toggle-buttons">
+        <button class="toggle-btn active" data-view="bars">Bar Chart</button>
+        <button class="toggle-btn" data-view="radial">Radial Chart</button>
+        <button class="toggle-btn" data-view="categories">By Category</button>
+      </div>
+      
+      <div class="skills-visualization">
+        <div class="chart-container" id="chart-container">
+          <svg id="skills-chart"></svg>
+        </div>
+        
+        <div class="legend" id="legend"></div>
+      </div>
+      
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+  </div>
+
+  <script>
+    class SkillsVisualization {
+      constructor() {
+        this.data = null;
+        this.currentView = 'bars';
+        this.svg = null;
+        this.tooltip = null;
+        this.colors = [
+          '#007aff', '#00c6fb', '#ff6b6b', '#ffd93d', '#28a745', '#17a2b8'
+        ];
+        this.init();
+      }
+
+      async init() {
+        try {
+          this.data = await this.loadData();
+          this.setupSVG();
+          this.setupTooltip();
+          this.setupButtons();
+          this.renderChart();
+        } catch (error) {
+          console.error('Failed to initialize skills visualization:', error);
+        }
+      }
+
+      async loadData() {
+        const response = await fetch('data/skills.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      }
+
+      setupSVG() {
+        const container = document.getElementById('chart-container');
+        this.svg = d3.select('#skills-chart')
+          .attr('width', '100%')
+          .attr('height', '100%')
+          .attr('viewBox', '0 0 800 400');
+      }
+
+      setupTooltip() {
+        this.tooltip = d3.select('#tooltip');
+      }
+
+      setupButtons() {
+        const buttons = document.querySelectorAll('.toggle-btn');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            buttons.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            this.currentView = e.target.dataset.view;
+            this.renderChart();
+          });
+        });
+      }
+
+      renderChart() {
+        this.svg.selectAll('*').remove();
+        
+        switch (this.currentView) {
+          case 'bars':
+            this.renderBarChart();
+            break;
+          case 'radial':
+            this.renderRadialChart();
+            break;
+          case 'categories':
+            this.renderCategoryChart();
+            break;
+        }
+        
+        this.updateLegend();
+      }
+
+      renderBarChart() {
+        const allSkills = this.data.skills.flatMap(category => 
+          category.items.map(item => ({
+            ...item,
+            category: category.category
+          }))
+        );
+
+        const margin = { top: 20, right: 30, bottom: 40, left: 120 };
+        const width = 800 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        const g = this.svg.append('g')
+          .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const y = d3.scaleBand()
+          .domain(allSkills.map(d => d.name))
+          .range([0, height])
+          .padding(0.1);
+
+        const x = d3.scaleLinear()
+          .domain([0, 100])
+          .range([0, width]);
+
+        const colorScale = d3.scaleOrdinal()
+          .domain(this.data.skills.map(d => d.category))
+          .range(this.colors);
+
+        // Add bars
+        g.selectAll('.skill-bar')
+          .data(allSkills)
+          .enter().append('rect')
+          .attr('class', 'skill-bar')
+          .attr('x', 0)
+          .attr('y', d => y(d.name))
+          .attr('width', 0)
+          .attr('height', y.bandwidth())
+          .attr('fill', d => colorScale(d.category))
+          .on('mouseover', (event, d) => this.showTooltip(event, d))
+          .on('mouseout', () => this.hideTooltip())
+          .transition()
+          .duration(1000)
+          .delay((d, i) => i * 50)
+          .attr('width', d => x(d.level));
+
+        // Add labels
+        g.selectAll('.skill-label')
+          .data(allSkills)
+          .enter().append('text')
+          .attr('class', 'skill-label')
+          .attr('x', -10)
+          .attr('y', d => y(d.name) + y.bandwidth() / 2)
+          .attr('dy', '0.35em')
+          .attr('text-anchor', 'end')
+          .text(d => d.name);
+
+        // Add value labels
+        g.selectAll('.skill-value')
+          .data(allSkills)
+          .enter().append('text')
+          .attr('class', 'skill-value')
+          .attr('x', d => x(d.level) + 5)
+          .attr('y', d => y(d.name) + y.bandwidth() / 2)
+          .attr('dy', '0.35em')
+          .text(d => `${d.level}%`);
+
+        // Add axes
+        g.append('g')
+          .attr('transform', `translate(0,${height})`)
+          .call(d3.axisBottom(x).tickFormat(d => `${d}%`));
+      }
+
+      renderRadialChart() {
+        const allSkills = this.data.skills.flatMap(category => 
+          category.items.map(item => ({
+            ...item,
+            category: category.category
+          }))
+        );
+
+        const width = 800;
+        const height = 400;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const outerRadius = Math.min(width, height) / 2 - 40;
+
+        const g = this.svg.append('g')
+          .attr('transform', `translate(${centerX},${centerY})`);
+
+        const angleScale = d3.scaleLinear()
+          .domain([0, allSkills.length])
+          .range([0, 2 * Math.PI]);
+
+        const radiusScale = d3.scaleLinear()
+          .domain([0, 100])
+          .range([0, outerRadius]);
+
+        const colorScale = d3.scaleOrdinal()
+          .domain(this.data.skills.map(d => d.category))
+          .range(this.colors);
+
+        // Add concentric circles
+        [20, 40, 60, 80, 100].forEach(level => {
+          g.append('circle')
+            .attr('r', radiusScale(level))
+            .attr('fill', 'none')
+            .attr('stroke', 'rgba(255,255,255,0.1)')
+            .attr('stroke-dasharray', '2,2');
+        });
+
+        // Add skill bars
+        allSkills.forEach((skill, i) => {
+          const angle = angleScale(i);
+          const x1 = 0;
+          const y1 = 0;
+          const x2 = radiusScale(skill.level) * Math.cos(angle - Math.PI / 2);
+          const y2 = radiusScale(skill.level) * Math.sin(angle - Math.PI / 2);
+
+          g.append('line')
+            .attr('x1', x1)
+            .attr('y1', y1)
+            .attr('x2', x1)
+            .attr('y2', y1)
+            .attr('stroke', colorScale(skill.category))
+            .attr('stroke-width', 3)
+            .attr('stroke-linecap', 'round')
+            .on('mouseover', (event) => this.showTooltip(event, skill))
+            .on('mouseout', () => this.hideTooltip())
+            .transition()
+            .duration(1000)
+            .delay(i * 50)
+            .attr('x2', x2)
+            .attr('y2', y2);
+
+          // Add skill labels
+          const labelRadius = outerRadius + 20;
+          const labelX = labelRadius * Math.cos(angle - Math.PI / 2);
+          const labelY = labelRadius * Math.sin(angle - Math.PI / 2);
+
+          g.append('text')
+            .attr('x', labelX)
+            .attr('y', labelY)
+            .attr('dy', '0.35em')
+            .attr('text-anchor', labelX > 0 ? 'start' : 'end')
+            .attr('class', 'skill-label')
+            .attr('font-size', '10px')
+            .text(skill.name);
+        });
+      }
+
+      renderCategoryChart() {
+        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        const g = this.svg.append('g')
+          .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const categoryData = this.data.skills.map(category => ({
+          ...category,
+          average: category.items.reduce((sum, item) => sum + item.level, 0) / category.items.length
+        }));
+
+        const x = d3.scaleBand()
+          .domain(categoryData.map(d => d.category))
+          .range([0, width])
+          .padding(0.1);
+
+        const y = d3.scaleLinear()
+          .domain([0, 100])
+          .range([height, 0]);
+
+        const colorScale = d3.scaleOrdinal()
+          .domain(categoryData.map(d => d.category))
+          .range(this.colors);
+
+        // Add bars
+        g.selectAll('.category-bar')
+          .data(categoryData)
+          .enter().append('rect')
+          .attr('class', 'category-bar')
+          .attr('x', d => x(d.category))
+          .attr('y', height)
+          .attr('width', x.bandwidth())
+          .attr('height', 0)
+          .attr('fill', d => colorScale(d.category))
+          .on('mouseover', (event, d) => this.showCategoryTooltip(event, d))
+          .on('mouseout', () => this.hideTooltip())
+          .transition()
+          .duration(1000)
+          .delay((d, i) => i * 200)
+          .attr('y', d => y(d.average))
+          .attr('height', d => height - y(d.average));
+
+        // Add category labels
+        g.selectAll('.category-label')
+          .data(categoryData)
+          .enter().append('text')
+          .attr('class', 'category-label')
+          .attr('x', d => x(d.category) + x.bandwidth() / 2)
+          .attr('y', height + 20)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '12px')
+          .text(d => d.category);
+
+        // Add value labels
+        g.selectAll('.category-value')
+          .data(categoryData)
+          .enter().append('text')
+          .attr('class', 'category-value')
+          .attr('x', d => x(d.category) + x.bandwidth() / 2)
+          .attr('y', d => y(d.average) - 5)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '10px')
+          .text(d => `${Math.round(d.average)}%`);
+
+        // Add axes
+        g.append('g')
+          .attr('transform', `translate(0,${height})`)
+          .call(d3.axisBottom(x));
+
+        g.append('g')
+          .call(d3.axisLeft(y).tickFormat(d => `${d}%`));
+      }
+
+      showTooltip(event, data) {
+        const tooltip = this.tooltip
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 10) + 'px')
+          .classed('visible', true);
+
+        tooltip.html(`
+          <div>
+            <strong>${data.name}</strong><br>
+            Level: ${data.level}%<br>
+            Experience: ${data.years} years<br>
+            Category: ${data.category}
+          </div>
+        `);
+      }
+
+      showCategoryTooltip(event, data) {
+        const tooltip = this.tooltip
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 10) + 'px')
+          .classed('visible', true);
+
+        const skillsList = data.items.map(item => 
+          `${item.name}: ${item.level}%`
+        ).join('<br>');
+
+        tooltip.html(`
+          <div>
+            <strong>${data.category}</strong><br>
+            Average: ${Math.round(data.average)}%<br>
+            <hr>
+            ${skillsList}
+          </div>
+        `);
+      }
+
+      hideTooltip() {
+        this.tooltip.classed('visible', false);
+      }
+
+      updateLegend() {
+        const legend = d3.select('#legend');
+        legend.selectAll('*').remove();
+
+        const colorScale = d3.scaleOrdinal()
+          .domain(this.data.skills.map(d => d.category))
+          .range(this.colors);
+
+        const legendItems = legend.selectAll('.legend-item')
+          .data(this.data.skills)
+          .enter().append('div')
+          .attr('class', 'legend-item');
+
+        legendItems.append('div')
+          .attr('class', 'legend-color')
+          .style('background-color', d => colorScale(d.category));
+
+        legendItems.append('span')
+          .text(d => d.category);
+      }
+    }
+
+    // Initialize the visualization
+    new SkillsVisualization();
+
+    // Theme toggle functionality
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle-btn';
+    themeToggle.innerHTML = `
+      <svg class="theme-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    `;
+    themeToggle.style.position = 'fixed';
+    themeToggle.style.top = '20px';
+    themeToggle.style.right = '20px';
+    themeToggle.style.zIndex = '1000';
+
+    document.body.appendChild(themeToggle);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.body.dataset.theme;
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.body.dataset.theme = newTheme;
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Apply saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.dataset.theme = savedTheme;
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+</html>

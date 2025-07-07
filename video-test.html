@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: #000;
+    }
+    
+    .video-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 3rem;
+      z-index: 1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <video autoplay loop muted playsinline>
+      <source src="assets/Reel-background.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="overlay">
+      <h1>Video Test</h1>
+      <p>If you can see this text over a video, the video is working!</p>
+    </div>
+  </div>
+  
+  <script>
+    const video = document.querySelector('video');
+    
+    video.addEventListener('loadstart', () => {
+      console.log('Video load started');
+    });
+    
+    video.addEventListener('loadeddata', () => {
+      console.log('Video data loaded');
+    });
+    
+    video.addEventListener('canplay', () => {
+      console.log('Video can play');
+    });
+    
+    video.addEventListener('error', (e) => {
+      console.error('Video error:', e);
+    });
+    
+    // Try to play the video
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log('Video is playing');
+      }).catch((error) => {
+        console.error('Play failed:', error);
+      });
+    }
+  </script>
+</body>
+</html>
