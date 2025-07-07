@@ -335,16 +335,16 @@ window.addEventListener('DOMContentLoaded', function() {
 })();
 
 // Fade-in animation for timeline items
-  function revealTimelineItems() {
-    const aboutSection = document.querySelector('.about-section');
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    if (!aboutSection || !timelineItems.length) return;
-    if (aboutSection.classList.contains('visible')) {
-      timelineItems.forEach((item, idx) => {
-        setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
-      });
-      window.removeEventListener('scroll', revealTimelineItems);
-    }
+function revealTimelineItems() {
+  const aboutSection = document.querySelector('.about-section');
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  if (!aboutSection || !timelineItems.length) return;
+  if (aboutSection.classList.contains('visible')) {
+    timelineItems.forEach((item, idx) => {
+      setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
+    });
+    window.removeEventListener('scroll', revealTimelineItems);
   }
-  window.addEventListener('scroll', revealTimelineItems, { passive: true });
-  revealTimelineItems();
+}
+window.addEventListener('scroll', revealTimelineItems, { passive: true });
+revealTimelineItems();

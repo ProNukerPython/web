@@ -986,58 +986,58 @@ class SectionNavigator {
       const currentEl = this.sections[this.currentSection];
       
       switch(e.key) {
-        case 'ArrowDown':
-        case 'PageDown':
-        case ' ':
-          // If current section is scrollable, check if we can navigate
-          if (currentEl && currentEl.classList.contains('scrollable')) {
-            const scrollContainer = currentEl.querySelector('.section-content') || currentEl;
-            const scrollTop = scrollContainer.scrollTop;
-            const scrollHeight = scrollContainer.scrollHeight;
-            const clientHeight = scrollContainer.clientHeight;
-            const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        // If current section is scrollable, check if we can navigate
+        if (currentEl && currentEl.classList.contains('scrollable')) {
+          const scrollContainer = currentEl.querySelector('.section-content') || currentEl;
+          const scrollTop = scrollContainer.scrollTop;
+          const scrollHeight = scrollContainer.scrollHeight;
+          const clientHeight = scrollContainer.clientHeight;
+          const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
             
-            if (!isAtBottom) {
-              // Not at bottom, scroll within section
-              scrollContainer.scrollBy({ top: 100, behavior: 'smooth' });
-              e.preventDefault();
-              return;
-            }
+          if (!isAtBottom) {
+            // Not at bottom, scroll within section
+            scrollContainer.scrollBy({ top: 100, behavior: 'smooth' });
+            e.preventDefault();
+            return;
           }
+        }
           
-          // Navigate to next section
-          e.preventDefault();
-          this.nextSection();
-          break;
+        // Navigate to next section
+        e.preventDefault();
+        this.nextSection();
+        break;
           
-        case 'ArrowUp':
-        case 'PageUp':
-          // If current section is scrollable, check if we can navigate
-          if (currentEl && currentEl.classList.contains('scrollable')) {
-            const scrollContainer = currentEl.querySelector('.section-content') || currentEl;
-            const scrollTop = scrollContainer.scrollTop;
+      case 'ArrowUp':
+      case 'PageUp':
+        // If current section is scrollable, check if we can navigate
+        if (currentEl && currentEl.classList.contains('scrollable')) {
+          const scrollContainer = currentEl.querySelector('.section-content') || currentEl;
+          const scrollTop = scrollContainer.scrollTop;
             
-            if (scrollTop > 0) {
-              // Not at top, scroll within section
-              scrollContainer.scrollBy({ top: -100, behavior: 'smooth' });
-              e.preventDefault();
-              return;
-            }
+          if (scrollTop > 0) {
+            // Not at top, scroll within section
+            scrollContainer.scrollBy({ top: -100, behavior: 'smooth' });
+            e.preventDefault();
+            return;
           }
+        }
           
-          // Navigate to previous section
-          e.preventDefault();
-          this.previousSection();
-          break;
+        // Navigate to previous section
+        e.preventDefault();
+        this.previousSection();
+        break;
           
-        case 'Home':
-          e.preventDefault();
-          this.goToSection(0);
-          break;
-        case 'End':
-          e.preventDefault();
-          this.goToSection(this.sections.length - 1);
-          break;
+      case 'Home':
+        e.preventDefault();
+        this.goToSection(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        this.goToSection(this.sections.length - 1);
+        break;
       }
     });
 
@@ -1125,7 +1125,7 @@ class SectionNavigator {
     // Show current section
     const currentEl = this.sections[index];
     if (currentEl) {
-      console.log(`Showing section:`, currentEl.id || currentEl.className);
+      console.log('Showing section:', currentEl.id || currentEl.className);
       currentEl.style.opacity = '1';
       currentEl.style.visibility = 'visible';
       currentEl.style.transform = 'translateY(0)';
@@ -1146,7 +1146,7 @@ class SectionNavigator {
     // Animation complete
     setTimeout(() => {
       this.isAnimating = false;
-      console.log(`Section transition complete`);
+      console.log('Section transition complete');
     }, 500);
   }
 
@@ -1423,7 +1423,7 @@ class ProjectCarousel {
 
     // Log the results
     const totalCards = this.carouselTrack.children.length;
-    console.log(`Created infinite carousel:`);
+    console.log('Created infinite carousel:');
     console.log(`- Original cards: ${this.projectCards.length}`);
     console.log(`- Duplicate sets: ${duplicateSets}`);
     console.log(`- Total cards: ${totalCards}`);
