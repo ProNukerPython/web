@@ -1,0 +1,31 @@
+# Build and distribution files
+build/
+dist/
+*.min.js
+*.min.css
+
+# Assets and media files
+assets/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.webp
+*.mp4
+*.webm
+*.mov
+
+# Dependencies
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
