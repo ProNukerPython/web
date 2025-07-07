@@ -1,6 +1,7 @@
 {
   "name": "marc-castellvi-portfolio",
   "version": "1.0.0",
+  "type": "module",
   "description": "Professional portfolio website for Marc Castellvi - Lighting and Compositing Artist",
   "main": "main.js",
   "scripts": {
