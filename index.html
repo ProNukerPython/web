@@ -26,8 +26,13 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   
-  <!-- Preload critical resources -->
+  <!-- Preload critical resources (fonts and video) -->
   <link rel="preload" href="assets/Reel-background.mp4" as="video" type="video/mp4">
+  <!-- Optimize font loading: Preconnect to Google Fonts and load only if used -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Example: Only include Inter if actually used in CSS -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"> -->
   <link rel="preload" href="theme.css" as="style">
   
   <!-- Stylesheets -->
@@ -54,21 +59,15 @@
     <div class="section-nav-dot" data-section="5" aria-label="Go to Contact section"></div>
   </div>
   
-  <!-- Section Controls -->
-  <div class="section-controls">
-    <button class="section-btn" id="prev-section" aria-label="Previous section">‹</button>
-    <button class="section-btn" id="next-section" aria-label="Next section">›</button>
-  </div>
-  
-  <!-- Auto-scroll Button -->
-  <button class="auto-scroll-btn" id="auto-scroll-btn" aria-label="Auto-scroll through sections">▶</button>
+
 
   <!-- Fixed Header with Navigation -->
   <header class="fixed-header">
-    <div class="header-title">
+    <div class="header-title" id="header-title">
       <span class="header-title-marc">MARC</span>
       <span class="header-title-castellvi">CASTELLVI</span>
     </div>
+    <!-- If you want to use a custom font, ensure it is loaded above and used in your CSS -->
     
     <!-- Theme Toggle Button -->
     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
@@ -267,111 +266,115 @@
 
   <!-- New Project Cards Section (moved above projects) -->
   <section id="project-cards" class="project-cards-section section section-animate scrollable" aria-labelledby="project-cards-title">
-    <div class="section-content">
-      <h2 id="project-cards-title" class="project-cards-title">Project Gallery</h2>
-          <p class="projects-intro">
-      <svg class="projects-intro-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" style="vertical-align:middle;margin-right:0.5em;">
-        <circle cx="11" cy="11" r="10" stroke="#00c6fb" stroke-width="2"/>
-        <path d="M6 12l3 3 7-7" stroke="#00c6fb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      A selection of my recent work in lighting, compositing, and tool development. Click on each project for more details.
-    </p>
-      <div class="projects-view-toggle" style="text-align:center; margin-bottom: 1.5em;">
-        <button id="projects-toggle-btn" class="action-btn" type="button" aria-pressed="false" aria-label="Show as list or carousel">
-          <span class="toggle-icon" aria-hidden="true">&#9776;</span>
-          <span class="toggle-label">Show as List</span>
-        </button>
-      </div>
-      <div class="projects-list">
-        <div class="carousel-container">
-          <div class="carousel-track" id="carousel-track">
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Spellbound</h3>
-                <div class="project-role">Lighting Assistant</div>
-                <div class="project-meta">Skydance Animation · 2024</div>
-                <p class="project-desc">
-                  Feature film. Responsible for lookdev, lighting, and compositing of key sequences using Houdini Solaris and Nuke.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Pookoo</h3>
-                <div class="project-role">Lighting TD & Pipeline Tools</div>
-                <div class="project-meta">Skydance Animation · 2022</div>
-                <p class="project-desc">
-                  Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Personal Short</h3>
-                <div class="project-role">Director · Lighting & Comp</div>
-                <div class="project-meta">2021</div>
-                <p class="project-desc">
-                  Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Sky: The two embers</h3>
-                <div class="project-role">Lighting & Compositing</div>
-                <div class="project-meta">Personal · 2020</div>
-                <p class="project-desc">
-                  Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">The Quinta's Ghost</h3>
-                <div class="project-role">CG Lighting & Lookdev</div>
-                <div class="project-meta">Freelance · 2023</div>
-                <p class="project-desc">
-                  Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Personal Projects and Colaborations</h3>
-                <div class="project-role">Lighting, Tools & Experiments</div>
-                <div class="project-meta">Ongoing</div>
-                <p class="project-desc">
-                  A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
-                </p>
-              </div>
-            </article>
+  <div class="section-content">
+    <!-- Projects Intro Restored -->
+    <div class="projects-intro">
+      <h3 class="projects-intro-title">Featured Projects</h3>
+      <div class="projects-intro-flex">
+        <div class="projects-intro-flex-row">
+          <span class="projects-intro-icon" aria-hidden="true">
+            <!-- Blue Tick SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 48 48" fill="00c6fb" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="22" fill="#00c6fb"/>
+              <circle cx="24" cy="24" r="20" fill="000"/>
+              <path d="M34 18L22 30L16 24" stroke="#00c6fb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div class="projects-intro-text">
+            <p class="projects-intro-desc">A curated selection of my lighting, compositing, and technical art work. Explore the gallery below to see highlights from professional and personal projects.</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  
-  <section id="skills" class="skills-section section section-animate" aria-labelledby="skills-title">
-    <!-- Floating window moved to about section -->
-  </section>
+    <div class="carousel-container" id="carousel-container">
+      <div class="carousel-track" id="carousel-track">
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Spellbound</h3>
+            <div class="project-role">Lighting Assistant</div>
+            <div class="project-meta">Skydance Animation · 2024</div>
+            <p class="project-desc">
+              Helping lighting Artist to move forward with some problems on scenes related to Houdini Solaris, Training shots and applying feedback notes.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Pookoo</h3>
+            <div class="project-role">Lighting TD & Pipeline Tools</div>
+            <div class="project-meta">Skydance Animation · 2022</div>
+            <p class="project-desc">
+              Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Short</h3>
+            <div class="project-role">Director · Lighting & Comp</div>
+            <div class="project-meta">2021</div>
+            <p class="project-desc">
+              Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Sky: The two embers</h3>
+            <div class="project-role">Lighting & Compositing</div>
+            <div class="project-meta">Personal · 2020</div>
+            <p class="project-desc">
+              Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">The Quinta's Ghost</h3>
+            <div class="project-role">CG Lighting & Lookdev</div>
+            <div class="project-meta">Freelance · 2023</div>
+            <p class="project-desc">
+              Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Projects and Colaborations</h3>
+            <div class="project-role">Lighting, Tools & Experiments</div>
+            <div class="project-meta">Ongoing</div>
+            <p class="project-desc">
+              A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
+            </p>
+          </div>
+        </article>
+      </div>
+      <!-- Carousel arrow navigation -->
+      <div class="carousel-arrows">
+        <button class="carousel-arrow carousel-arrow-left" id="carousel-arrow-left" aria-label="Scroll to previous project">‹</button>
+        <button class="carousel-arrow carousel-arrow-right" id="carousel-arrow-right" aria-label="Scroll to next project">›</button>
+      </div>
+    </div>
+  </div>
+</section>
   
   <section class="Nuke Tools section section-animate" id="Tools-section" aria-labelledby="nuke-tools-title">
     <div class="nuke-tools-container">

@@ -1,3 +1,110 @@
+// --- Custom Carousel Scrollbar Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+  const carousel = document.querySelector('.carousel-container');
+  const carouselTrack = document.getElementById('carousel-track');
+  const leftArrow = document.getElementById('carousel-arrow-left');
+  const rightArrow = document.getElementById('carousel-arrow-right');
+  if (!carousel || !carouselTrack || !leftArrow || !rightArrow) return;
+
+  // Center the next/prev project card in the carousel
+  function centerProjectCard(index) {
+    const cards = Array.from(carouselTrack.querySelectorAll('.project-card'));
+    if (!cards.length) return;
+    // Clamp index to valid range
+    const total = cards.length;
+    let i = ((index % total) + total) % total;
+    const card = cards[i];
+    const cardRect = card.getBoundingClientRect();
+    const carouselRect = carousel.getBoundingClientRect();
+    const cardCenter = cardRect.left + cardRect.width / 2;
+    const carouselCenter = carouselRect.left + carouselRect.width / 2;
+    // Calculate the scrollX needed to center this card
+    // Find the card's offsetLeft relative to the track
+    const cardOffset = card.offsetLeft + card.offsetWidth / 2;
+    const targetScroll = cardOffset - carousel.offsetWidth / 2;
+    // Set scrollX directly (disable auto-scroll)
+    if (window.portfolioApp) {
+      const carouselComp = window.portfolioApp.getComponent('projectCarousel');
+      if (carouselComp) {
+        carouselComp.isAnimating = false;
+        // Animate the jump smoothly
+        const start = -carouselComp.scrollX;
+        const end = targetScroll;
+        const duration = 520; // ms
+        const startTime = performance.now();
+        function animateScroll(now) {
+          const elapsed = now - startTime;
+          const t = Math.min(1, elapsed / duration);
+          // Ease in-out cubic
+          const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+          const current = start + (end - start) * ease;
+          carouselComp.scrollX = -current;
+          carouselTrack.style.transform = `translateX(${-current}px)`;
+          if (t < 1) {
+            requestAnimationFrame(animateScroll);
+          } else {
+            carouselComp.scrollX = -end;
+            carouselTrack.style.transform = `translateX(${-end}px)`;
+            // After animation, schedule auto-scroll resume
+            if (window.carouselAutoScrollTimeout) clearTimeout(window.carouselAutoScrollTimeout);
+            window.carouselAutoScrollTimeout = setTimeout(() => {
+              carouselComp.isAnimating = true;
+            }, 5000);
+          }
+        }
+        requestAnimationFrame(animateScroll);
+      }
+    }
+    // Store current index for navigation
+    carousel.currentCenteredIndex = i;
+  }
+
+  // Find the initial centered card (closest to center)
+  function getClosestCardIndex() {
+    const cards = Array.from(carouselTrack.querySelectorAll('.project-card'));
+    if (!cards.length) return 0;
+    const carouselRect = carousel.getBoundingClientRect();
+    const carouselCenter = carouselRect.left + carouselRect.width / 2;
+    let minDist = Infinity;
+    let minIdx = 0;
+    cards.forEach((card, idx) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - carouselCenter);
+      if (dist < minDist) {
+        minDist = dist;
+        minIdx = idx;
+      }
+    });
+    return minIdx;
+  }
+
+  // Arrow button event listeners
+  leftArrow.addEventListener('click', () => {
+    const cards = Array.from(carouselTrack.querySelectorAll('.project-card'));
+    let idx = carousel.currentCenteredIndex ?? getClosestCardIndex();
+    idx = (idx - 1 + cards.length) % cards.length;
+    centerProjectCard(idx);
+  });
+  rightArrow.addEventListener('click', () => {
+    const cards = Array.from(carouselTrack.querySelectorAll('.project-card'));
+    let idx = carousel.currentCenteredIndex ?? getClosestCardIndex();
+    idx = (idx + 1) % cards.length;
+    centerProjectCard(idx);
+  });
+
+  // Center the closest card on load
+  setTimeout(() => {
+    centerProjectCard(getClosestCardIndex());
+  }, 200);
+
+  // Optionally: recenter on window resize
+  window.addEventListener('resize', () => {
+    if (typeof carousel.currentCenteredIndex === 'number') {
+      centerProjectCard(carousel.currentCenteredIndex);
+    }
+  });
+});
 // Floating Skills Window logic
 document.addEventListener('DOMContentLoaded', () => {
   const openBtn = document.getElementById('skills-float-btn');
@@ -149,14 +256,14 @@ class AnimationObserver {
     if ('IntersectionObserver' in window) {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          console.log('Intersection observed:', entry.target.className, 'isIntersecting:', entry.isIntersecting);
+          // Debug log removed
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            console.log('Added visible class to:', entry.target.className);
+            // Debug log removed
             
             // Special handling for about section
             if (entry.target.classList.contains('about-section')) {
-              console.log('About section became visible, triggering child animations');
+              // Debug log removed
               this.triggerAboutAnimations();
             }
             
@@ -211,11 +318,12 @@ class AnimationObserver {
 }
 
 // Header management
+
 class HeaderManager {
   constructor() {
     this.fixedHeader = document.querySelector('.fixed-header');
     this.mainHeader = document.querySelector('.main-header');
-    this.headerTitle = document.querySelector('.header-title');
+    this.headerTitle = document.getElementById('header-title');
     this.init();
   }
 
@@ -231,9 +339,10 @@ class HeaderManager {
   }
 
   updateHeaderVisibility() {
-    if (!this.fixedHeader || !this.mainHeader) return;
+    if (!this.fixedHeader || !this.mainHeader || !this.headerTitle) return;
 
     const rect = this.mainHeader.getBoundingClientRect();
+    // Show title as soon as the main header bottom is above the top of the viewport
     const isScrolledPast = rect.bottom <= 0;
 
     // Toggle header title visibility
@@ -375,42 +484,26 @@ class VideoManager {
 
   initBackgroundVideo() {
     if (!this.bgVideo) {
-      console.warn('Background video element not found');
+      // Debug log removed
       return;
     }
 
-    console.log('Background video element found:', this.bgVideo);
-    console.log('Video source:', this.bgVideo.src || this.bgVideo.currentSrc);
+    // Debug logs removed
 
-    this.bgVideo.addEventListener('loadstart', () => {
-      console.log('Background video load started');
-    });
-
-    this.bgVideo.addEventListener('loadeddata', () => {
-      console.log('Background video data loaded');
-    });
-
-    this.bgVideo.addEventListener('canplay', () => {
-      console.log('Background video can play');
-    });
-
-    this.bgVideo.addEventListener('playing', () => {
-      console.log('Background video is playing');
-    });
+    // Debug logs removed
 
     const playPromise = this.bgVideo.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        console.log('Background video play succeeded');
+        // Debug log removed
       }).catch((err) => {
-        console.warn('Background video autoplay blocked:', err);
+        // Debug log removed
         this.setupUserInteractionPlayback();
       });
     }
 
     this.bgVideo.addEventListener('error', (e) => {
-      console.error('Background video error:', e);
-      console.error('Video error code:', this.bgVideo.error ? this.bgVideo.error.code : 'unknown');
+      // Optionally handle video errors in production
     });
   }
 
@@ -544,7 +637,7 @@ class ScrollManager {
     // Add debugging for scroll issues
     window.addEventListener('wheel', (e) => {
       if (e.defaultPrevented) {
-        console.warn('Scroll wheel event was prevented by something');
+        // Debug log removed
       }
     }, { passive: true });
     
@@ -1007,7 +1100,7 @@ class SectionNavigator {
       section.style.zIndex = '1';
     });
 
-    console.log(`Found ${this.sections.length} sections:`, this.sections.map(s => s.id || s.className));
+    // Debug log removed
   }
 
   bindEvents() {
@@ -1126,19 +1219,19 @@ class SectionNavigator {
         const isAtTop = scrollTop <= 0;
         const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
         
-        console.log(`Scrollable section - scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}, isAtTop: ${isAtTop}, isAtBottom: ${isAtBottom}, deltaY: ${e.deltaY}`);
+        // Debug log removed
         
         // Allow navigation only if we're at the edges and scrolling in the appropriate direction
         if (e.deltaY > 0 && isAtBottom) {
           // Scrolling down at bottom - navigate to next section
-          console.log('Navigating to next section from bottom of scrollable section');
+          // Debug log removed
           e.preventDefault();
           if (!this.isAnimating) {
             this.nextSection();
           }
         } else if (e.deltaY < 0 && isAtTop) {
           // Scrolling up at top - navigate to previous section
-          console.log('Navigating to previous section from top of scrollable section');
+          // Debug log removed
           e.preventDefault();
           if (!this.isAnimating) {
             this.previousSection();
@@ -1162,62 +1255,65 @@ class SectionNavigator {
   }
 
   showSection(index) {
-    console.log(`Attempting to show section ${index}`);
-    
     if (index < 0 || index >= this.sections.length || this.isAnimating) {
-      console.log(`Invalid section index ${index} or currently animating`);
       return;
     }
-    
     this.isAnimating = true;
-    
-    // Update current section
     const previousSection = this.currentSection;
     this.currentSection = index;
-    
-    console.log(`Moving from section ${previousSection} to section ${index}`);
-    
-    // Hide all sections first
+
+    // Hide all sections except the current
     this.sections.forEach((section, i) => {
       if (i !== index) {
         section.style.opacity = '0';
         section.style.visibility = 'hidden';
         section.style.zIndex = '1';
-        
         if (i < index) {
           section.style.transform = 'translateY(-50px)';
         } else {
           section.style.transform = 'translateY(50px)';
         }
+      } else {
+        section.style.opacity = '1';
+        section.style.visibility = 'visible';
+        section.style.transform = 'translateY(0)';
+        section.style.zIndex = '10';
       }
     });
-    
-    // Show current section
+
+    // Special: If about-section, fade in its text content
     const currentEl = this.sections[index];
-    if (currentEl) {
-      console.log('Showing section:', currentEl.id || currentEl.className);
-      currentEl.style.opacity = '1';
-      currentEl.style.visibility = 'visible';
-      currentEl.style.transform = 'translateY(0)';
-      currentEl.style.zIndex = '10';
-      
-      // Reset scrollable section if needed
-      if (currentEl.classList.contains('scrollable') && currentEl.id) {
-        this.scrollableManager.resetSection(currentEl.id);
+    if (currentEl && currentEl.id === 'about') {
+      const aboutText = currentEl.querySelector('.about-text-content');
+      if (aboutText) {
+        aboutText.style.transition = 'opacity 0.8s cubic-bezier(.4,0,.2,1)';
+        aboutText.style.opacity = '1';
       }
     }
-    
-    // Update navigation dots
+
+    // Reset scrollable section if needed
+    if (currentEl && currentEl.classList.contains('scrollable') && currentEl.id) {
+      this.scrollableManager.resetSection(currentEl.id);
+    }
+
+    // Update navigation dots and buttons
     this.updateNavDots();
-    
-    // Update navigation buttons
     this.updateNavButtons();
-    
-    // Animation complete
+
     setTimeout(() => {
       this.isAnimating = false;
-      console.log('Section transition complete');
     }, 500);
+
+    // --- Fixed Header Title Visibility Logic ---
+    // Show the fixed header title if NOT on the main (hero) section (index 0)
+    const fixedHeader = document.querySelector('.fixed-header');
+    if (fixedHeader) {
+      if (index === 0) {
+        fixedHeader.classList.remove('show-title');
+      } else {
+        fixedHeader.classList.add('show-title');
+      }
+    }
   }
 
   updateNavDots() {
@@ -1294,11 +1390,7 @@ class SectionNavigator {
 
   // Test method to verify navigation
   testNavigation() {
-    console.log('Testing section navigation...');
-    console.log('Total sections:', this.sections.length);
-    this.sections.forEach((section, index) => {
-      console.log(`Section ${index}:`, section.id || section.className, section);
-    });
+    // Debug log removed
     
     // Test navigation to second section
     setTimeout(() => {
@@ -1427,61 +1519,120 @@ class ProjectCarousel {
     this.carouselTrack = null;
     this.projectCards = [];
     this.isAnimating = true;
+    this.scrollX = 0;
+    this.cardWidth = 0;
+    this.totalSetWidth = 0;
+    this.duplicateSets = 3; // Restore to 3 for seamless infinite loop
+    this._hasStartedAnimation = false; // Track if animation has started
     this.init();
   }
 
   init() {
     this.carousel = document.querySelector('.carousel-container');
     this.carouselTrack = document.querySelector('.carousel-track');
-    
     if (!this.carousel || !this.carouselTrack) {
       console.log('Carousel elements not found');
       return;
     }
-
     this.setupInfiniteScroll();
     this.bindEvents();
     this.startOpacityAnimation();
-    this.setupInfiniteLoop();
+    this.startCarouselAnimation();
   }
 
-  setupInfiniteLoop() {
-    // Monitor animation progress and reset when needed
-    const checkLoop = () => {
-      if (!this.isAnimating) return;
-      
-      const transform = window.getComputedStyle(this.carouselTrack).transform;
-      if (transform && transform !== 'none') {
-        const matrix = new DOMMatrix(transform);
-        const translateX = matrix.m41;
-        
-        // Calculate when to reset - when we've moved one full set
-        const cardWidth = 380 + 32; // card width + gap
-        const originalSetWidth = this.projectCards.length * cardWidth;
-        
-        if (Math.abs(translateX) >= originalSetWidth) {
-          // Reset position seamlessly
-          this.carouselTrack.style.transform = `translateX(${translateX + originalSetWidth}px)`;
+  startCarouselAnimation() {
+    // Calculate card width and total set width
+    if (this.projectCards.length > 0) {
+      const card = this.projectCards[0];
+      this.cardWidth = card.offsetWidth + 32; // 32px gap (var(--spacing-xl))
+      this.totalSetWidth = this.projectCards.length * this.cardWidth;
+    }
+    let lastTimestamp = null;
+    let currentSpeed = 0.09; // px per ms (slower)
+    let targetSpeed = 0.09;
+    const minSpeed = 0.02;
+    const speedEasing = 0.08; // Lower = smoother stop/start
+    // Only set scrollX to -totalSetWidth on the first animation start or after a reset
+    if (!this._hasStartedAnimation) {
+      this.scrollX = -this.totalSetWidth;
+      this.carouselTrack.style.transform = `translateX(${this.scrollX}px)`;
+      this._hasStartedAnimation = true;
+    }
+    const animate = (timestamp) => {
+      currentSpeed += (targetSpeed - currentSpeed) * speedEasing;
+      let doMove = this.isAnimating;
+      if (!doMove) {
+        targetSpeed = 0;
+      } else {
+        targetSpeed = 0.025; // 50% slower scroll when animating
+      }
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+      if (doMove) {
+        this.scrollX -= currentSpeed * delta;
+        // If we've scrolled past the end of the middle set (B), jump back by totalSetWidth
+        if (this.scrollX <= -2 * this.totalSetWidth) {
+          this.scrollX += this.totalSetWidth;
+        }
+        // If we've scrolled before the start of the middle set (B), jump forward by totalSetWidth
+        if (this.scrollX >= 0) {
+          this.scrollX -= this.totalSetWidth;
         }
       }
-      
-      requestAnimationFrame(checkLoop);
+      this.carouselTrack.style.transform = `translateX(${this.scrollX}px)`;
+
+      // --- Center card scaling effect ---
+      // Always run this, even if not moving
+      const containerRect = this.carousel.getBoundingClientRect();
+      const trackRect = this.carouselTrack.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      const allCards = this.carouselTrack.querySelectorAll('.project-card');
+      allCards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const dist = Math.abs(cardCenter - containerCenter);
+        const maxScale = 1;
+        const minScale = 0.82;
+        const scaleRange = maxScale - minScale;
+        const visibleWidth = containerRect.width;
+        const edgeZone = visibleWidth * 0.20;
+        let scale, blur;
+        if (dist < edgeZone) {
+          scale = maxScale;
+          blur = 0;
+        } else if (dist < visibleWidth / 2) {
+          const t = (dist - edgeZone) / (visibleWidth / 2 - edgeZone);
+          const drop = t * t;
+          scale = maxScale - drop * scaleRange;
+          blur = drop * 6;
+        } else {
+          scale = minScale;
+          blur = 6;
+        }
+        card.style.transition = 'transform 0.38s cubic-bezier(.33,1.6,.6,1), filter 0.38s cubic-bezier(.33,1.6,.6,1)';
+        card.style.transform = `scale(${scale})`;
+        card.style.filter = `blur(${blur}px)`;
+        card.style.zIndex = scale > (maxScale - 0.01) ? '2' : '';
+      });
+
+      requestAnimationFrame(animate);
     };
-    
-    checkLoop();
+    requestAnimationFrame(animate);
   }
 
   setupInfiniteScroll() {
-    // Get all project cards
-    const originalCards = this.carouselTrack.querySelectorAll('.project-card:not(.carousel-clone)');
-    this.projectCards = Array.from(originalCards);
-
-    // Create enough duplicates for seamless infinite scroll
-    // We need multiple complete sets for smooth infinite animation
-    const duplicateSets = 8; // Create 8 additional sets for smooth infinite scroll
-    
-    // Clone and append cards multiple times
-    for (let set = 0; set < duplicateSets; set++) {
+    // Remove all cards except the originals (first set)
+    const allCards = Array.from(this.carouselTrack.querySelectorAll('.project-card'));
+    // Only keep the first N originals (not .carousel-clone)
+    const originals = allCards.filter(card => !card.classList.contains('carousel-clone'));
+    // Remove all clones and any extra sets
+    allCards.forEach(card => {
+      if (card.classList.contains('carousel-clone')) card.remove();
+    });
+    this.projectCards = Array.from(originals);
+    // Clone and append cards for seamless infinite scroll
+    for (let set = 0; set < this.duplicateSets; set++) {
       this.projectCards.forEach((card, index) => {
         const clone = card.cloneNode(true);
         clone.classList.add('carousel-clone');
@@ -1490,68 +1641,40 @@ class ProjectCarousel {
         this.carouselTrack.appendChild(clone);
       });
     }
-
-    // Log the results
-    const totalCards = this.carouselTrack.children.length;
-    console.log('Created infinite carousel:');
-    console.log(`- Original cards: ${this.projectCards.length}`);
-    console.log(`- Duplicate sets: ${duplicateSets}`);
-    console.log(`- Total cards: ${totalCards}`);
-    console.log(`- Total sets: ${duplicateSets + 1}`);
+    // Recalculate card width and set width
+    if (this.projectCards.length > 0) {
+      const card = this.projectCards[0];
+      this.cardWidth = card.offsetWidth + 32;
+      this.totalSetWidth = this.projectCards.length * this.cardWidth;
+    }
+    // Set scrollX to the start of the middle set for seamlessness
+    this.scrollX = -this.totalSetWidth;
+    this.carouselTrack.style.transform = `translateX(${this.scrollX}px)`;
+    // Reset animation start flag so next animation will re-initialize
+    this._hasStartedAnimation = false;
   }
 
   startOpacityAnimation() {
-    // Animate opacity based on position relative to center
-    const animateOpacity = () => {
-      if (!this.isAnimating) return;
-      
-      const cards = this.carouselTrack.querySelectorAll('.project-card');
-      const containerRect = this.carousel.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      
-      cards.forEach(card => {
-        if (card.classList.contains('hovered')) return;
-        
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2;
-        const distanceFromCenter = Math.abs(cardCenter - containerCenter);
-        const maxDistance = containerRect.width / 2;
-        
-        // Calculate opacity based on distance from center (0.4 to 1.0)
-        const opacity = Math.max(0.4, 1 - (distanceFromCenter / maxDistance) * 0.6);
-        card.style.opacity = opacity;
-      });
-      
-      requestAnimationFrame(animateOpacity);
-    };
-    
-    animateOpacity();
+    // Remove all inline opacity styles and ensure all cards are fully opaque except on hover
+    const cards = this.carouselTrack.querySelectorAll('.project-card');
+    cards.forEach(card => {
+      card.style.opacity = '';
+    });
   }
 
   bindEvents() {
-    // Handle individual card hover with better event handling
-    this.carouselTrack.addEventListener('mouseenter', (e) => {
-      const card = e.target.closest('.project-card');
-      if (card) {
-        this.pauseAnimation();
-        card.classList.add('hovered');
-        card.style.opacity = '1'; // Force full opacity on hover
-      }
-    }, true);
+    // Smoother pause/resume on hover for the whole carousel
+    this.carouselTrack.addEventListener('mouseenter', () => {
+      this.pauseAnimation();
+      this.carouselTrack.classList.add('carousel-paused');
+    });
+    this.carouselTrack.addEventListener('mouseleave', () => {
+      this.resumeAnimation();
+      this.carouselTrack.classList.remove('carousel-paused');
+    });
 
-    this.carouselTrack.addEventListener('mouseleave', (e) => {
-      const card = e.target.closest('.project-card');
-      if (card) {
-        card.classList.remove('hovered');
-        card.style.opacity = ''; // Reset to calculated opacity
-        // Small delay before resuming to prevent flickering
-        setTimeout(() => {
-          if (!this.carouselTrack.querySelector('.project-card.hovered')) {
-            this.resumeAnimation();
-          }
-        }, 100);
-      }
-    }, true);
+    // Pointer stays as grab, not pointer, for a more elegant look
+    this.carouselTrack.style.cursor = 'grab';
 
     // Handle window resize
     window.addEventListener('resize', () => {
@@ -1560,15 +1683,14 @@ class ProjectCarousel {
 
     // Handle reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      this.carouselTrack.style.animationDuration = '120s'; // Much slower
+      // No-op, JS controls speed
     }
   }
 
   pauseAnimation() {
-    if (this.carouselTrack) {
-      this.carouselTrack.style.animationPlayState = 'paused';
-      this.isAnimating = false;
-    }
+    // Only stop the auto-move, not the sizing/blurring
+    this.isAnimating = false;
+    // Do NOT change transform or filter here; sizing/blurring is handled in the animation loop
   }
 
   resumeAnimation() {
@@ -1581,16 +1703,11 @@ class ProjectCarousel {
   handleResize() {
     // Recalculate carousel setup on window resize
     setTimeout(() => {
-      this.resetCarousel();
       this.setupInfiniteScroll();
     }, 100);
   }
-
   resetCarousel() {
-    // Remove all cloned cards
-    const clones = this.carouselTrack.querySelectorAll('.carousel-clone');
-    clones.forEach(clone => clone.remove());
-    console.log(`Removed ${clones.length} cloned cards for carousel reset`);
+    // No longer needed, handled in setupInfiniteScroll
   }
 }
 
@@ -1637,15 +1754,15 @@ class PortfolioApp {
   }
 
   initLegacyAnimations() {
-    // Project cards animation
+    // Project cards animation (no delay, instant fade-in on scroll)
     const projectCards = document.querySelectorAll('.project-card');
     const revealProjectCards = () => {
       const windowHeight = window.innerHeight;
-      projectCards.forEach((card, idx) => {
+      projectCards.forEach((card) => {
         if (card.classList.contains('visible')) return;
         const rect = card.getBoundingClientRect();
         if (rect.top < windowHeight * 0.92 && rect.bottom > 0) {
-          setTimeout(() => card.classList.add('visible'), idx * 120);
+          card.classList.add('visible');
         }
       });
     };
@@ -1653,12 +1770,11 @@ class PortfolioApp {
     window.addEventListener('scroll', revealProjectCards, { passive: true });
     revealProjectCards();
 
-    // Timeline items animation
+    // Timeline items animation (keep stagger for timeline only)
     const revealTimelineItems = () => {
       const aboutSection = document.querySelector('.about-section');
       const timelineItems = document.querySelectorAll('.timeline-item');
       if (!aboutSection || !timelineItems.length) return;
-      
       if (aboutSection.classList.contains('visible')) {
         timelineItems.forEach((item, idx) => {
           setTimeout(() => item.classList.add('visible'), 150 + idx * 170);
