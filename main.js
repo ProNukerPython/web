@@ -1388,16 +1388,7 @@ class SectionNavigator {
     }
   }
 
-  // Test method to verify navigation
-  testNavigation() {
-    // Debug log removed
-    
-    // Test navigation to second section
-    setTimeout(() => {
-      console.log('Testing navigation to section 1');
-      this.goToSection(1);
-    }, 2000);
-  }
+  // (Removed unused testNavigation method)
 
   // Public method to jump to a specific section by ID
   navigateToSection(sectionId) {
@@ -1437,7 +1428,7 @@ class ScrollableSectionManager {
         canNavigateNext: false
       });
       
-      console.log(`Setup scrollable section: ${sectionId}`);
+      // (Removed debug log)
     });
   }
 
@@ -1483,9 +1474,7 @@ class ScrollableSectionManager {
     }
     
     // Log state change
-    if (wasAtBottom !== isAtBottom) {
-      console.log(`Section ${sectionId} scroll state changed - at bottom: ${isAtBottom}, scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}`);
-    }
+    // (Removed debug log)
   }
 
   canNavigateFromSection(sectionId) {
@@ -1507,7 +1496,7 @@ class ScrollableSectionManager {
         sectionData.indicator.classList.remove('hidden');
       }
       
-      console.log(`Reset scrollable section: ${sectionId}`);
+      // (Removed debug log)
     }
   }
 }
@@ -1531,7 +1520,7 @@ class ProjectCarousel {
     this.carousel = document.querySelector('.carousel-container');
     this.carouselTrack = document.querySelector('.carousel-track');
     if (!this.carousel || !this.carouselTrack) {
-      console.log('Carousel elements not found');
+      // (Removed debug log)
       return;
     }
     this.setupInfiniteScroll();
@@ -1747,7 +1736,7 @@ class PortfolioApp {
       // Initialize legacy animations for backward compatibility
       this.initLegacyAnimations();
 
-      console.log('Portfolio application initialized successfully');
+      // (Removed debug log)
     } catch (error) {
       console.error('Failed to initialize portfolio application:', error);
     }
