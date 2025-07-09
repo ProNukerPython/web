@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://marccastellvi.com/sitemap.xml
+
+# Disallow development and temporary files
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /*.log
+Disallow: /main-old.js
+Disallow: /styles-old.css
+
+# Allow specific assets
+Allow: /assets/
+Allow: /data/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.html

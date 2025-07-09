@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Marc Castellvi</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .contact-form-page {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: var(--spacing-4xl) var(--spacing-lg);
+    }
+
+    .contact-form-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact-form-title {
+      text-align: center;
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--primary-color);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .contact-form-description {
+      text-align: center;
+      font-size: var(--font-size-lg);
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-3xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .contact-form-card {
+      background: var(--bg-glass);
+      border-radius: var(--border-radius-2xl);
+      padding: var(--spacing-3xl);
+      backdrop-filter: var(--glass-blur) var(--glass-saturation);
+      border: var(--glass-border);
+      box-shadow: var(--shadow-glass);
+    }
+
+    .form-group {
+      margin-bottom: var(--spacing-xl);
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+      transition: color var(--transition-normal);
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: var(--spacing-md);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-lg);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: var(--font-size-base);
+      font-family: var(--font-family);
+      transition: all var(--transition-normal);
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-error {
+      color: var(--color-error);
+      font-size: var(--font-size-sm);
+      margin-top: var(--spacing-xs);
+      display: none;
+    }
+
+    .form-group.error .form-input,
+    .form-group.error .form-textarea {
+      border-color: var(--color-error);
+    }
+
+    .form-group.error .form-error {
+      display: block;
+    }
+
+    .form-group.error .form-label {
+      color: var(--color-error);
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: var(--spacing-lg);
+      background: var(--primary-color);
+      color: var(--color-white);
+      border: none;
+      border-radius: var(--border-radius-xl);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-submit:hover:not(:disabled) {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .form-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-submit .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .form-submit.loading .loading-spinner {
+      display: inline-block;
+    }
+
+    .form-submit.loading .submit-text {
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .honeypot {
+      display: none;
+    }
+
+    .form-success {
+      background: var(--color-success);
+      color: white;
+      padding: var(--spacing-lg);
+      border-radius: var(--border-radius-lg);
+      margin-top: var(--spacing-lg);
+      text-align: center;
+      display: none;
+    }
+
+    .form-success.show {
+      display: block;
+    }
+
+    .back-button {
+      position: fixed;
+      top: var(--spacing-lg);
+      left: var(--spacing-lg);
+      z-index: var(--z-index-fixed);
+    }
+
+    .character-count {
+      font-size: var(--font-size-xs);
+      color: var(--text-tertiary);
+      text-align: right;
+      margin-top: var(--spacing-xs);
+    }
+
+    .character-count.warning {
+      color: var(--color-warning);
+    }
+
+    .character-count.error {
+      color: var(--color-error);
+    }
+
+    .required::after {
+      content: ' *';
+      color: var(--color-error);
+    }
+
+    @media (max-width: 768px) {
+      .contact-form-page {
+        padding: var(--spacing-2xl) var(--spacing-md);
+      }
+
+      .contact-form-card {
+        padding: var(--spacing-2xl);
+      }
+
+      .contact-form-title {
+        font-size: var(--font-size-3xl);
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="contact-form-page">
+    <a href="index.html" class="back-button contact-btn">← Back to Portfolio</a>
+    
+    <div class="contact-form-container">
+      <h1 class="contact-form-title">Get In Touch</h1>
+      <p class="contact-form-description">
+        I'm always interested in hearing about new opportunities, collaborations, or just having a conversation about the industry. Feel free to reach out!
+      </p>
+      
+      <div class="contact-form-card">
+        <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <!-- Honeypot field for spam prevention -->
+          <input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off">
+          
+          <div class="form-group">
+            <label for="name" class="form-label required">Name</label>
+            <input type="text" id="name" name="name" class="form-input" required>
+            <div class="form-error">Please enter your name.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label required">Email</label>
+            <input type="email" id="email" name="email" class="form-input" required>
+            <div class="form-error">Please enter a valid email address.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="company" class="form-label">Company/Organization</label>
+            <input type="text" id="company" name="company" class="form-input">
+          </div>
+          
+          <div class="form-group">
+            <label for="subject" class="form-label required">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-input" required>
+            <div class="form-error">Please enter a subject.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="message" class="form-label required">Message</label>
+            <textarea id="message" name="message" class="form-textarea" required maxlength="2000" placeholder="Tell me about your project, collaboration opportunity, or just say hello!"></textarea>
+            <div class="character-count" id="message-count">0/2000</div>
+            <div class="form-error">Please enter your message.</div>
+          </div>
+          
+          <button type="submit" class="form-submit" id="submit-btn">
+            <span class="submit-text">Send Message</span>
+            <div class="loading-spinner"></div>
+          </button>
+          
+          <div class="form-success" id="success-message">
+            <h3>Thank you for your message!</h3>
+            <p>I'll get back to you as soon as possible.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class ContactForm {
+      constructor() {
+        this.form = document.getElementById('contact-form');
+        this.submitBtn = document.getElementById('submit-btn');
+        this.successMessage = document.getElementById('success-message');
+        this.messageTextarea = document.getElementById('message');
+        this.messageCount = document.getElementById('message-count');
+        this.init();
+      }
+
+      init() {
+        this.bindEvents();
+        this.updateCharacterCount();
+      }
+
+      bindEvents() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // Real-time validation
+        const inputs = this.form.querySelectorAll('.form-input, .form-textarea');
+        inputs.forEach(input => {
+          input.addEventListener('blur', () => this.validateField(input));
+          input.addEventListener('input', () => this.clearErrors(input));
+        });
+
+        // Character count for message
+        this.messageTextarea.addEventListener('input', () => this.updateCharacterCount());
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!this.validateForm()) {
+          return;
+        }
+
+        this.setLoading(true);
+        
+        try {
+          const formData = new FormData(this.form);
+          
+          // Simulate form submission (replace with actual endpoint)
+          await this.submitForm(formData);
+          
+          this.showSuccess();
+          this.form.reset();
+          this.updateCharacterCount();
+        } catch (error) {
+          this.showError('Failed to send message. Please try again.');
+        } finally {
+          this.setLoading(false);
+        }
+      }
+
+      async submitForm(formData) {
+        // Replace this with your actual form submission logic
+        // Example with Formspree:
+        /*
+        const response = await fetch(this.form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Form submission failed');
+        }
+        */
+        
+        // Simulate network request
+        return new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
+      }
+
+      validateForm() {
+        const inputs = this.form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+          if (!this.validateField(input)) {
+            isValid = false;
+          }
+        });
+        
+        return isValid;
+      }
+
+      validateField(field) {
+        const value = field.value.trim();
+        const fieldGroup = field.closest('.form-group');
+        
+        // Remove previous error state
+        fieldGroup.classList.remove('error');
+        
+        // Check if required field is empty
+        if (field.required && !value) {
+          this.showFieldError(fieldGroup, 'This field is required.');
+          return false;
+        }
+        
+        // Validate email format
+        if (field.type === 'email' && value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            this.showFieldError(fieldGroup, 'Please enter a valid email address.');
+            return false;
+          }
+        }
+        
+        // Validate message length
+        if (field.id === 'message' && value.length > 2000) {
+          this.showFieldError(fieldGroup, 'Message must be less than 2000 characters.');
+          return false;
+        }
+        
+        return true;
+      }
+
+      showFieldError(fieldGroup, message) {
+        fieldGroup.classList.add('error');
+        const errorElement = fieldGroup.querySelector('.form-error');
+        if (errorElement) {
+          errorElement.textContent = message;
+        }
+      }
+
+      clearErrors(field) {
+        const fieldGroup = field.closest('.form-group');
+        fieldGroup.classList.remove('error');
+      }
+
+      updateCharacterCount() {
+        const currentLength = this.messageTextarea.value.length;
+        const maxLength = 2000;
+        
+        this.messageCount.textContent = `${currentLength}/${maxLength}`;
+        
+        // Add warning/error classes based on character count
+        this.messageCount.classList.remove('warning', 'error');
+        
+        if (currentLength > maxLength * 0.9) {
+          this.messageCount.classList.add('warning');
+        }
+        
+        if (currentLength > maxLength) {
+          this.messageCount.classList.add('error');
+        }
+      }
+
+      setLoading(isLoading) {
+        this.submitBtn.disabled = isLoading;
+        this.submitBtn.classList.toggle('loading', isLoading);
+      }
+
+      showSuccess() {
+        this.successMessage.classList.add('show');
+        setTimeout(() => {
+          this.successMessage.classList.remove('show');
+        }, 5000);
+      }
+
+      showError(message) {
+        // Create or update error message
+        let errorElement = document.getElementById('form-error');
+        if (!errorElement) {
+          errorElement = document.createElement('div');
+          errorElement.id = 'form-error';
+          errorElement.style.cssText = `
+            background: var(--color-error);
+            color: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            margin-top: var(--spacing-lg);
+            text-align: center;
+          `;
+          this.form.appendChild(errorElement);
+        }
+        
+        errorElement.textContent = message;
+        
+        setTimeout(() => {
+          errorElement.remove();
+        }, 5000);
+      }
+    }
+
+    // Initialize the contact form
+    new ContactForm();
+
+    // Theme toggle functionality
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle-btn';
+    themeToggle.innerHTML = `
+      <svg class="theme-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+    `;
+    themeToggle.style.position = 'fixed';
+    themeToggle.style.top = '20px';
+    themeToggle.style.right = '20px';
+    themeToggle.style.zIndex = '1000';
+
+    document.body.appendChild(themeToggle);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.body.dataset.theme;
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.body.dataset.theme = newTheme;
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Apply saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.dataset.theme = savedTheme;
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+</html>

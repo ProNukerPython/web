@@ -1,0 +1,59 @@
+{
+  "skills": [
+    {
+      "category": "3D Software",
+      "items": [
+        { "name": "Houdini", "level": 90, "years": 4 },
+        { "name": "Solaris", "level": 85, "years": 3 },
+        { "name": "Redshift", "level": 80, "years": 3 },
+        { "name": "Maya", "level": 75, "years": 2 },
+        { "name": "Blender", "level": 70, "years": 2 }
+      ]
+    },
+    {
+      "category": "Compositing",
+      "items": [
+        { "name": "Nuke", "level": 95, "years": 5 },
+        { "name": "After Effects", "level": 80, "years": 4 },
+        { "name": "DaVinci Resolve", "level": 70, "years": 2 },
+        { "name": "Fusion", "level": 65, "years": 2 }
+      ]
+    },
+    {
+      "category": "Programming",
+      "items": [
+        { "name": "Python", "level": 85, "years": 4 },
+        { "name": "VEX", "level": 80, "years": 3 },
+        { "name": "JavaScript", "level": 75, "years": 3 },
+        { "name": "C++", "level": 60, "years": 2 },
+        { "name": "GLSL", "level": 55, "years": 1 }
+      ]
+    },
+    {
+      "category": "Pipeline Tools",
+      "items": [
+        { "name": "Shotgun/Flow", "level": 85, "years": 3 },
+        { "name": "Deadline", "level": 80, "years": 3 },
+        { "name": "Git", "level": 85, "years": 4 },
+        { "name": "Perforce", "level": 70, "years": 2 },
+        { "name": "Docker", "level": 65, "years": 2 }
+      ]
+    },
+    {
+      "category": "Specialized Skills",
+      "items": [
+        { "name": "Lighting", "level": 90, "years": 5 },
+        { "name": "Lookdev", "level": 85, "years": 4 },
+        { "name": "Color Grading", "level": 80, "years": 3 },
+        { "name": "Motion Graphics", "level": 75, "years": 3 },
+        { "name": "Procedural Modeling", "level": 85, "years": 4 }
+      ]
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2025-01-07",
+    "totalYearsExperience": 5,
+    "primarySpecialization": "Lighting and Compositing",
+    "secondarySpecialization": "Pipeline Development"
+  }
+}
