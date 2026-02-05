@@ -12,27 +12,33 @@
   padding: 0 !important;
   box-sizing: border-box;
 }
+
 @keyframes scrollbar-fadein {
   0% { opacity: 0; transform: translateY(24px) scaleX(0.7); }
   60% { opacity: 1; transform: translateY(-4px) scaleX(1.08); }
   100% { opacity: 1; transform: translateY(0) scaleX(1); }
 }
+
 .carousel-scrollbar {
   opacity: 0;
   animation: none;
   pointer-events: none;
 }
+
 .carousel-scrollbar.visible {
   animation: scrollbar-fadein 0.7s cubic-bezier(.33,1.6,.6,1) 0.1s both;
   pointer-events: auto;
 }
+
 /* Shrink from the opposite side (drag left = shrink right, drag right = shrink left) */
 .carousel-scrollbar-thumb.shrink-left {
   transform-origin: right;
 }
+
 .carousel-scrollbar-thumb.shrink-right {
   transform-origin: left;
 }
+
 @keyframes scrollbar-shrink {
   0% { transform: scaleX(1); }
   50% { transform: scaleX(0.7); }
@@ -42,6 +48,7 @@
 .carousel-scrollbar-thumb.shrink {
   animation: scrollbar-shrink 0.35s cubic-bezier(.4,1.6,.4,1);
 }
+
 .projects-intro-flex-row {
   display: flex;
   flex-direction: row;
@@ -60,6 +67,7 @@
   margin-right: var(--spacing-xs);
   flex-shrink: 0; /* Prevent icon from shrinking */
 }
+
 /* Flex row for projects intro icon and desc */
 .projects-intro-flex-row {
   display: flex;
@@ -77,15 +85,16 @@
   margin: 0;
   text-align: left;
 }
+
 /* Custom Carousel Scrollbar */
 .carousel-scrollbar {
   width: 320px;
   height: 12px;
-  margin: 0 auto 18px auto;
+  margin: 0 auto 18px;
   position: relative;
   background: #007aff;
   border-radius: 6px;
-  box-shadow: 0 2px 8px 0 rgba(0,122,255,0.10);
+  box-shadow: 0 2px 8px 0 rgb(0 122 255 / 10%);
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -94,8 +103,8 @@
   margin-top: var(--spacing-xl);
   transition: background 0.2s;
 }
+
 .carousel-scrollbar-thumb {
-  transition: width 0.25s cubic-bezier(.4,1.6,.4,1), background 0.2s, transform 0.32s cubic-bezier(.33,1.6,.6,1);
   position: absolute;
   left: 0;
   top: 1px;
@@ -103,46 +112,54 @@
   width: 60px;
   background: #00c6fb;
   border-radius: 5px;
-  box-shadow: 0 2px 8px 0 rgba(0,198,251,0.18);
+  box-shadow: 0 2px 8px 0 rgb(0 198 251 / 18%);
   transition: width 0.25s cubic-bezier(.4,1.6,.4,1), background 0.2s;
   cursor: grab;
   will-change: left, width;
 }
+
 .carousel-scrollbar-thumb:active {
   width: 90px;
   background: #0051a8;
   cursor: grabbing;
   transition: width 0.25s cubic-bezier(.4,1.6,.4,1), background 0.2s;
 }
+
 .carousel-scrollbar:focus {
   outline: 2px solid #00c6fb;
   outline-offset: 2px;
 }
-@media (max-width: 768px) {
+
+@media (width <= 768px) {
   .carousel-scrollbar {
     max-width: 90vw;
     height: 14px;
     margin-bottom: 12px;
   }
+
   .carousel-scrollbar-thumb {
     height: 10px;
     border-radius: 5px;
   }
 }
-@media (max-width: 480px) {
+
+@media (width <= 480px) {
   .carousel-scrollbar {
     max-width: 98vw;
     height: 10px;
     margin-bottom: 8px;
   }
+
   .carousel-scrollbar-thumb {
     height: 6px;
     border-radius: 3px;
   }
 }
+
 .skills-float-btn {
   margin-left: 1.2em;
 }
+
 /* .skills-float-btn now only provides margin. All button styles use .action-btn */
 
 .skills-float-window {
@@ -156,7 +173,7 @@
   box-shadow: var(--shadow-glass);
   backdrop-filter: var(--glass-blur) var(--glass-saturation);
   border: var(--glass-border);
-  padding: 2.5em 2.5em 2em 2.5em;
+  padding: 2.5em 2.5em 2em;
   z-index: 1002;
   min-width: 320px;
   max-width: 90vw;
@@ -169,6 +186,7 @@
   opacity: 1;
   transition: opacity 0.32s cubic-bezier(.25,.8,.25,1);
 }
+
 .skills-float-window.closing {
   opacity: 0;
   pointer-events: none;
@@ -178,6 +196,7 @@
   display: none !important;
   opacity: 0 !important;
 }
+
 .skills-float-close {
   position: absolute;
   top: 1em;
@@ -192,43 +211,49 @@
   padding: 0 0.2em;
   transition: color 0.2s;
 }
+
 .skills-float-close:hover, .skills-float-close:focus {
   color: #00c6fb;
 }
+
 @keyframes skillsFloatIn {
   0% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
+
 .simple-skills-list {
   list-style: none;
   padding: 0;
-  margin: 2em auto 0 auto;
+  margin: 2em auto 0;
   max-width: 400px;
   display: flex;
   flex-wrap: wrap;
   gap: 1.2em 2em;
   justify-content: center;
 }
+
 .simple-skills-list li {
   display: flex;
   align-items: center;
   font-size: 1.15em;
-  background: rgba(0,0,0,0.04);
+  background: rgb(0 0 0 / 4%);
   border-radius: 1.2em;
   padding: 0.4em 1em 0.4em 0.7em;
   margin: 0;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 4%);
   transition: background 0.2s;
 }
+
 .simple-skills-list li:hover {
-  background: rgba(0,198,251,0.10);
+  background: rgb(0 198 251 / 10%);
 }
+
 .skill-icon {
   width: 28px;
   height: 28px;
   margin-right: 0.7em;
   vertical-align: middle;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10));
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 10%));
   color: #fff;
   fill: #fff;
 }
@@ -239,11 +264,13 @@
   color: #181c24;
   fill: #181c24;
 }
+
 /* Ensure inline SVGs in .skill-icon are white */
 .skill-icon svg {
   color: inherit;
   fill: inherit;
 }
+
 /* Reel Play Card - Make the whole card interactive and animate play icon on hover/focus */
 .reel-play-card {
   width: 100%;
@@ -251,11 +278,10 @@
   display: block;
   border-radius: var(--border-radius-xl);
   box-shadow: var(--shadow-xl);
-  background: var(--bg-secondary);
   object-fit: cover;
   aspect-ratio: 16/9;
   position: absolute;
-  background: rgba(0,0,0,0.08);
+  background: rgb(0 0 0 / 8%);
   cursor: pointer;
   z-index: 3;
   transition: background 0.2s, box-shadow 0.2s;
@@ -269,36 +295,37 @@
 
 .reel-play-card:hover,
 .reel-play-card:focus-visible {
-  background: rgba(0,0,0,0.12);
+  background: rgb(0 0 0 / 12%);
 }
 
 .reel-play-card .reel-play-icon {
   width: 80px;
   height: 80px;
   fill: var(--primary-color);
-  filter: drop-shadow(0 2px 8px rgba(0,198,251,0.18));
+  filter: drop-shadow(0 2px 8px rgb(0 198 251 / 18%));
   transition: filter 0.2s, transform 0.2s;
 }
 
 .reel-play-card:hover .reel-play-icon,
 .reel-play-card:focus-visible .reel-play-icon {
-  filter: drop-shadow(0 4px 16px rgba(0,198,251,0.25));
+  filter: drop-shadow(0 4px 16px rgb(0 198 251 / 25%));
   transform: scale(1.12) rotate(-2deg);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .reel-play-card .reel-play-icon {
     width: 48px;
     height: 48px;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .reel-play-card .reel-play-icon {
     width: 32px;
     height: 32px;
   }
 }
+
 /* Center reel section content both vertically and horizontally */
 
  * Marc Castellvi Portfolio  Enhanced Styles
@@ -333,7 +360,9 @@ body {
 
 body {
   padding-top: 0; /* Remove top padding since we're doing fullscreen */
+
   --header-anim-progress: 0;
+
   transition: background-color var(--transition-normal), color var(--transition-normal);
   position: relative;
 }
@@ -483,7 +512,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(255 255 255 / 5%);
   backdrop-filter: blur(16px) saturate(120%);
   pointer-events: none;
   transition: opacity var(--transition-slow);
@@ -826,6 +855,7 @@ body .main-header .black-bar.bottom {
 .about-section {
   background: var(--bg-primary);
   color: var(--text-primary);
+
   /* Remove conflicting position styles - handled by .section */
 }
 
@@ -837,7 +867,7 @@ body .main-header .black-bar.bottom {
   background: linear-gradient(
       to bottom,
       var(--bg-primary) 0%,
-      rgba(0, 0, 0, 0) 38%,
+      rgb(0 0 0 / 0%) 38%,
       var(--bg-primary) 100%
     ),
     url('assets/banner.jpg') center center/cover no-repeat;
@@ -934,7 +964,7 @@ body .main-header .black-bar.bottom {
   flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .about-actions {
     flex-direction: column;
     gap: var(--spacing-md);
@@ -1044,6 +1074,7 @@ body .main-header .black-bar.bottom {
 .projects-section {
   background: var(--bg-secondary);
   color: var(--text-primary);
+
   /* Position and align-content handled by .section */
   height: 100vh;
   display: flex;
@@ -1065,6 +1096,7 @@ body .main-header .black-bar.bottom {
   color: var(--text-primary);
   text-align: center;
 }
+
 /* .projects-container: margin and spacing handled above. */
 .projects-container {
   width: 100%;
@@ -1080,6 +1112,7 @@ body .main-header .black-bar.bottom {
   min-height: 0;
 
 }
+
 .projects-intro-title {
   font-size: 50px;
   font-weight: var(--font-weight-bold);
@@ -1087,6 +1120,7 @@ body .main-header .black-bar.bottom {
   margin-bottom: var(--spacing-md);
   text-align: center;
 }
+
 .projects-intro-flex {
   display: flex;
   flex-direction: row;
@@ -1119,8 +1153,10 @@ body .main-header .black-bar.bottom {
   background: none !important;
   box-shadow: none !important;
 }
+
 .projects-list.list-view {
   display: block !important;
+
   /* Remove any list-specific styles */
   background: none !important;
   box-shadow: none !important;
@@ -1135,31 +1171,31 @@ body .main-header .black-bar.bottom {
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
   position: relative;
-  padding: 0 0; /* Add vertical padding for hover scaling */
+  padding: 0; /* Add vertical padding for hover scaling */
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.0) 5%,
-    rgba(0, 0, 0, 0.2) 10%,
-    rgba(0, 0, 0, 0.6) 20%,
+    rgb(0 0 0 / 0%) 5%,
+    rgb(0 0 0 / 20%) 10%,
+    rgb(0 0 0 / 60%) 20%,
     black 30%,
     black 70%,
-    rgba(0, 0, 0, 0.6) 80%,
-    rgba(0, 0, 0, 0.2) 90%,
-    rgba(0, 0, 0, 0.05) 95%,
+    rgb(0 0 0 / 60%) 80%,
+    rgb(0 0 0 / 20%) 90%,
+    rgb(0 0 0 / 5%) 95%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.0) 5%,
-    rgba(0, 0, 0, 0.2) 10%,
-    rgba(0, 0, 0, 0.6) 20%,
+    rgb(0 0 0 / 0%) 5%,
+    rgb(0 0 0 / 20%) 10%,
+    rgb(0 0 0 / 60%) 20%,
     black 30%,
     black 70%,
-    rgba(0, 0, 0, 0.6) 80%,
-    rgba(0, 0, 0, 0.2) 90%,
-    rgba(0, 0, 0, 0.05) 95%,
+    rgb(0 0 0 / 60%) 80%,
+    rgb(0 0 0 / 20%) 90%,
+    rgb(0 0 0 / 5%) 95%,
     transparent 100%
   );
 }
@@ -1168,18 +1204,15 @@ body .main-header .black-bar.bottom {
 .carousel-container::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.1) 10%,
+    rgb(0 0 0 / 30%) 0%,
+    rgb(0 0 0 / 10%) 10%,
     transparent 20%,
     transparent 80%,
-    rgba(0, 0, 0, 0.1) 90%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgb(0 0 0 / 10%) 90%,
+    rgb(0 0 0 / 30%) 100%
   );
   pointer-events: none;
   z-index: 1;
@@ -1188,15 +1221,12 @@ body .main-header .black-bar.bottom {
 .project-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1) 0%,
+    rgb(255 255 255 / 10%) 0%,
     transparent 50%,
-    rgba(0, 198, 251, 0.1) 100%
+    rgb(0 198 251 / 10%) 100%
   );
   opacity: 0.12;
   transition: none;
@@ -1225,17 +1255,18 @@ body .main-header .black-bar.bottom {
 .project-card:hover {
   box-shadow: 
     var(--shadow-glow), 
-    0 20px 40px rgba(0, 198,251, 0.15),
-    0 0 30px rgba(0, 198,251, 0.1);
+    0 20px 40px rgb(0 198 251 / 15%),
+    0 0 30px rgb(0 198 251 / 10%);
 }
 
 .carousel-track {
   display: flex;
   gap: var(--spacing-xl);
   will-change: transform;
-  padding: 0 0vw;
+  padding: 0;
   transition: filter var(--transition-normal), cursor 0.3s cubic-bezier(.4,1,.4,1);
   align-items: center; /* Center cards vertically */
+
   /* Ensure hardware acceleration */
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -1278,12 +1309,13 @@ body .main-header .black-bar.bottom {
 .project-card:hover {
   transform: scale(1.06) translateY(-12px);
   box-shadow: 
-    0 0 0 6px rgba(0,198,251,0.10),
-    0 20px 60px 0 rgba(0,198,251,0.18),
-    0 0 40px 0 rgba(0,198,251,0.13),
+    0 0 0 6px rgb(0 198 251 / 10%),
+    0 20px 60px 0 rgb(0 198 251 / 18%),
+    0 0 40px 0 rgb(0 198 251 / 13%),
     var(--shadow-glow);
   z-index: 10;
   opacity: 1;
+
   /* Ensure hover state doesn't get clipped */
   position: relative;
 }
@@ -1367,7 +1399,7 @@ body .main-header .black-bar.bottom {
   background: linear-gradient(
       to bottom,
       var(--bg-primary) 0%,
-      rgba(10, 10, 10, 0.85) 60%,
+      rgb(10 10 10 / 85%) 60%,
       transparent 100%
     ),
     url('assets/banner.jpg') center center/cover no-repeat;
@@ -1430,7 +1462,7 @@ body .main-header .black-bar.bottom {
   transform: translateX(-10%);
   transition: transform 0.35s cubic-bezier(.25, .8, .25, 1);
   z-index: 5; /* Increase z-index to be above play button */
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 80%));
 }
 
 .reel-reel-label::after
@@ -1443,9 +1475,9 @@ body .main-header .black-bar.bottom {
   height: 100%;
   background: linear-gradient(
     to right,
-    rgba(255, 255, 255, 0.1) 0%,
+    rgb(255 255 255 / 10%) 0%,
     transparent 50%,
-    rgba(0, 198, 251, 0.1) 100%
+    rgb(0 198 251 / 10%) 100%
   );
   opacity: 0;
   transition: opacity var(--transition-normal);
@@ -1462,7 +1494,6 @@ body .main-header .black-bar.bottom {
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--bg-glass);
-  border: var(--glass-border);
   border-radius: var(--border-radius-full);
   box-shadow: var(--shadow-glass);
   backdrop-filter: var(--glass-blur) var(--glass-saturation);
@@ -1482,34 +1513,36 @@ body .main-header .black-bar.bottom {
   width: 80px;
   height: 80px;
   fill: var(--primary-color);
-  filter: drop-shadow(0 2px 8px rgba(0,198,251,0.18));
+  filter: drop-shadow(0 2px 8px rgb(0 198 251 / 18%));
   transition: filter var(--transition-normal), transform var(--transition-normal);
   background: var(--glass-blur) var(--glass-saturation);
 }
 
 .reel-play-btn:hover .reel-play-icon,
 .reel-play-btn:focus-visible .reel-play-icon {
-  filter: drop-shadow(0 4px 16px rgba(0,198,251,0.25));
+  filter: drop-shadow(0 4px 16px rgb(0 198 251 / 25%));
   transform: scale(1.1);
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .reel-play-btn {
     width: 48px;
     height: 48px;
   }
+
   .reel-play-btn .reel-play-icon {
     width: 32px;
     height: 32px;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .reel-play-btn {
     width: 40px;
     height: 40px;
   }
+
   .reel-play-btn .reel-play-icon {
     width: 24px;
     height: 24px;
@@ -1527,7 +1560,6 @@ body .main-header .black-bar.bottom {
   justify-content: center;
   width: 56px;
   height: 56px;
-  border: none;
   border-radius: var(--border-radius-full);
   background: var(--bg-glass);
   box-shadow: var(--shadow-glass);
@@ -1567,6 +1599,7 @@ body.in-main-header #scrollToTopBtn {
 .skills-section {
   background: var(--bg-primary);
   color: var(--text-primary);
+
   /* Remove conflicting position/padding styles - handled by .section */
 }
 
@@ -1645,7 +1678,7 @@ body.in-main-header #scrollToTopBtn {
   margin-bottom: 0;
 }
 
-/* Action Button (restored) !IMPORTANT DONT REMOVE!*/
+/* Action Button (restored) !IMPORTANT DONT REMOVE! */
 .action-btn {
   will-change: box-shadow, filter;
   transform: perspective(1px) translateZ(0);
@@ -1672,8 +1705,8 @@ body.in-main-header #scrollToTopBtn {
 .action-btn:focus-visible {
   background: var(--primary-color);
   color: var(--color-white);
-  box-shadow: 0 2px 16px 0 rgba(0,198,251,0.10), var(--shadow-glow);
-  filter: brightness(1.03) drop-shadow(0 1px 6px rgba(0,198,251,0.08));
+  box-shadow: 0 2px 16px 0 rgb(0 198 251 / 10%), var(--shadow-glow);
+  filter: brightness(1.03) drop-shadow(0 1px 6px rgb(0 198 251 / 8%));
   letter-spacing: 0.2px;
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
@@ -1941,7 +1974,7 @@ body.in-main-header #scrollToTopBtn {
 .form-textarea:focus {
   border-color: var(--color-primary);
   background: var(--bg-primary);
-  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+  box-shadow: 0 0 0 3px rgb(0 122 255 / 10%);
 }
 
 .form-textarea {
@@ -1965,7 +1998,7 @@ body.in-main-header #scrollToTopBtn {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgb(255 255 255 / 30%);
   border: 2px solid transparent;
   cursor: pointer;
   transition: all var(--transition-normal);
@@ -1973,13 +2006,13 @@ body.in-main-header #scrollToTopBtn {
 }
 
 .section-nav-dot:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgb(255 255 255 / 50%);
   transform: scale(1.2);
 }
 
 .section-nav-dot.active {
   background: var(--primary-color);
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgb(255 255 255 / 50%);
   transform: scale(1.3);
 }
 
@@ -1990,7 +2023,7 @@ body.in-main-header #scrollToTopBtn {
   left: 50%;
   width: 4px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgb(255 255 255 / 80%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
@@ -2018,7 +2051,6 @@ body.in-main-header #scrollToTopBtn {
   justify-content: center;
   width: 56px;
   height: 56px;
-  border: none;
   border-radius: var(--border-radius-full);
   background: var(--bg-glass);
   backdrop-filter: var(--glass-blur) var(--glass-saturation);
@@ -2081,10 +2113,11 @@ body.in-main-header #scrollToTopBtn {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 0 20px rgb(0 122 255 / 30%);
   }
+
   50% {
-    box-shadow: 0 0 30px rgba(0, 122, 255, 0.6);
+    box-shadow: 0 0 30px rgb(0 122 255 / 60%);
   }
 }
 
@@ -2094,7 +2127,7 @@ body.in-main-header #scrollToTopBtn {
 }
 
 /* Mobile responsiveness for section navigation */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .section-nav {
     bottom: 120px;
     right: 50%;
@@ -2134,7 +2167,7 @@ body.in-main-header #scrollToTopBtn {
 }
 
 /* Very small screens */
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .section-nav {
     bottom: 100px;
   }
@@ -2175,7 +2208,7 @@ body.in-main-header #scrollToTopBtn {
 
 
 /* Responsive carousel adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .carousel-container {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -2198,7 +2231,7 @@ body.in-main-header #scrollToTopBtn {
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .carousel-container {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -2223,8 +2256,8 @@ body.in-main-header #scrollToTopBtn {
   transform: scale(1.05) translateY(-10px);
   box-shadow: 
     var(--shadow-glow), 
-    0 20px 40px rgba(0, 198,251, 0.15),
-    0 0 30px rgba(0, 198,251, 0.1);
+    0 20px 40px rgb(0 198 251 / 15%),
+    0 0 30px rgb(0 198 251 / 10%);
   z-index: 10;
   filter: brightness(1.1) contrast(1.05);
 }
@@ -2298,6 +2331,7 @@ body.in-main-header #scrollToTopBtn {
 .contact-section {
   background: var(--bg-secondary);
   color: var(--text-primary);
+
   /* Remove conflicting styles - handled by .section */
 }
 
@@ -2308,7 +2342,7 @@ body.in-main-header #scrollToTopBtn {
   z-index: 0;
   background: radial-gradient(
     ellipse at 70% 20%,
-    rgba(0, 122, 255, 0.2) 0%,
+    rgb(0 122 255 / 20%) 0%,
     var(--bg-secondary) 80%
   );
   opacity: 0.6;
@@ -2372,12 +2406,11 @@ body.in-main-header #scrollToTopBtn {
 
 .contact-buttons {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: var(--spacing-lg);
   justify-content: center;
   width: 100%;
   margin-top: var(--spacing-sm);
-  flex-wrap: wrap;
 }
 
 /* .contact-btn is deprecated. Use .action-btn for all main buttons. */
@@ -2387,9 +2420,10 @@ body.in-main-header #scrollToTopBtn {
 .action-btn:focus-visible {
   background: var(--primary-color);
   color: var(--color-white);
+
   /* transform: scale(1.025); */
-  box-shadow: 0 2px 16px 0 rgba(0,198,251,0.10), var(--shadow-glow);
-  filter: brightness(1.03) drop-shadow(0 1px 6px rgba(0,198,251,0.08));
+  box-shadow: 0 2px 16px 0 rgb(0 198 251 / 10%), var(--shadow-glow);
+  filter: brightness(1.03) drop-shadow(0 1px 6px rgb(0 198 251 / 8%));
   letter-spacing: 0.2px;
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
@@ -2481,7 +2515,7 @@ body.in-main-header #scrollToTopBtn {
   grid-column: 1 / -1;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .contact-form {
     grid-template-columns: 1fr;
   }
@@ -2495,15 +2529,15 @@ body.in-main-header #scrollToTopBtn {
   justify-content: center;
   align-items: center;
   gap: 32px;
-  margin: 24px 0 0 0;
+  margin: 24px 0 0;
 }
+
 .carousel-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 56px;
   height: 56px;
-  border: none;
   border-radius: var(--border-radius-full);
   background: var(--bg-glass);
   backdrop-filter: var(--glass-blur) var(--glass-saturation);
@@ -2514,24 +2548,29 @@ body.in-main-header #scrollToTopBtn {
   font-size: 24px;
   opacity: 0.8;
 }
+
 .carousel-arrow:hover {
   opacity: 1;
   transform: scale(1.05);
   background: var(--bg-glass-light);
   color: var(--primary-color);
 }
+
 .carousel-arrow:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
+
 .carousel-arrow:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   transform: none;
 }
+
 .carousel-arrow:disabled:hover {
   background: var(--bg-glass);
   color: var(--text-primary);
+
   /* Ensure section-content fills available space and centers children */
   display: flex;
   flex-direction: column;

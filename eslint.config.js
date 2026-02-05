@@ -23,7 +23,8 @@ export default [
         navigator: 'readonly',
         module: 'readonly',
         FormData: 'readonly',
-        DOMMatrix: 'readonly'
+        DOMMatrix: 'readonly',
+        performance: 'readonly'
       }
     },
     rules: {
