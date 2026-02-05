@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!cards.length) return;
     // Clamp index to valid range
     const total = cards.length;
-    let i = ((index % total) + total) % total;
+    const i = ((index % total) + total) % total;
     const card = cards[i];
     const cardRect = card.getBoundingClientRect();
     const carouselRect = carousel.getBoundingClientRect();
@@ -1549,7 +1549,7 @@ class ProjectCarousel {
     }
     const animate = (timestamp) => {
       currentSpeed += (targetSpeed - currentSpeed) * speedEasing;
-      let doMove = this.isAnimating;
+      const doMove = this.isAnimating;
       if (!doMove) {
         targetSpeed = 0;
       } else {
