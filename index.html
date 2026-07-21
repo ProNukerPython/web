@@ -1234,37 +1234,37 @@
        al siguiente (el clic en la pantalla abre el vídeo completo)
      ═══════════════════════════════════════════════════════════ */
   const IREEL = [
-    { kind: "yt", vid: "t3qnuVscDes", start: 5,  dur: 20,
+    { kind: "yt", vid: "t3qnuVscDes", start: 5,  dur: 25,
       studio: "ILLUSORIUM STUDIOS", title: "Blacksad — Fan Art", altKey: "Blacksad",
       url: "https://www.youtube.com/watch?v=t3qnuVscDes",
       en: "Compositing. I built a tool to apply 2D textures in comp using Position/Normal passes and triplanar STMaps (X, Y, Z) — textures track the assets through the shot.",
       es: "Composición. Desarrollé una tool para aplicar texturas 2D en comp con pases de Position/Normals y STMaps triplanares (X, Y, Z): la textura se mueve pegada a los assets." },
-    { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 20,
+    { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 25,
       studio: "SKYDANCE ANIMATION", title: "Swapped · Netflix", altKey: "Swapped",
       url: "https://www.youtube.com/watch?v=glgmAwRDP8s",
       en: "Compositing Trainee. Compositing tools development and the DiMatte workflow.",
       es: "Compositing Trainee. Desarrollo de tools de compositing y todo el flujo de DiMattes." },
-    { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 20,
+    { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 25,
       studio: "COCOLILO ANIMATION", title: "Pocoyó — Season 5", altKey: "Pocoyo",
       url: "https://www.youtube.com/watch?v=ptLECQo71WE",
       en: "Compositing Artist | TD. Artistic compositing and development of the show's Nuke pipeline and tools.",
       es: "Compositing Artist | TD. Composición artística y desarrollo de la pipeline de Nuke de la serie y sus tools." },
-    { kind: "yt", vid: "25_RHP3UB70", start: 0, dur: 20,
+    { kind: "yt", vid: "25_RHP3UB70", start: 0, dur: 25,
       studio: "ILLUSORIUM STUDIOS", title: "The Quinta's Ghost", altKey: "Quinta",
       url: "https://www.youtube.com/watch?v=25_RHP3UB70",
       en: "Lighting and compositing tools development for the comp team.",
       es: "Lighting y desarrollo de tools de compositing para el equipo de comp." },
-    { kind: "yt", vid: "FWepS03YbFU", start: 0, dur: 20,
+    { kind: "yt", vid: "FWepS03YbFU", start: 0, dur: 25,
       studio: "ILLUSORIUM STUDIOS", title: "Sky: The Two Embers — Part 1", altKey: "Sky:",
       url: "https://www.youtube.com/watch?v=FWepS03YbFU",
       en: "Artistic 3D compositing: developing shots from the lead's template and iterating on feedback.",
       es: "Composición 3D artística: desarrollo de planos desde el template del lead y aplicación de feedback." },
-    { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 20,
+    { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 25,
       studio: "SKYDANCE ANIMATION", title: "Spellbound · Netflix", altKey: "Spellbound",
       url: "https://www.youtube.com/watch?v=jGQiq1ZuCW8",
       en: "Lighting Assistant: scene prep, renders and QC of the layers that later live in the comp.",
       es: "Lighting Assistant: preparación de escenas, renders y control de calidad de capas." },
-    { kind: "vimeo", vid: "886479681", start: 5, dur: 20,
+    { kind: "vimeo", vid: "886479681", start: 5, dur: 25,
       studio: "LA SALLE BCN", title: "GLARE", altKey: "GLARE",
       url: "https://vimeo.com/886479681",
       en: "University short film. Comp & Lighting supervisor, plus concept art, modeling, look dev and texturing.",
@@ -1324,13 +1324,14 @@
   });
 
   /* ── Reel interactiva (clips locales en /media + timer) ── */
+  const MEDIA_V = "25";   /* cache-buster: súbelo cuando recortes los clips */
   const IREEL_MEDIA = {
-    "Blacksad":   "media/blacksad.mp4",
-    "Swapped":    "media/swapped.mp4",
-    "Pocoyo":     "media/pocoyo.mp4",
-    "Quinta":     "media/quinta.mp4",
-    "Sky:":       "media/sky.mp4",
-    "Spellbound": "media/spellbound.mp4",
+    "Blacksad":   "media/blacksad.mp4?v=" + MEDIA_V,
+    "Swapped":    "media/swapped.mp4?v=" + MEDIA_V,
+    "Pocoyo":     "media/pocoyo.mp4?v=" + MEDIA_V,
+    "Quinta":     "media/quinta.mp4?v=" + MEDIA_V,
+    "Sky:":       "media/sky.mp4?v=" + MEDIA_V,
+    "Spellbound": "media/spellbound.mp4?v=" + MEDIA_V,
   };
   const irScreen = document.getElementById("ireel-screen");
   const irVideo = document.getElementById("ireel-video");
