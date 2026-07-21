@@ -291,6 +291,8 @@
     color: var(--amber-ink);
   }
   .btn.primary:hover { color: var(--amber-ink); }
+  .ic { width: 1rem; height: 1rem; display: block; }
+  .ic-s { width: 0.7rem; height: 0.7rem; display: inline-block; vertical-align: -1px; }
 
   /* ── Sections ──────────────────────────────────── */
   main { display: block; }
@@ -799,7 +801,7 @@
         <div class="ireel-screen" id="ireel-screen" role="button" tabindex="0">
           <img id="ireel-poster" alt="" aria-hidden="true">
           <video id="ireel-video" muted playsinline preload="auto" hidden></video>
-          <span class="ireel-hint mono"><span class="l-en">▶&nbsp;WATCH FULL VIDEO</span><span class="l-es">▶&nbsp;VER VÍDEO COMPLETO</span></span>
+          <span class="ireel-hint mono"><svg class="ic-s" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>&nbsp;<span class="l-en">WATCH FULL VIDEO</span><span class="l-es">VER VÍDEO COMPLETO</span></span>
         </div>
         <div class="ireel-bars" id="ireel-bars" aria-label="Projects"></div>
         <div class="ireel-info">
@@ -809,11 +811,11 @@
             <p id="ireel-desc"></p>
           </div>
           <div class="ireel-ctrl mono">
-            <button class="btn" id="ireel-prev" aria-label="Previous project">⏮</button>
-            <button class="btn" id="ireel-play" aria-label="Pause">⏸</button>
-            <button class="btn" id="ireel-mute" aria-label="Unmute">🔇</button>
-            <button class="btn" id="ireel-next" aria-label="Next project">⏭</button>
-            <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video">↗</a>
+            <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
+            <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
+            <button class="btn" id="ireel-mute" aria-label="Unmute"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
+            <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
           </div>
         </div>
       </div>
@@ -822,7 +824,7 @@
         <!-- Reel privado -->
         <article class="reel-card reveal">
           <div class="reel-screen">
-            <div class="play-glyph" aria-hidden="true">🔒</div>
+            <div class="play-glyph" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v3H6a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1V8a5 5 0 0 0-5-5zm-3 8V8a3 3 0 1 1 6 0v3H9z"/></svg></div>
           </div>
           <div class="reel-meta mono">
             <span>REEL 2026</span><span>·</span><span class="lock l-en">PRIVATE</span><span class="lock l-es">PRIVADO</span><span>·</span><span>NDA</span>
@@ -1385,10 +1387,12 @@
 
   irVideo.addEventListener("ended", () => { if (!irPaused) irLoad(irIdx + 1); });
 
+  const IC_MUTED = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const IC_SOUND = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6.5a8.5 8.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   const irMute = document.getElementById("ireel-mute");
   irMute.addEventListener("click", () => {
     irVideo.muted = !irVideo.muted;
-    irMute.textContent = irVideo.muted ? "🔇" : "🔊";
+    irMute.innerHTML = irVideo.muted ? IC_MUTED : IC_SOUND;
     irMute.setAttribute("aria-label", irVideo.muted ? "Unmute" : "Mute");
   });
 
@@ -1397,9 +1401,11 @@
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); window.open(IREEL[irIdx].url, "_blank", "noopener"); }
   });
 
+  const IC_PLAY = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>';
+  const IC_PAUSE = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg>';
   irPlay.addEventListener("click", () => {
     irPaused = !irPaused;
-    irPlay.textContent = irPaused ? "▶" : "⏸";
+    irPlay.innerHTML = irPaused ? IC_PLAY : IC_PAUSE;
     irPlay.setAttribute("aria-label", irPaused ? "Play" : "Pause");
     irPoster.style.animationPlayState = irPaused ? "paused" : "running";
     if (irPaused) { irVideo.pause(); }
