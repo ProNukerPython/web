@@ -519,10 +519,10 @@
     white-space: nowrap;
     text-shadow: 0 1px 6px rgba(0,0,0,0.35);
   }
-  .sound-doodle .arrow { width: 2.4rem; height: 2rem; }
+  .sound-doodle .arrow { width: 2.6rem; height: 2.2rem; }
   @keyframes doodleBob {
-    0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
-    50%      { transform: translateX(-50%) translateY(-5px) rotate(2deg); }
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(-1.5px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .sound-doodle { animation: none; transform: translateX(-50%); }
@@ -862,7 +862,15 @@
             <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
             <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
             <button class="btn" id="ireel-mute" aria-label="Unmute"><span class="mute-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sound-doodle" id="sound-doodle" aria-hidden="true">
-                <svg class="arrow" viewBox="0 0 60 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44 C 4 28, 10 12, 30 7"/><path d="M20 16 L 30 6 L 40 12"/></svg>
+                <svg class="arrow" viewBox="0 0 60 52" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                  <defs><filter id="boil" x="-30%" y="-30%" width="160%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="1" result="n">
+                      <animate attributeName="seed" values="1;3;5;7;9" dur="0.5s" repeatCount="indefinite" calcMode="discrete"/>
+                    </feTurbulence>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter></defs>
+                  <g filter="url(#boil)"><path d="M9 45 C 3 29, 11 12, 31 7"/><path d="M20 15 L 31 6 L 41 13"/></g>
+                </svg>
                 <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
               </span></button>
             <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
@@ -1390,7 +1398,7 @@
   const irOpen = document.getElementById("ireel-open");
   const irPlay = document.getElementById("ireel-play");
 
-  let irIdx = 0, irElapsed = 0, irPaused = false, irStarted = false;
+  let irIdx = 0, irElapsed = 0, irPaused = false, irStarted = false, irVisible = false;
 
   IREEL.forEach((it, i) => {
     const b = document.createElement("button");
@@ -1426,7 +1434,7 @@
       irVideo.hidden = false;
       irVideo.src = src;
       irVideo.currentTime = 0;
-      if (irStarted && !irPaused) irVideo.play().catch(() => {});
+      if (irStarted && !irPaused && irVisible) irVideo.play().catch(() => {});
     } else {
       irVideo.hidden = true;
       irVideo.removeAttribute("src");
@@ -1474,7 +1482,7 @@
   document.getElementById("ireel-next").addEventListener("click", () => irLoad(irIdx + 1));
 
   setInterval(() => {
-    if (!irStarted || irPaused) return;
+    if (!irStarted || irPaused || !irVisible) return;   /* congela fuera de vista */
     irElapsed += 100;
     const it = IREEL[irIdx];
     const pct = Math.min(100, irElapsed / (it.dur * 10));
@@ -1483,12 +1491,15 @@
   }, 100);
 
   irLoad(0);
-  new IntersectionObserver((entries, o) => {
+  /* Reproduce solo mientras la reel está en vista; se para al salir */
+  new IntersectionObserver((entries) => {
     entries.forEach(en => {
-      if (en.isIntersecting && !irStarted) {
-        irStarted = true;
-        if (!irVideo.hidden) irVideo.play().catch(() => {});
-        o.disconnect();
+      irVisible = en.isIntersecting;
+      if (en.isIntersecting) {
+        if (!irStarted) irStarted = true;
+        if (!irPaused && !irVideo.hidden) irVideo.play().catch(() => {});
+      } else {
+        irVideo.pause();
       }
     });
   }, { threshold: 0.35 }).observe(document.querySelector(".ireel"));
