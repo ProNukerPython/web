@@ -1542,26 +1542,34 @@
     target.classList.toggle("done", i === steps.length - 1);
   }
 
-  /* Reproduce la secuencia completa desde el primer step */
-  function runComp() {
+  /* Reproduce desde el step `start`: aterriza ahí, se mantiene un
+     momento (`hold` ms) y avanza hacia COMP paso a paso. */
+  const STEP_MS = 420;   /* tiempo entre pasos al avanzar */
+  function playFrom(start, hold) {
     compTimers.forEach(clearTimeout);
     compTimers = [];
     if (reduced) { setCompStep(steps.length - 1); compDone = true; return; }
-    segs.forEach(s => s.classList.remove("on", "final"));
-    steps.forEach((step, i) => {
+    compDone = false;
+    setCompStep(start);                 /* aterriza en el step pedido */
+    if (start >= steps.length - 1) { compDone = true; return; }
+    for (let i = start + 1; i < steps.length; i++) {
+      const delay = hold + (i - start - 1) * STEP_MS;
       compTimers.push(setTimeout(() => {
         setCompStep(i);
         if (i === steps.length - 1) compDone = true;
-      }, 500 + i * 420));
-    });
+      }, delay));
+    }
   }
 
-  /* Los segmentos son clicables: rejugar la animación una vez cargada */
-  segs.forEach(s => {
+  /* Secuencia inicial completa desde RENDER */
+  function runComp() { playFrom(0, 500 + STEP_MS); }
+
+  /* Los segmentos son clicables: aterriza en ese step y sigue desde ahí */
+  segs.forEach((s, idx) => {
     s.style.cursor = "pointer";
     s.setAttribute("role", "button");
-    s.setAttribute("aria-label", "Replay compositing animation");
-    s.addEventListener("click", () => { if (compDone) runComp(); });
+    s.setAttribute("aria-label", "Play compositing from this step");
+    s.addEventListener("click", () => { if (compDone) playFrom(idx, 1000); });
   });
 
   runComp();
