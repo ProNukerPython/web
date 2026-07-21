@@ -493,7 +493,7 @@
   #ireel-mute { position: relative; }
   .sound-doodle {
     position: absolute;
-    bottom: calc(100% + 0.5rem);
+    top: calc(100% + 0.5rem);
     left: 50%;
     display: flex;
     flex-direction: column;
@@ -506,7 +506,7 @@
   }
   .sound-doodle.gone {
     opacity: 0;
-    transform: translateX(-50%) scale(0.85) translateY(6px);
+    transform: translateX(-50%) scale(0.85) translateY(-6px);
     transition: opacity 0.4s ease, transform 0.4s ease;
     animation: none;
   }
@@ -862,8 +862,8 @@
             <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
             <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
             <button class="btn" id="ireel-mute" aria-label="Unmute"><span class="mute-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sound-doodle" id="sound-doodle" aria-hidden="true">
+                <svg class="arrow" viewBox="0 0 60 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44 C 4 28, 10 12, 30 7"/><path d="M20 16 L 30 6 L 40 12"/></svg>
                 <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
-                <svg class="arrow" viewBox="0 0 60 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 C 4 22, 10 38, 30 43"/><path d="M22 34 L 30 44 L 40 38"/></svg>
               </span></button>
             <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
             <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
