@@ -253,9 +253,14 @@
     height: 3px;
     background: var(--line);
     border-radius: 2px;
+    padding: 8px 0;
+    background-clip: content-box;
+    margin: -8px 0;
+    transition: background-color 0.15s ease;
   }
-  .passes .seg.on { background: var(--teal); }
-  .passes .seg.final { background: var(--amber); }
+  .passes .seg.on { background-color: var(--teal); }
+  .passes .seg.final { background-color: var(--amber); }
+  .passes .seg:hover { background-color: var(--ink); }
   #pass-label { min-width: 7ch; color: var(--ink); }
 
   .hero-cta {
@@ -1229,37 +1234,37 @@
        al siguiente (el clic en la pantalla abre el vídeo completo)
      ═══════════════════════════════════════════════════════════ */
   const IREEL = [
-    { kind: "yt", vid: "t3qnuVscDes", start: 5,  dur: 15,
+    { kind: "yt", vid: "t3qnuVscDes", start: 5,  dur: 20,
       studio: "ILLUSORIUM STUDIOS", title: "Blacksad — Fan Art", altKey: "Blacksad",
       url: "https://www.youtube.com/watch?v=t3qnuVscDes",
       en: "Compositing. I built a tool to apply 2D textures in comp using Position/Normal passes and triplanar STMaps (X, Y, Z) — textures track the assets through the shot.",
       es: "Composición. Desarrollé una tool para aplicar texturas 2D en comp con pases de Position/Normals y STMaps triplanares (X, Y, Z): la textura se mueve pegada a los assets." },
-    { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 15,
+    { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 20,
       studio: "SKYDANCE ANIMATION", title: "Swapped · Netflix", altKey: "Swapped",
       url: "https://www.youtube.com/watch?v=glgmAwRDP8s",
       en: "Compositing Trainee. Compositing tools development and the DiMatte workflow.",
       es: "Compositing Trainee. Desarrollo de tools de compositing y todo el flujo de DiMattes." },
-    { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 15,
+    { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 20,
       studio: "COCOLILO ANIMATION", title: "Pocoyó — Season 5", altKey: "Pocoyo",
       url: "https://www.youtube.com/watch?v=ptLECQo71WE",
       en: "Compositing Artist | TD. Artistic compositing and development of the show's Nuke pipeline and tools.",
       es: "Compositing Artist | TD. Composición artística y desarrollo de la pipeline de Nuke de la serie y sus tools." },
-    { kind: "yt", vid: "25_RHP3UB70", start: 0, dur: 15,
+    { kind: "yt", vid: "25_RHP3UB70", start: 0, dur: 20,
       studio: "ILLUSORIUM STUDIOS", title: "The Quinta's Ghost", altKey: "Quinta",
       url: "https://www.youtube.com/watch?v=25_RHP3UB70",
       en: "Lighting and compositing tools development for the comp team.",
       es: "Lighting y desarrollo de tools de compositing para el equipo de comp." },
-    { kind: "yt", vid: "FWepS03YbFU", start: 0, dur: 15,
+    { kind: "yt", vid: "FWepS03YbFU", start: 0, dur: 20,
       studio: "ILLUSORIUM STUDIOS", title: "Sky: The Two Embers — Part 1", altKey: "Sky:",
       url: "https://www.youtube.com/watch?v=FWepS03YbFU",
       en: "Artistic 3D compositing: developing shots from the lead's template and iterating on feedback.",
       es: "Composición 3D artística: desarrollo de planos desde el template del lead y aplicación de feedback." },
-    { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 15,
+    { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 20,
       studio: "SKYDANCE ANIMATION", title: "Spellbound · Netflix", altKey: "Spellbound",
       url: "https://www.youtube.com/watch?v=jGQiq1ZuCW8",
       en: "Lighting Assistant: scene prep, renders and QC of the layers that later live in the comp.",
       es: "Lighting Assistant: preparación de escenas, renders y control de calidad de capas." },
-    { kind: "vimeo", vid: "886479681", start: 5, dur: 15,
+    { kind: "vimeo", vid: "886479681", start: 5, dur: 20,
       studio: "LA SALLE BCN", title: "GLARE", altKey: "GLARE",
       url: "https://vimeo.com/886479681",
       en: "University short film. Comp & Lighting supervisor, plus concept art, modeling, look dev and texturing.",
@@ -1469,25 +1474,45 @@
     { name: "AOVs",   f: "grayscale(1) blur(5px) contrast(0.85)" },
     { name: "FX",     f: "grayscale(0.7) blur(2px)" },
     { name: "GRADE",  f: "grayscale(0.25) blur(0.5px) saturate(1.15)" },
-    { name: "FINAL",  f: "none" },
+    { name: "COMP",   f: "none" },
   ];
 
+  let compTimers = [];
+  let compDone = false;
+
+  /* Salta al estado de un step concreto (sin animar los intermedios) */
+  function setCompStep(i) {
+    target.style.filter = steps[i].f;
+    label.textContent = steps[i].name;
+    segs.forEach((s, j) => {
+      s.classList.toggle("on", j <= i && j !== steps.length - 1);
+      s.classList.toggle("final", j <= i && j === steps.length - 1);
+    });
+    target.classList.toggle("done", i === steps.length - 1);
+  }
+
+  /* Reproduce la secuencia completa desde el primer step */
   function runComp() {
-    if (reduced) {
-      target.classList.add("done");
-      label.textContent = "FINAL";
-      segs.forEach((s, i) => s.classList.add(i === segs.length - 1 ? "final" : "on"));
-      return;
-    }
+    compTimers.forEach(clearTimeout);
+    compTimers = [];
+    if (reduced) { setCompStep(steps.length - 1); compDone = true; return; }
+    segs.forEach(s => s.classList.remove("on", "final"));
     steps.forEach((step, i) => {
-      setTimeout(() => {
-        target.style.filter = step.f;
-        label.textContent = step.name;
-        segs[i].classList.add(i === steps.length - 1 ? "final" : "on");
-        if (i === steps.length - 1) target.classList.add("done");
-      }, 500 + i * 420);
+      compTimers.push(setTimeout(() => {
+        setCompStep(i);
+        if (i === steps.length - 1) compDone = true;
+      }, 500 + i * 420));
     });
   }
+
+  /* Los segmentos son clicables: rejugar la animación una vez cargada */
+  segs.forEach(s => {
+    s.style.cursor = "pointer";
+    s.setAttribute("role", "button");
+    s.setAttribute("aria-label", "Replay compositing animation");
+    s.addEventListener("click", () => { if (compDone) runComp(); });
+  });
+
   runComp();
 
   /* ── Timecode en vivo (frames a 24 fps) ──────────── */
