@@ -407,6 +407,7 @@
   .ireel-screen {
     position: relative;
     display: block;
+    z-index: 60;   /* por encima del grano (#grain, z-index 50) */
     aspect-ratio: 16 / 9;
     border-radius: 6px;
     overflow: hidden;
@@ -810,6 +811,7 @@
           <div class="ireel-ctrl mono">
             <button class="btn" id="ireel-prev" aria-label="Previous project">⏮</button>
             <button class="btn" id="ireel-play" aria-label="Pause">⏸</button>
+            <button class="btn" id="ireel-mute" aria-label="Unmute">🔇</button>
             <button class="btn" id="ireel-next" aria-label="Next project">⏭</button>
             <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video">↗</a>
           </div>
@@ -1382,6 +1384,13 @@
   }
 
   irVideo.addEventListener("ended", () => { if (!irPaused) irLoad(irIdx + 1); });
+
+  const irMute = document.getElementById("ireel-mute");
+  irMute.addEventListener("click", () => {
+    irVideo.muted = !irVideo.muted;
+    irMute.textContent = irVideo.muted ? "🔇" : "🔊";
+    irMute.setAttribute("aria-label", irVideo.muted ? "Unmute" : "Mute");
+  });
 
   irScreen.addEventListener("click", () => window.open(IREEL[irIdx].url, "_blank", "noopener"));
   irScreen.addEventListener("keydown", (e) => {
