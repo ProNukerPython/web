@@ -485,8 +485,50 @@
   }
   .ireel-info h3 { margin: 0.15rem 0 0.3rem; font-size: 1.15rem; }
   .ireel-info p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 40rem; }
-  .ireel-ctrl { display: flex; gap: 0.5rem; }
+  .ireel-ctrl { display: flex; gap: 0.5rem; position: relative; }
   .ireel-ctrl .btn { padding: 0.5rem 0.85rem; }
+
+  /* ── Doodle "activa el sonido" (anclado al botón mute) ─ */
+  #ireel-mute { position: relative; }
+  .sound-doodle {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    color: var(--amber);
+    pointer-events: none;
+    animation: doodleBob 1.8s ease-in-out infinite;
+    z-index: 5;
+  }
+  .sound-doodle.gone {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.85) translateY(6px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    animation: none;
+  }
+  .sound-doodle .note {
+    font-family: "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+  }
+  .sound-doodle .arrow { width: 2.4rem; height: 2rem; }
+  @keyframes doodleBob {
+    0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+    50%      { transform: translateX(-50%) translateY(-5px) rotate(2deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sound-doodle { animation: none; transform: translateX(-50%); }
+  }
+  @media (max-width: 34rem) {
+    .sound-doodle .note { font-size: 0.82rem; white-space: normal; max-width: 11rem; }
+  }
 
   .pass-form { display: flex; gap: 0.6rem; flex-wrap: wrap; }
   .pass-form input {
@@ -818,7 +860,10 @@
           <div class="ireel-ctrl mono">
             <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
             <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
-            <button class="btn" id="ireel-mute" aria-label="Unmute"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <button class="btn" id="ireel-mute" aria-label="Unmute"><span class="mute-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sound-doodle" id="sound-doodle" aria-hidden="true">
+                <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
+                <svg class="arrow" viewBox="0 0 60 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 C 4 22, 10 38, 30 43"/><path d="M22 34 L 30 44 L 40 38"/></svg>
+              </span></button>
             <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
             <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
           </div>
@@ -1324,8 +1369,9 @@
   });
 
   /* ── Reel interactiva (clips locales en /media + timer) ── */
-  const MEDIA_V = "25";   /* cache-buster: súbelo cuando recortes los clips */
+  const MEDIA_V = "26";   /* cache-buster: súbelo cuando recortes los clips */
   const IREEL_MEDIA = {
+    "GLARE":      "media/glare.mp4?v=" + MEDIA_V,
     "Blacksad":   "media/blacksad.mp4?v=" + MEDIA_V,
     "Swapped":    "media/swapped.mp4?v=" + MEDIA_V,
     "Pocoyo":     "media/pocoyo.mp4?v=" + MEDIA_V,
@@ -1396,9 +1442,12 @@
   const IC_MUTED = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   const IC_SOUND = '<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6.5a8.5 8.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   const irMute = document.getElementById("ireel-mute");
+  const irMuteIc = irMute.querySelector(".mute-ic");
+  const irDoodle = document.getElementById("sound-doodle");
   irMute.addEventListener("click", () => {
     irVideo.muted = !irVideo.muted;
-    irMute.innerHTML = irVideo.muted ? IC_MUTED : IC_SOUND;
+    if (!irVideo.muted && irDoodle) irDoodle.classList.add("gone");
+    irMuteIc.innerHTML = irVideo.muted ? IC_MUTED : IC_SOUND;
     irMute.setAttribute("aria-label", irVideo.muted ? "Unmute" : "Mute");
   });
 
