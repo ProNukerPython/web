@@ -414,15 +414,17 @@
     background: #000;
     box-shadow: var(--shadow);
   }
+  .ireel-screen { cursor: pointer; }
   .ireel-screen img,
-  .ireel-screen iframe {
+  .ireel-screen video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    border: 0;
+    object-fit: cover;
   }
-  .ireel-screen img { object-fit: cover; transform-origin: center; }
+  .ireel-screen video[hidden] { display: none; }
+  .ireel-screen img { transform-origin: center; }
   @keyframes irzoom {
     from { transform: scale(1); }
     to   { transform: scale(1.14) translate(-1.5%, -1%); }
@@ -793,12 +795,10 @@
 
       <!-- Reel interactiva: los vídeos públicos de cada proyecto, con timer -->
       <div class="ireel reveal">
-        <div class="ireel-screen">
+        <div class="ireel-screen" id="ireel-screen" role="button" tabindex="0">
           <img id="ireel-poster" alt="" aria-hidden="true">
-          <iframe id="ireel-frame" title="Project reel player"
-                  allow="autoplay; fullscreen; encrypted-media"
-                  allowfullscreen
-                  referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <video id="ireel-video" muted playsinline preload="auto" hidden></video>
+          <span class="ireel-hint mono"><span class="l-en">▶&nbsp;WATCH FULL VIDEO</span><span class="l-es">▶&nbsp;VER VÍDEO COMPLETO</span></span>
         </div>
         <div class="ireel-bars" id="ireel-bars" aria-label="Projects"></div>
         <div class="ireel-info">
@@ -1314,8 +1314,17 @@
     irRenderText();
   });
 
-  /* ── Reel interactiva (vídeos embebidos + timer) ── */
-  const irFrame = document.getElementById("ireel-frame");
+  /* ── Reel interactiva (clips locales en /media + timer) ── */
+  const IREEL_MEDIA = {
+    "Blacksad":   "media/blacksad.mp4",
+    "Swapped":    "media/swapped.mp4",
+    "Pocoyo":     "media/pocoyo.mp4",
+    "Quinta":     "media/quinta.mp4",
+    "Sky:":       "media/sky.mp4",
+    "Spellbound": "media/spellbound.mp4",
+  };
+  const irScreen = document.getElementById("ireel-screen");
+  const irVideo = document.getElementById("ireel-video");
   const irPoster = document.getElementById("ireel-poster");
   const irBars = document.getElementById("ireel-bars");
   const irStudio = document.getElementById("ireel-studio");
@@ -1331,18 +1340,10 @@
     b.className = "bar";
     b.setAttribute("aria-label", it.title);
     b.innerHTML = '<span class="fill"></span>';
-    b.addEventListener("click", () => irLoad(i, true));
+    b.addEventListener("click", (e) => { e.stopPropagation(); irLoad(i); });
     irBars.appendChild(b);
   });
   const irBarEls = [...irBars.children];
-
-  function irSrc(it) {
-    return it.kind === "vimeo"
-      ? "https://player.vimeo.com/video/" + it.vid + "?autoplay=1&muted=1#t=" + it.start + "s"
-      : "https://www.youtube-nocookie.com/embed/" + it.vid +
-        "?autoplay=1&mute=1&controls=0&start=" + it.start +
-        "&rel=0&modestbranding=1&playsinline=1&enablejsapi=1";
-  }
 
   function irRenderText() {
     const it = IREEL[irIdx];
@@ -1350,15 +1351,29 @@
     irTitle.textContent = it.title;
     irDesc.textContent = it[currentLang()];
     irOpen.href = it.url;
+    irScreen.setAttribute("aria-label", it.title);
   }
 
-  function irLoad(n, withVideo) {
+  function irLoad(n) {
     irIdx = (n + IREEL.length) % IREEL.length;
     irElapsed = 0;
     const it = IREEL[irIdx];
     const thumb = document.querySelector('.proj .thumb[alt*="' + it.altKey + '"]');
     if (thumb) irPoster.src = thumb.src;
-    if (withVideo) irFrame.src = irSrc(it);
+    irPoster.classList.remove("zooming");
+    void irPoster.offsetWidth;
+    irPoster.classList.add("zooming");
+    irPoster.style.animationPlayState = irPaused ? "paused" : "running";
+    const src = IREEL_MEDIA[it.altKey];
+    if (src) {
+      irVideo.hidden = false;
+      irVideo.src = src;
+      irVideo.currentTime = 0;
+      if (irStarted && !irPaused) irVideo.play().catch(() => {});
+    } else {
+      irVideo.hidden = true;
+      irVideo.removeAttribute("src");
+    }
     irBarEls.forEach((b, i) => {
       b.classList.toggle("done", i < irIdx);
       b.querySelector(".fill").style.width = i < irIdx ? "100%" : "0%";
@@ -1366,25 +1381,26 @@
     irRenderText();
   }
 
-  function irPostCmd(pause) {
-    try {
-      const it = IREEL[irIdx];
-      const msg = it.kind === "vimeo"
-        ? JSON.stringify({ method: pause ? "pause" : "play" })
-        : JSON.stringify({ event: "command", func: pause ? "pauseVideo" : "playVideo", args: [] });
-      irFrame.contentWindow.postMessage(msg, "*");
-    } catch (e) {}
-  }
+  irVideo.addEventListener("ended", () => { if (!irPaused) irLoad(irIdx + 1); });
+
+  irScreen.addEventListener("click", () => window.open(IREEL[irIdx].url, "_blank", "noopener"));
+  irScreen.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); window.open(IREEL[irIdx].url, "_blank", "noopener"); }
+  });
 
   irPlay.addEventListener("click", () => {
     irPaused = !irPaused;
     irPlay.textContent = irPaused ? "▶" : "⏸";
     irPlay.setAttribute("aria-label", irPaused ? "Play" : "Pause");
-    irPostCmd(irPaused);
-    if (!irStarted && !irPaused) { irStarted = true; irLoad(irIdx, true); }
+    irPoster.style.animationPlayState = irPaused ? "paused" : "running";
+    if (irPaused) { irVideo.pause(); }
+    else {
+      if (!irStarted) irStarted = true;
+      if (!irVideo.hidden) irVideo.play().catch(() => {});
+    }
   });
-  document.getElementById("ireel-prev").addEventListener("click", () => irLoad(irIdx - 1, true));
-  document.getElementById("ireel-next").addEventListener("click", () => irLoad(irIdx + 1, true));
+  document.getElementById("ireel-prev").addEventListener("click", () => irLoad(irIdx - 1));
+  document.getElementById("ireel-next").addEventListener("click", () => irLoad(irIdx + 1));
 
   setInterval(() => {
     if (!irStarted || irPaused) return;
@@ -1392,15 +1408,15 @@
     const it = IREEL[irIdx];
     const pct = Math.min(100, irElapsed / (it.dur * 10));
     irBarEls[irIdx].querySelector(".fill").style.width = pct + "%";
-    if (irElapsed >= it.dur * 1000) irLoad(irIdx + 1, true);
+    if (irElapsed >= it.dur * 1000) irLoad(irIdx + 1);
   }, 100);
 
-  irLoad(0, false);
+  irLoad(0);
   new IntersectionObserver((entries, o) => {
     entries.forEach(en => {
       if (en.isIntersecting && !irStarted) {
         irStarted = true;
-        irLoad(irIdx, true);
+        if (!irVideo.hidden) irVideo.play().catch(() => {});
         o.disconnect();
       }
     });
