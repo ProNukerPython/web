@@ -786,7 +786,6 @@
   <a class="brand mono" href="#top">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
   <div class="nav-right">
     <ul class="mono">
-      <li><a href="#reels">Reels</a></li>
       <li><a href="#sobre-mi"><span class="l-en">About</span><span class="l-es">Sobre mí</span></a></li>
       <li><a href="#experiencia"><span class="l-en">Experience</span><span class="l-es">Experiencia</span></a></li>
       <li><a href="#proyectos"><span class="l-en">Projects</span><span class="l-es">Proyectos</span></a></li>
@@ -829,64 +828,18 @@
     </div>
 
     <div class="hero-cta">
-      <a class="btn primary" href="#reels"><span class="l-en">Watch reel</span><span class="l-es">Ver reel</span></a>
+      <a class="btn primary" href="#proyectos"><span class="l-en">Watch reel</span><span class="l-es">Ver reel</span></a>
       <a class="btn" href="#contacto"><span class="l-en">Get in touch</span><span class="l-es">Contactar</span></a>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- ══ REELS ══════════════════════════════════════ -->
-  <section id="reels">
-    <div class="wrap">
-      <div class="eyebrow reveal">
-        <span class="tc mono">TC 00:00:10:00</span>
-        <h2 class="display">Reels</h2>
-      </div>
-
-      <!-- Reel interactiva: los vídeos públicos de cada proyecto, con timer -->
-      <div class="ireel reveal">
-        <div class="ireel-screen" id="ireel-screen" role="button" tabindex="0">
-          <img id="ireel-poster" alt="" aria-hidden="true">
-          <video id="ireel-video" muted playsinline preload="auto" hidden></video>
-          <span class="ireel-hint mono"><svg class="ic-s" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>&nbsp;<span class="l-en">WATCH FULL VIDEO</span><span class="l-es">VER VÍDEO COMPLETO</span></span>
-        </div>
-        <div class="ireel-bars" id="ireel-bars" aria-label="Projects"></div>
-        <div class="ireel-info">
-          <div>
-            <span class="ptc mono" id="ireel-studio"></span>
-            <h3 class="display" id="ireel-title"></h3>
-            <p id="ireel-desc"></p>
-          </div>
-          <div class="ireel-ctrl mono">
-            <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
-            <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
-            <button class="btn" id="ireel-mute" aria-label="Unmute"><span class="mute-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sound-doodle" id="sound-doodle" aria-hidden="true">
-                <svg class="arrow" viewBox="0 0 60 52" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
-                  <defs><filter id="boil" x="-30%" y="-30%" width="160%" height="160%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="1" result="n">
-                      <animate attributeName="seed" values="1;3;5;7;9" dur="0.5s" repeatCount="indefinite" calcMode="discrete"/>
-                    </feTurbulence>
-                    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
-                  </filter></defs>
-                  <g filter="url(#boil)"><path d="M12 46 C 6 30, 13 13, 30 8"/><path d="M21 16 L 30 7 L 39 16"/></g>
-                </svg>
-                <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
-              </span></button>
-            <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
-            <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- ══ SOBRE MÍ ═══════════════════════════════════ -->
   <section id="sobre-mi">
     <div class="wrap">
       <div class="eyebrow reveal">
-        <span class="tc mono">TC 00:01:24:00</span>
+        <span class="tc mono">TC 00:00:10:00</span>
         <h2 class="display"><span class="l-en">About me</span><span class="l-es">Sobre mí</span></h2>
       </div>
 
@@ -1053,7 +1006,42 @@
         <h2 class="display"><span class="l-en">Projects</span><span class="l-es">Proyectos</span></h2>
       </div>
 
-      <div class="proj-grid">
+      <!-- Reel interactiva: intro de proyectos — los vídeos de cada uno, con timer -->
+      <div class="ireel reveal">
+        <div class="ireel-screen" id="ireel-screen" role="button" tabindex="0">
+          <img id="ireel-poster" alt="" aria-hidden="true">
+          <video id="ireel-video" muted playsinline preload="auto" hidden></video>
+          <span class="ireel-hint mono"><svg class="ic-s" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>&nbsp;<span class="l-en">WATCH FULL VIDEO</span><span class="l-es">VER VÍDEO COMPLETO</span></span>
+        </div>
+        <div class="ireel-bars" id="ireel-bars" aria-label="Projects"></div>
+        <div class="ireel-info">
+          <div>
+            <span class="ptc mono" id="ireel-studio"></span>
+            <h3 class="display" id="ireel-title"></h3>
+            <p id="ireel-desc"></p>
+          </div>
+          <div class="ireel-ctrl mono">
+            <button class="btn" id="ireel-prev" aria-label="Previous project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6z"/><path d="M20 5v14L9 12z"/></svg></button>
+            <button class="btn" id="ireel-play" aria-label="Pause"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6z"/><path d="M14 5h4v14h-4z"/></svg></button>
+            <button class="btn" id="ireel-mute" aria-label="Unmute"><span class="mute-ic"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="m16.6 9.6 4.8 4.8m0-4.8-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sound-doodle" id="sound-doodle" aria-hidden="true">
+                <svg class="arrow" viewBox="0 0 60 52" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                  <defs><filter id="boil" x="-30%" y="-30%" width="160%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="1" result="n">
+                      <animate attributeName="seed" values="1;3;5;7;9" dur="0.5s" repeatCount="indefinite" calcMode="discrete"/>
+                    </feTurbulence>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter></defs>
+                  <g filter="url(#boil)"><path d="M12 46 C 6 30, 13 13, 30 8"/><path d="M21 16 L 30 7 L 39 16"/></g>
+                </svg>
+                <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
+              </span></button>
+            <button class="btn" id="ireel-next" aria-label="Next project"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2z"/><path d="M4 5v14l11-7z"/></svg></button>
+            <a class="btn primary" id="ireel-open" href="#" target="_blank" rel="noopener" aria-label="Open full video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-grid" style="margin-top: 1.8rem;">
         <article class="proj reveal">
           <div class="thumb-ph mono" aria-hidden="true">
             <span class="glyph">◉</span>
