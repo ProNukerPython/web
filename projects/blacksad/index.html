@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blacksad — Fan Art — Compositing Artist | Marc Castellví</title>
+<meta name="description" content="Compositing on Illusorium Studios' fan-art piece based on the noir comic Blacksad, including a custom triplanar STMap tool for applying 2D textures in comp.">
+<link rel="canonical" href="https://marc-castellvi.com/projects/blacksad/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+<meta name="author" content="Marc Castellví Vila">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0d0f14">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://marc-castellvi.com/projects/blacksad/">
+<meta property="og:site_name" content="Marc Castellví — Portfolio">
+<meta property="og:title" content="Blacksad — Fan Art — Compositing Artist | Marc Castellví">
+<meta property="og:description" content="Compositing on Illusorium Studios' fan-art piece based on the noir comic Blacksad, including a custom triplanar STMap tool for applying 2D textures in comp.">
+<meta property="og:image" content="https://marc-castellvi.com/assets/blacksad.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blacksad — Fan Art — Compositing Artist | Marc Castellví">
+<meta name="twitter:description" content="Compositing on Illusorium Studios' fan-art piece based on the noir comic Blacksad, including a custom triplanar STMap tool for applying 2D textures in comp.">
+<meta name="twitter:image" content="https://marc-castellvi.com/assets/blacksad.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://marc-castellvi.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Projects",
+      "item": "https://marc-castellvi.com/projects/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Blacksad — Fan Art"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "@id": "https://marc-castellvi.com/projects/blacksad/#work",
+  "name": "Blacksad — Fan Art",
+  "url": "https://marc-castellvi.com/projects/blacksad/",
+  "image": "https://marc-castellvi.com/assets/blacksad.jpg",
+  "description": "Compositing on Illusorium Studios' fan-art piece based on the noir comic Blacksad, including a custom triplanar STMap tool for applying 2D textures in comp.",
+  "contributor": {
+    "@id": "https://marc-castellvi.com/#person"
+  },
+  "sourceOrganization": {
+    "@type": "Organization",
+    "name": "Illusorium Studios"
+  },
+  "sameAs": "https://www.youtube.com/watch?v=t3qnuVscDes"
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+  <a class="brand" href="/">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
+  <ul>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/projects/" aria-current="page">Projects</a></li>
+    <li><a href="/reel/">Reel</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+<div class="breadcrumbs mono" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">/</span><a href="/projects/">Projects</a><span class="sep">/</span><span>Blacksad — Fan Art</span></div>
+<span class="kicker mono">Illusorium Studios</span>
+<h1 class="display">Blacksad — Fan Art</h1>
+<p class="lede">Compositing on Illusorium Studios' fan-art piece based on the noir comic Blacksad, including a custom triplanar STMap tool for applying 2D textures in comp.</p>
+
+<div class="video-embed">
+  <iframe src="https://www.youtube-nocookie.com/embed/t3qnuVscDes" title="Watch the Blacksad fan art on YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<p><a href="https://www.youtube.com/watch?v=t3qnuVscDes" target="_blank" rel="noopener">Watch the Blacksad fan art on YouTube ↗</a></p>
+
+<div class="slate mono">
+  <div class="row"><span class="k">Role</span><span class="v">Compositing Artist</span></div>
+  <div class="row"><span class="k">Studio</span><span class="v">Illusorium Studios</span></div>
+  <div class="row"><span class="k">Dates</span><span class="v">2025</span></div>
+  <div class="row"><span class="k">Software</span><span class="v">Nuke</span></div>
+</div>
+
+
+<h2>What was my role?</h2>
+<p>I did <strong>compositing</strong> on Illusorium Studios' fan-art piece based on the
+noir comic series <em>Blacksad</em>.</p>
+
+<h2>Technical breakdown: triplanar STMaps in comp</h2>
+<p>The most interesting part of this project was a tool I built to apply 2D
+textures directly in comp. Using <strong>Position and Normal passes</strong> from the
+render, the tool generates <strong>triplanar STMaps</strong> (projections along X, Y and
+Z) so that any 2D texture can be mapped onto the CG assets from within Nuke —
+and it tracks the assets correctly through the shot as the camera and objects
+move.</p>
+<p>This meant look tweaks — adding grain, wear, printed patterns — could happen
+in comp without a round trip to texturing and re-rendering, which is exactly
+the kind of iteration speed comp is for.</p>
+
+<h2>Software</h2>
+<p>Nuke, working with multichannel EXR renders (Position, Normals, and beauty
+AOVs).</p>
+
+
+<div class="tags"><span class="tag">Nuke</span><span class="tag">Fan art</span><span class="tag">STMaps</span><span class="tag">Position passes</span></div>
+
+<p style="margin-top:2.4rem"><a class="btn" href="/projects/">← All projects</a>
+<a class="btn primary" href="/contact/">Get in touch</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <nav aria-label="Site pages">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/projects/">Projects</a>
+    <a href="/reel/">Reel</a>
+    <a href="/blog/">Blog</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <span>© 2026 MARC CASTELLVÍ VILA · COMP · MADRID</span>
+</footer>
+</body>
+</html>
