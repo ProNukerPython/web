@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví</title>
+<meta name="description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<link rel="canonical" href="https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+<meta name="author" content="Marc Castellví Vila">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0d0f14">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/">
+<meta property="og:site_name" content="Marc Castellví — Portfolio">
+<meta property="og:title" content="How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví">
+<meta property="og:description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<meta property="og:image" content="https://marc-castellvi.com/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví">
+<meta name="twitter:description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<meta name="twitter:image" content="https://marc-castellvi.com/assets/og-card.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://marc-castellvi.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://marc-castellvi.com/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How I Build a Compositing Workflow in Nuke for Animation Features"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "@id": "https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/#article",
+  "headline": "How I Build a Compositing Workflow in Nuke for Animation Features",
+  "description": "A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.",
+  "url": "https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/",
+  "datePublished": "2026-07-22",
+  "dateModified": "2026-07-22",
+  "inLanguage": "en",
+  "image": "https://marc-castellvi.com/assets/og-card.png",
+  "author": {
+    "@id": "https://marc-castellvi.com/#person"
+  },
+  "publisher": {
+    "@id": "https://marc-castellvi.com/#person"
+  },
+  "mainEntityOfPage": "https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/"
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+  <a class="brand" href="/">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
+  <ul>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/projects/">Projects</a></li>
+    <li><a href="/reel/">Reel</a></li>
+    <li><a href="/blog/" aria-current="page">Blog</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+<div class="breadcrumbs mono" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span>How I Build a Compositing Workflow in Nuke for Animation Features</span></div>
+<article class="prose">
+<span class="kicker mono">BLOG</span>
+<h1 class="display">How I Build a Compositing Workflow in Nuke for Animation Features</h1>
+<p class="meta">By Marc Castellví · July 22, 2026</p>
+
+<p>Over the last few years I've worked on the comp side of animated features
+and series at <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
+Studios and Cocolilo Animation — sometimes as a shot artist, often as the
+person building the templates and tools the rest of the team relies on. This
+article is a practical summary of how I approach a Nuke compositing workflow
+for animation, and the decisions that matter most.</p>
+
+<h2>1. Start from the template, not the shot</h2>
+<p>In animation, comp is a volume game: hundreds of shots that share the same
+render structure. The single highest-leverage thing you can do is invest in a
+solid <strong>shot template</strong> — a Nuke script that already knows how to read the
+show's passes, rebuild the beauty, and route mattes and FX elements, so an
+artist opens a shot and starts making creative decisions immediately instead of
+wiring nodes.</p>
+<p>A good template has three properties:</p>
+<ul>
+  <li><strong>Predictable structure</strong> — every shot looks the same, so anyone can open
+      anyone's script and know where things are.</li>
+  <li><strong>Safe defaults</strong> — the un-touched template output should already look
+      close to the lighting render. Comp adds, it doesn't repair.</li>
+  <li><strong>Escape hatches</strong> — artists must be able to break out of the template for
+      hero shots without fighting it.</li>
+</ul>
+
+<h2>2. Respect the AOV structure</h2>
+<p>Having worked as a <a href="/projects/spellbound/">lighting assistant</a> before
+moving to comp, I learned to treat the render's AOV structure as a contract
+between departments. The comp template rebuilds the beauty from light groups
+and AOVs, which gives comp enormous grading power — but only if the rebuild is
+mathematically exact. Verify it with a difference against the beauty on every
+show setup, and automate that check if you can.</p>
+
+<h2>3. Mattes are a workflow, not a node</h2>
+<p>On <a href="/projects/swapped/">Swapped</a> I owned the DiMatte workflow, and it
+changed how I think about mattes. Cryptomatte is great for ad-hoc picking, but
+a production needs <strong>named, versioned, consistent mattes</strong> that arrive in
+every shot the same way. Define naming conventions early, build the template to
+consume them automatically, and give artists one obvious tool to request or
+generate a matte that doesn't exist yet.</p>
+
+<h2>4. Move look decisions into comp when it's cheaper</h2>
+<p>Some look tweaks don't need a re-render. On the
+<a href="/projects/blacksad/">Blacksad fan-art piece</a> I built a triplanar STMap
+tool that uses Position and Normal passes to apply 2D textures directly in
+comp, tracking the assets through the shot. That kind of tool turns a
+days-long texture/render round trip into minutes inside Nuke. Every show has a
+handful of these opportunities — find them.</p>
+
+<h2>5. Automate the boring 20%</h2>
+<p>As a TD on <a href="/projects/pocoyo-season-5/">Pocoyó season 5</a> my job was
+essentially to remove friction: automatic script setup, read/write node
+management, versioning, delivery. Python inside Nuke pays for itself
+immediately in episodic work. My rule of thumb: if an artist does the same
+five clicks in every shot, that's a tool.</p>
+
+<h2>Closing thoughts</h2>
+<p>The artistic and technical sides of compositing aren't separate jobs — the
+best comp teams I've been part of treat the pipeline as part of the image.
+If the template is solid, the mattes are reliable and the boring parts are
+automated, artists spend their day on what actually shows up on screen.</p>
+
+<p><em>Want to talk comp workflows, or see this thinking applied to real
+productions? Check my <a href="/projects/">projects</a> or
+<a href="/contact/">get in touch</a>.</em></p>
+
+</article>
+
+<p style="margin-top:2.4rem"><a class="btn" href="/blog/">← All articles</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <nav aria-label="Site pages">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/projects/">Projects</a>
+    <a href="/reel/">Reel</a>
+    <a href="/blog/">Blog</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <span>© 2026 MARC CASTELLVÍ VILA · COMP · MADRID</span>
+</footer>
+</body>
+</html>
