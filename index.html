@@ -1723,22 +1723,54 @@
   /* ── Grano de película ───────────────────────────── */
   const grain = document.getElementById("grain");
   const gctx = grain.getContext("2d");
-  function sizeGrain() {
-    grain.width = Math.floor(innerWidth / 3);
-    grain.height = Math.floor(innerHeight / 3);
+  /* Grano fino: una partícula = 1 px CSS. Se generan unos pocos
+     tiles de ruido y se pintan como patrón, así el coste no depende
+     del tamaño de la pantalla (nada de recorrer millones de píxeles
+     por fotograma). El canvas va a resolución de dispositivo para
+     que no se vea ampliado en pantallas retina. */
+  const TILE = 128;
+  const grainTiles = [];
+  let grainPatterns = [];
+  let grainDpr = 1;
+
+  function makeGrainTiles() {
+    grainTiles.length = 0;
+    for (let t = 0; t < 4; t++) {
+      const c = document.createElement("canvas");
+      c.width = c.height = TILE;
+      const cx = c.getContext("2d");
+      const img = cx.createImageData(TILE, TILE);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = Math.random() * 255;
+        d[i] = d[i + 1] = d[i + 2] = v;
+        d[i + 3] = 255;
+      }
+      cx.putImageData(img, 0, 0);
+      grainTiles.push(c);
+    }
   }
+
+  function sizeGrain() {
+    grainDpr = Math.min(window.devicePixelRatio || 1, 2);
+    grain.width = Math.max(1, Math.round(innerWidth * grainDpr));
+    grain.height = Math.max(1, Math.round(innerHeight * grainDpr));
+    /* trabajamos en px CSS: 1 unidad del patrón = 1 px CSS */
+    gctx.setTransform(grainDpr, 0, 0, grainDpr, 0, 0);
+    grainPatterns = grainTiles.map(c => gctx.createPattern(c, "repeat"));
+    drawGrain();   /* redimensionar limpia el canvas: repintar ya */
+  }
+
+  let grainFrame = 0;
+  function drawGrain() {
+    if (!grainPatterns.length) return;
+    gctx.fillStyle = grainPatterns[grainFrame++ % grainPatterns.length];
+    gctx.fillRect(0, 0, innerWidth, innerHeight);
+  }
+
+  makeGrainTiles();
   sizeGrain();
   addEventListener("resize", sizeGrain);
-  function drawGrain() {
-    const img = gctx.createImageData(grain.width, grain.height);
-    const d = img.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const v = Math.random() * 255;
-      d[i] = d[i + 1] = d[i + 2] = v;
-      d[i + 3] = 255;
-    }
-    gctx.putImageData(img, 0, 0);
-  }
   drawGrain();
   if (!reduced) { setInterval(drawGrain, 1000 / 12); }
 </script>
