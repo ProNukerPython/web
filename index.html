@@ -420,6 +420,16 @@
     background: var(--line);
     align-self: center;
   }
+  .eyebrow .more {
+    order: 1;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .eyebrow .more:hover { color: var(--amber); }
 
   /* scroll reveal */
   .reveal {
@@ -574,6 +584,8 @@
     flex-wrap: wrap;
   }
   .ireel-info h3 { margin: 0.15rem 0 0.3rem; font-size: 1.15rem; }
+  .ireel-info h3 a { color: inherit; text-decoration: none; }
+  .ireel-info h3 a:hover { color: var(--amber); }
   .ireel-info p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 40rem; }
   .ireel-ctrl { display: flex; gap: 0.5rem; position: relative; }
   .ireel-ctrl .btn { padding: 0.5rem 0.85rem; }
@@ -758,7 +770,7 @@
   }
   .proj:hover .thumb { filter: saturate(1.05); }
   .proj .thumb-link::after {
-    content: "▶";
+    content: "→";
     position: absolute;
     inset: 0;
     display: grid;
@@ -795,6 +807,9 @@
   @media (prefers-reduced-motion: reduce) { .proj:hover { transform: none; } }
   .proj .ptc { font-size: 0.68rem; color: var(--teal); letter-spacing: 0.1em; }
   .proj h3 { margin: 0; font-size: 1.1rem; }
+  .proj h3 a { color: inherit; text-decoration: none; }
+  .proj h3 a:hover { color: var(--amber); }
+  .proj .links { display: flex; gap: 1.1rem; flex-wrap: wrap; }
   .proj p { margin: 0; color: var(--muted); font-size: 0.92rem; flex: 1; }
   .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .tag {
@@ -945,6 +960,7 @@
       <div class="eyebrow reveal">
         <span class="tc mono">TC 00:00:10:00</span>
         <h2 class="display"><span class="l-en">About me</span><span class="l-es">Sobre mí</span></h2>
+        <a class="more mono" href="/about/"><span class="l-en">Full bio →</span><span class="l-es">Bio completa →</span></a>
       </div>
 
       <div class="about-grid">
@@ -996,6 +1012,7 @@
       <div class="eyebrow reveal">
         <span class="tc mono">TC 00:02:48:00</span>
         <h2 class="display"><span class="l-en">Experience</span><span class="l-es">Experiencia</span></h2>
+        <a class="more mono" href="/about/"><span class="l-en">Full CV →</span><span class="l-es">CV completo →</span></a>
       </div>
 
       <div class="timeline">
@@ -1108,6 +1125,8 @@
       <div class="eyebrow reveal">
         <span class="tc mono">TC 00:04:12:00</span>
         <h2 class="display"><span class="l-en">Projects</span><span class="l-es">Proyectos</span></h2>
+        <a class="more mono" href="/reel/"><span class="l-en">Reel →</span><span class="l-es">Reel →</span></a>
+        <a class="more mono" href="/projects/"><span class="l-en">All projects →</span><span class="l-es">Todos los proyectos →</span></a>
       </div>
 
       <!-- Reel interactiva: intro de proyectos — los vídeos de cada uno, con timer -->
@@ -1121,7 +1140,7 @@
         <div class="ireel-info">
           <div>
             <span class="ptc mono" id="ireel-studio"></span>
-            <h3 class="display" id="ireel-title"></h3>
+            <h3 class="display"><a id="ireel-title" href="/projects/"></a></h3>
             <p id="ireel-desc"></p>
           </div>
           <div class="ireel-ctrl mono">
@@ -1181,11 +1200,11 @@
           </div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=t3qnuVscDes" target="_blank" rel="noopener" aria-label="Watch Blacksad fan art on YouTube">
+          <a class="thumb-link" href="/projects/blacksad/" aria-label="View the Blacksad — Fan Art project page">
             <img class="thumb" src="assets/blacksad.jpg" alt="Still from Blacksad fan art by Illusorium Studios — Nuke compositing by Marc Castellví" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">ILLUSORIUM STUDIOS</span>
-          <h3 class="display">Blacksad — Fan Art</h3>
+          <h3 class="display"><a href="/projects/blacksad/">Blacksad — Fan Art</a></h3>
           <p class="l-en">Compositing on Illusorium's fan-art piece based on
              the noir comic series <em>Blacksad</em>.</p>
           <p class="l-es">Composición en la pieza fan art de Illusorium basada
@@ -1193,14 +1212,14 @@
           <div class="tags">
             <span class="tag">Nuke</span><span class="tag">Fan art</span>
           </div>
-          <a href="https://www.youtube.com/watch?v=t3qnuVscDes" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/blacksad/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=t3qnuVscDes" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=glgmAwRDP8s" target="_blank" rel="noopener" aria-label="Watch Swapped trailer on YouTube">
+          <a class="thumb-link" href="/projects/swapped/" aria-label="View the Swapped project page">
             <img class="thumb" src="assets/swapped.jpg" alt="Still from Swapped (Netflix) — compositing tools and DiMatte workflow by Marc Castellví at Skydance Animation" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">SKYDANCE ANIMATION</span>
-          <h3 class="display">Swapped · Netflix</h3>
+          <h3 class="display"><a href="/projects/swapped/">Swapped · Netflix</a></h3>
           <p class="l-en">Compositing Trainee. Compositing tools development
              and the DiMatte workflow on Skydance's feature for Netflix.</p>
           <p class="l-es">Compositing Trainee. Desarrollo de tools de
@@ -1209,14 +1228,14 @@
           <div class="tags">
             <span class="tag">Nuke</span><span class="tag">Tools</span><span class="tag">DiMattes</span><span class="tag">Netflix</span>
           </div>
-          <a href="https://www.youtube.com/watch?v=glgmAwRDP8s" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/swapped/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=glgmAwRDP8s" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=lPjD5BKZ0E4" target="_blank" rel="noopener" aria-label="Watch Pocoyo season 5 on YouTube">
+          <a class="thumb-link" href="/projects/pocoyo-season-5/" aria-label="View the Pocoyó season 5 project page">
             <img class="thumb" src="assets/pocoyo-season-5.jpg" alt="Still from Pocoyo season 5 — Nuke compositing and pipeline by Marc Castellví at Cocolilo Animation" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">COCOLILO ANIMATION</span>
-          <h3 class="display"><span class="l-en">Pocoyo — Season 5</span><span class="l-es">Pocoyó — Temporada 5</span></h3>
+          <h3 class="display"><a href="/projects/pocoyo-season-5/"><span class="l-en">Pocoyo — Season 5</span><span class="l-es">Pocoyó — Temporada 5</span></a></h3>
           <p class="l-en">Compositing Artist | TD. Artistic compositing and
              development of the show's Nuke pipeline and tools.</p>
           <p class="l-es">Compositing Artist | TD. Composición artística y
@@ -1224,14 +1243,14 @@
           <div class="tags">
             <span class="tag"><span class="l-en">Series</span><span class="l-es">Serie</span></span><span class="tag">TD</span><span class="tag"><span class="l-en">Automation</span><span class="l-es">Automatización</span></span>
           </div>
-          <a href="https://www.youtube.com/watch?v=lPjD5BKZ0E4" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/pocoyo-season-5/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=lPjD5BKZ0E4" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=25_RHP3UB70" target="_blank" rel="noopener" aria-label="Watch The Quinta's Ghost on YouTube">
+          <a class="thumb-link" href="/projects/the-quintas-ghost/" aria-label="View the The Quinta's Ghost project page">
             <img class="thumb" src="assets/the-quintas-ghost.jpg" alt="Still from The Quinta's Ghost — lighting and compositing tools by Marc Castellví at Illusorium Studios" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">ILLUSORIUM STUDIOS</span>
-          <h3 class="display">The Quinta's Ghost</h3>
+          <h3 class="display"><a href="/projects/the-quintas-ghost/">The Quinta's Ghost</a></h3>
           <p class="l-en">Lighting and compositing tools development:
              lighting work on the show plus Nuke tools for the comp team.</p>
           <p class="l-es">Lighting y desarrollo de tools de compositing:
@@ -1240,14 +1259,14 @@
           <div class="tags">
             <span class="tag">Lighting</span><span class="tag">Nuke</span><span class="tag">Tools</span>
           </div>
-          <a href="https://www.youtube.com/watch?v=25_RHP3UB70" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/the-quintas-ghost/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=25_RHP3UB70" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=FWepS03YbFU" target="_blank" rel="noopener" aria-label="Watch Sky: The Two Embers on YouTube">
+          <a class="thumb-link" href="/projects/sky-the-two-embers/" aria-label="View the Sky: The Two Embers project page">
             <img class="thumb" src="assets/sky-the-two-embers.jpg" alt="Still from Sky: The Two Embers — CG compositing in Nuke by Marc Castellví at Illusorium Studios" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">ILLUSORIUM STUDIOS</span>
-          <h3 class="display">Sky: The Two Embers — Part 1</h3>
+          <h3 class="display"><a href="/projects/sky-the-two-embers/">Sky: The Two Embers — Part 1</a></h3>
           <p class="l-en">Compositing Artist. Artistic 3D compositing on the
              feature based on <em>Sky: Children of the Light</em>: developing
              shots from the lead's template and iterating on feedback.</p>
@@ -1258,14 +1277,14 @@
           <div class="tags">
             <span class="tag">Nuke</span><span class="tag"><span class="l-en">Feature film</span><span class="l-es">Largometraje</span></span><span class="tag">Multipass</span>
           </div>
-          <a href="https://www.youtube.com/watch?v=FWepS03YbFU" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/sky-the-two-embers/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=FWepS03YbFU" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://www.youtube.com/watch?v=jGQiq1ZuCW8" target="_blank" rel="noopener" aria-label="Watch Spellbound on YouTube">
+          <a class="thumb-link" href="/projects/spellbound/" aria-label="View the Spellbound project page">
             <img class="thumb" src="assets/spellbound.jpg" alt="Still from Spellbound (Netflix) — lighting by Marc Castellví at Skydance Animation" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">SKYDANCE ANIMATION</span>
-          <h3 class="display">Spellbound · Netflix</h3>
+          <h3 class="display"><a href="/projects/spellbound/">Spellbound · Netflix</a></h3>
           <p class="l-en">Lighting Assistant. Support for the lighting team on
              Skydance's feature for Netflix: scenes, renders and layer QC.</p>
           <p class="l-es">Lighting Assistant. Apoyo al equipo de iluminación en el
@@ -1274,14 +1293,14 @@
           <div class="tags">
             <span class="tag">Lighting</span><span class="tag"><span class="l-en">Feature film</span><span class="l-es">Largometraje</span></span><span class="tag">Netflix</span>
           </div>
-          <a href="https://www.youtube.com/watch?v=jGQiq1ZuCW8" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a>
+          <div class="links"><a href="/projects/spellbound/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=jGQiq1ZuCW8" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
         <article class="proj reveal">
-          <a class="thumb-link" href="https://vimeo.com/886479681" target="_blank" rel="noopener" aria-label="Watch GLARE on Vimeo">
+          <a class="thumb-link" href="/projects/glare/" aria-label="View the GLARE project page">
             <img class="thumb" src="assets/glare.jpg" alt="Still from GLARE short film — compositing and lighting supervision by Marc Castellví at La Salle BCN" width="640" height="270" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">LA SALLE BCN</span>
-          <h3 class="display">GLARE</h3>
+          <h3 class="display"><a href="/projects/glare/">GLARE</a></h3>
           <p class="l-en">University short film. Comp &amp; Lighting
              supervisor, plus concept art, modeling, look dev and
              texturing.</p>
@@ -1291,7 +1310,34 @@
           <div class="tags">
             <span class="tag"><span class="l-en">Short film</span><span class="l-es">Cortometraje</span></span><span class="tag">Comp &amp; Lighting sup</span><span class="tag">Look dev</span>
           </div>
-          <a href="https://vimeo.com/886479681" target="_blank" rel="noopener"><span class="l-en">Watch on Vimeo ↗</span><span class="l-es">Ver en Vimeo ↗</span></a>
+          <div class="links"><a href="/projects/glare/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://vimeo.com/886479681" target="_blank" rel="noopener"><span class="l-en">Watch on Vimeo ↗</span><span class="l-es">Ver en Vimeo ↗</span></a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BLOG ═══════════════════════════════════════ -->
+  <section id="blog">
+    <div class="wrap">
+      <div class="eyebrow reveal">
+        <span class="tc mono">TC 00:05:02:00</span>
+        <h2 class="display">Blog</h2>
+        <a class="more mono" href="/blog/"><span class="l-en">All articles →</span><span class="l-es">Todos los artículos →</span></a>
+      </div>
+
+      <div class="proj-grid">
+        <article class="proj reveal">
+          <span class="ptc mono">JUL 2026 · NUKE</span>
+          <h3 class="display"><a href="/blog/nuke-compositing-workflow-animation/">How I Build a Compositing Workflow in Nuke for Animation Features</a></h3>
+          <p class="l-en">Templates, multipass AOVs, Cryptomatte, DiMattes and the
+             tools that keep a comp team fast and consistent — written from real
+             production experience.</p>
+          <p class="l-es">Templates, AOVs multipass, Cryptomatte, DiMattes y las
+             tools que mantienen a un equipo de comp rápido y consistente —
+             escrito desde experiencia real de producción.</p>
+          <div class="links">
+            <a href="/blog/nuke-compositing-workflow-animation/"><span class="l-en">Read article →</span><span class="l-es">Leer artículo →</span></a>
+          </div>
         </article>
       </div>
     </div>
@@ -1303,6 +1349,7 @@
       <div class="eyebrow reveal">
         <span class="tc mono">TC 00:05:36:00</span>
         <h2 class="display"><span class="l-en">Skills &amp; contact</span><span class="l-es">Skills &amp; contacto</span></h2>
+        <a class="more mono" href="/contact/"><span class="l-en">Contact page →</span><span class="l-es">Página de contacto →</span></a>
       </div>
 
       <div class="skills-grid">
@@ -1360,37 +1407,37 @@
      ═══════════════════════════════════════════════════════════ */
   const IREEL = [
     { kind: "yt", vid: "t3qnuVscDes", start: 5,  dur: 25,
-      studio: "ILLUSORIUM STUDIOS", title: "Blacksad — Fan Art", altKey: "Blacksad",
+      studio: "ILLUSORIUM STUDIOS", title: "Blacksad — Fan Art", altKey: "Blacksad", page: "/projects/blacksad/",
       url: "https://www.youtube.com/watch?v=t3qnuVscDes",
       en: "Compositing. I built a tool to apply 2D textures in comp using Position/Normal passes and triplanar STMaps (X, Y, Z) — textures track the assets through the shot.",
       es: "Composición. Desarrollé una tool para aplicar texturas 2D en comp con pases de Position/Normals y STMaps triplanares (X, Y, Z): la textura se mueve pegada a los assets." },
     { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 25,
-      studio: "SKYDANCE ANIMATION", title: "Swapped · Netflix", altKey: "Swapped",
+      studio: "SKYDANCE ANIMATION", title: "Swapped · Netflix", altKey: "Swapped", page: "/projects/swapped/",
       url: "https://www.youtube.com/watch?v=glgmAwRDP8s",
       en: "Compositing Trainee. Compositing tools development and the DiMatte workflow.",
       es: "Compositing Trainee. Desarrollo de tools de compositing y todo el flujo de DiMattes." },
     { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 25,
-      studio: "COCOLILO ANIMATION", title: "Pocoyó — Season 5", altKey: "Pocoyo",
+      studio: "COCOLILO ANIMATION", title: "Pocoyó — Season 5", altKey: "Pocoyo", page: "/projects/pocoyo-season-5/",
       url: "https://www.youtube.com/watch?v=ptLECQo71WE",
       en: "Compositing Artist | TD. Artistic compositing and development of the show's Nuke pipeline and tools.",
       es: "Compositing Artist | TD. Composición artística y desarrollo de la pipeline de Nuke de la serie y sus tools." },
     { kind: "yt", vid: "25_RHP3UB70", start: 0, dur: 25,
-      studio: "ILLUSORIUM STUDIOS", title: "The Quinta's Ghost", altKey: "Quinta",
+      studio: "ILLUSORIUM STUDIOS", title: "The Quinta's Ghost", altKey: "Quinta", page: "/projects/the-quintas-ghost/",
       url: "https://www.youtube.com/watch?v=25_RHP3UB70",
       en: "Lighting and compositing tools development for the comp team.",
       es: "Lighting y desarrollo de tools de compositing para el equipo de comp." },
     { kind: "yt", vid: "FWepS03YbFU", start: 0, dur: 25,
-      studio: "ILLUSORIUM STUDIOS", title: "Sky: The Two Embers — Part 1", altKey: "Sky:",
+      studio: "ILLUSORIUM STUDIOS", title: "Sky: The Two Embers — Part 1", altKey: "Sky:", page: "/projects/sky-the-two-embers/",
       url: "https://www.youtube.com/watch?v=FWepS03YbFU",
       en: "Artistic 3D compositing: developing shots from the lead's template and iterating on feedback.",
       es: "Composición 3D artística: desarrollo de planos desde el template del lead y aplicación de feedback." },
     { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 25,
-      studio: "SKYDANCE ANIMATION", title: "Spellbound · Netflix", altKey: "Spellbound",
+      studio: "SKYDANCE ANIMATION", title: "Spellbound · Netflix", altKey: "Spellbound", page: "/projects/spellbound/",
       url: "https://www.youtube.com/watch?v=jGQiq1ZuCW8",
       en: "Lighting Assistant: scene prep, renders and QC of the layers that later live in the comp.",
       es: "Lighting Assistant: preparación de escenas, renders y control de calidad de capas." },
     { kind: "vimeo", vid: "886479681", start: 5, dur: 25,
-      studio: "LA SALLE BCN", title: "GLARE", altKey: "GLARE",
+      studio: "LA SALLE BCN", title: "GLARE", altKey: "GLARE", page: "/projects/glare/",
       url: "https://vimeo.com/886479681",
       en: "University short film. Comp & Lighting supervisor, plus concept art, modeling, look dev and texturing.",
       es: "Cortometraje universitario. Supervisor de Comp y Lighting, además de concept art, modelado, look dev y texturing." },
@@ -1460,6 +1507,7 @@
     const it = IREEL[irIdx];
     irStudio.textContent = it.studio;
     irTitle.textContent = it.title;
+    if (it.page) irTitle.href = it.page;
     irDesc.textContent = it[currentLang()];
     irOpen.href = it.url;
     irScreen.setAttribute("aria-label", it.title);
