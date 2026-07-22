@@ -499,7 +499,7 @@
     gap: 0.15rem;
     color: var(--amber);
     pointer-events: none;
-    animation: doodleBob 1.8s ease-in-out infinite;
+    animation: doodleBob 2.4s ease-in-out infinite;
     z-index: 5;
   }
   .sound-doodle.gone {
@@ -521,8 +521,8 @@
   }
   .sound-doodle .arrow { width: 2.6rem; height: 2.2rem; }
   @keyframes doodleBob {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(-1.5px); }
+    0%, 100% { transform: translateX(-50%) translateY(0) rotate(-1deg); }
+    50%      { transform: translateX(-50%) translateY(-7px) rotate(1deg); }
   }
   @media (prefers-reduced-motion: reduce) {
     .sound-doodle { animation: none; transform: translateX(-50%); }
@@ -1031,7 +1031,7 @@
                     </feTurbulence>
                     <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
                   </filter></defs>
-                  <g filter="url(#boil)"><path d="M12 46 C 6 30, 13 13, 30 8"/><path d="M21 16 L 30 7 L 39 16"/></g>
+                  <g filter="url(#boil)"><path d="M47 45 C 43 33, 37 20, 30 9"/><path d="M21 17 L 30 8 L 39 17"/></g>
                 </svg>
                 <span class="note"><span class="l-en">turn on sound<br>to feel the magic!</span><span class="l-es">activa el sonido<br>¡para sentir la magia!</span></span>
               </span></button>
