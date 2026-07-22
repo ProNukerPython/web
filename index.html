@@ -631,7 +631,50 @@
     .sound-doodle { animation: none; transform: translateX(-50%); }
   }
   @media (max-width: 34rem) {
-    .sound-doodle .note { font-size: 0.82rem; white-space: normal; max-width: 11rem; }
+    /* el <br> ya parte la nota en 2 líneas: mantener nowrap y encoger */
+    .sound-doodle .note { font-size: 0.72rem; white-space: nowrap; max-width: none; }
+    .sound-doodle .arrow { width: 2rem; height: 1.7rem; }
+    /* hueco para que el doodle no pise la tarjeta siguiente */
+    .ireel { margin-bottom: 5.5rem; }
+  }
+
+  /* ══ MÓVIL ═══════════════════════════════════════════
+     Nav compacto en 2 filas, cabeceras que envuelven y
+     espaciados más cortos. */
+  @media (max-width: 40rem) {
+    nav {
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      padding: 0.6rem 1rem;
+    }
+    nav .brand {
+      white-space: nowrap;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+    }
+    nav .nav-right {
+      width: 100%;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+    }
+    nav ul {
+      gap: 0.55rem;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+    nav ul a { font-size: 0.6rem; letter-spacing: 0.06em; }
+    .lang-btn { font-size: 0.6rem; padding: 0.28rem 0.5rem; flex-shrink: 0; }
+
+    /* cabeceras de sección: el enlace "more" baja de línea */
+    .eyebrow { flex-wrap: wrap; row-gap: 0.5rem; }
+    .eyebrow .more { order: 3; }
+
+    /* menos aire vertical para no scrollear tanto */
+    section { padding: 3rem 1rem; }
+    .job { padding-left: 1.4rem; }
+    .contact-block { padding: 1.4rem; }
+    footer { font-size: 0.62rem; }
   }
 
   .pass-form { display: flex; gap: 0.6rem; flex-wrap: wrap; }
@@ -762,6 +805,7 @@
   .proj .thumb {
     display: block;
     width: 100%;
+    height: auto;          /* anula el atributo height="360" del <img> */
     aspect-ratio: 16 / 9;
     object-fit: cover;
     border-bottom: 1px solid var(--line);
