@@ -537,6 +537,11 @@
   @media (prefers-reduced-motion: reduce) {
     .js .reveal { opacity: 1; transform: none; filter: none; transition: none; }
     .js .eyebrow::after { transform: scaleX(1); transition: none; }
+    .js .slate .row,
+    .js .skill-group .chip { opacity: 1; transform: none; transition: none; }
+    .js .proj .thumb { transform: none; }
+    .js .job.active::before { transform: none; box-shadow: none; }
+    .js .job.active h3 { color: inherit; }
     #scroll-progress { display: none; }
     .timeline::after { display: none; }
     #comp-target { filter: none; transition: none; }
@@ -852,6 +857,30 @@
     background: var(--teal);
   }
   .job.current::before { background: var(--amber); }
+
+  /* ── Playhead del timeline ─────────────────────────
+     El puesto que cruza el centro de pantalla se marca,
+     como un cabezal recorriendo la línea de tiempo. */
+  .job::before { transition: transform 0.35s ease, box-shadow 0.35s ease; }
+  .js .job.active::before {
+    transform: scale(1.9);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--amber) 22%, transparent);
+  }
+  .job h3, .job .dates { transition: color 0.35s ease; }
+  .js .job.active h3 { color: var(--amber); }
+
+  /* ── Entradas escalonadas dentro de bloques ──────── */
+  .js .slate .row,
+  .js .skill-group .chip {
+    opacity: 0;
+    transform: translateY(9px);
+    transition: opacity 0.5s ease var(--d, 0ms), transform 0.5s ease var(--d, 0ms);
+  }
+  .js .slate.in .row,
+  .js .skill-group.in .chip {
+    opacity: 1;
+    transform: none;
+  }
   .job .dates {
     font-size: 0.72rem;
     color: var(--muted);
@@ -907,6 +936,11 @@
     display: block;
     margin: -1.4rem -1.4rem 0;
     position: relative;
+    overflow: hidden;          /* recorta la deriva de la miniatura */
+  }
+  /* la miniatura deriva dentro de su marco al scrollear */
+  .js .proj .thumb {
+    transform: scale(1.12) translate3d(0, var(--py, 0px), 0);
   }
   .proj .thumb {
     display: block;
@@ -1874,6 +1908,14 @@
     });
   });
 
+  /* escalonado fino dentro de la ficha técnica y de los chips */
+  document.querySelectorAll(".slate").forEach(box => {
+    box.querySelectorAll(".row").forEach((r, i) => r.style.setProperty("--d", i * 60 + "ms"));
+  });
+  document.querySelectorAll(".skill-group").forEach(box => {
+    box.querySelectorAll(".chip").forEach((c, i) => c.style.setProperty("--d", i * 55 + "ms"));
+  });
+
   /* ── Scroll: playhead, trazado del timeline y hero ── */
   const spEl = document.getElementById("scroll-progress");
   const timelineEl = document.querySelector(".timeline");
@@ -1887,6 +1929,11 @@
   const HM_GRID = 4, HM_FRAMES = 16, HM_STEP = 100 / (HM_GRID - 1);
   const hmTiles = Array.from(document.querySelectorAll(".hm-tile"))
     .map((el, i) => ({ el, offset: (i * 5) % HM_FRAMES, last: -1 }));
+
+  /* miniaturas que derivan dentro de su marco y puestos del timeline */
+  const projThumbs = Array.from(document.querySelectorAll(".proj .thumb"));
+  const jobEls = Array.from(document.querySelectorAll(".job"));
+  let lastActiveJob = -1;
 
   let scrollTicking = false;
 
@@ -1922,6 +1969,34 @@
           const rate = HM_RATES[i % HM_RATES.length];
           hmCols[i].style.transform =
             "translate3d(0," + (h * rate).toFixed(1) + "px,0)";
+        }
+      }
+
+      if (projThumbs.length) {                     /* miniaturas: deriva en su marco */
+        const half = innerHeight / 2;
+        const rects = projThumbs.map(im => im.parentElement.getBoundingClientRect());
+        for (let i = 0; i < projThumbs.length; i++) {
+          const r = rects[i];
+          if (r.bottom < -200 || r.top > innerHeight + 200) continue;
+          const p = (r.top + r.height / 2 - half) / (half + r.height / 2);
+          projThumbs[i].style.setProperty(
+            "--py", (Math.max(-1, Math.min(1, p)) * 16).toFixed(1) + "px");
+        }
+      }
+
+      if (jobEls.length) {                         /* timeline: puesto bajo el cabezal */
+        const mid = innerHeight * 0.45;
+        let bestI = -1, bestD = Infinity;
+        for (let i = 0; i < jobEls.length; i++) {
+          const r = jobEls[i].getBoundingClientRect();
+          if (r.bottom < 0 || r.top > innerHeight) continue;
+          const d = Math.abs(r.top + r.height / 2 - mid);
+          if (d < bestD) { bestD = d; bestI = i; }
+        }
+        if (bestI !== lastActiveJob) {
+          if (lastActiveJob >= 0) jobEls[lastActiveJob].classList.remove("active");
+          if (bestI >= 0) jobEls[bestI].classList.add("active");
+          lastActiveJob = bestI;
         }
       }
 
