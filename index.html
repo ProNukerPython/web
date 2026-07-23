@@ -482,28 +482,22 @@
   /* ── Scroll reveal: "focus pull" ──────────────────
      Entra desenfocado y se resuelve a nítido, como una
      pasada de foco. Sin JS todo queda visible (.js). */
+  /* Ligado al scroll: el JS escribe --p (0..1), --ty y --bl en cada
+     fotograma según dónde esté el elemento. Entra al subir y se
+     desvanece al salir por arriba, y va y viene si scrolleas atrás. */
   .js .reveal {
-    opacity: 0;
-    transform: translateY(26px) scale(0.99);
-    filter: blur(6px);
-    transition:
-      opacity 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0ms),
-      transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0ms),
-      filter 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0ms);
-  }
-  .js .reveal.in {
-    opacity: 1;
-    transform: none;
-    filter: none;
+    opacity: var(--p, 0);
+    transform: translate3d(0, var(--ty, 26px), 0);
+    filter: blur(var(--bl, 6px));
+    transition: none;
   }
 
-  /* la línea de la cabecera se traza de izquierda a derecha */
+  /* la línea de la cabecera se traza siguiendo el mismo progreso */
   .js .eyebrow::after {
-    transform: scaleX(0);
+    transform: scaleX(var(--p, 0));
     transform-origin: left center;
-    transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--d, 0ms) + 0.18s);
+    transition: none;
   }
-  .js .eyebrow.in::after { transform: scaleX(1); }
 
   /* barra de progreso de scroll (playhead) */
   #scroll-progress {
@@ -774,8 +768,9 @@
     .eyebrow { flex-wrap: wrap; row-gap: 0.5rem; }
     .eyebrow .more { order: 3; }
 
-    /* desenfoque de entrada más suave: el blur pesa en GPU móvil */
-    .js .reveal { transform: translateY(18px) scale(0.995); filter: blur(4px); }
+    /* desenfoque más suave en móvil (el blur pesa en GPU), pero
+       sigue ligado al progreso de scroll: nada de valores fijos */
+    .js .reveal { filter: blur(calc(var(--bl, 6px) * 0.6)); }
 
     /* mosaico: 2 columnas para que los planos se lean */
     .hero-mosaic { grid-template-columns: repeat(2, 1fr); inset: -22% -4%; opacity: 0.2; }
@@ -1935,12 +1930,23 @@
   const jobEls = Array.from(document.querySelectorAll(".job"));
   let lastActiveJob = -1;
 
+  /* ── Aparición/desvanecimiento ligado al scroll ────
+     Cada elemento calcula su progreso según dónde está en pantalla:
+     entra al subir desde abajo y se desvanece al salir por arriba.
+     Al scrollear hacia atrás el proceso se deshace, porque el valor
+     depende de la posición, no de un disparo único. */
+  const revealEls = Array.from(document.querySelectorAll(".reveal"));
+  const revLast = new Float32Array(revealEls.length).fill(-1);
+  const REV_IN_END = 0.72;    /* acaba de entrar a esta altura de pantalla */
+  const REV_OUT_AT = 0.28;    /* empieza a irse cuando su pie sube de aquí */
+
   let scrollTicking = false;
 
-  function onScrollFx() {
-    if (scrollTicking) return;
-    scrollTicking = true;
-    requestAnimationFrame(() => {
+  /* El trabajo va aparte para poder ejecutar la primera pasada de
+     forma síncrona: si dependiera de requestAnimationFrame, las
+     secciones se quedarían invisibles hasta el primer fotograma. */
+  function applyScrollFx() {
+    {
       const doc = document.documentElement;
       const max = doc.scrollHeight - innerHeight;
       const y = scrollY;
@@ -1969,6 +1975,29 @@
           const rate = HM_RATES[i % HM_RATES.length];
           hmCols[i].style.transform =
             "translate3d(0," + (h * rate).toFixed(1) + "px,0)";
+        }
+      }
+
+      if (revealEls.length) {                      /* secciones: entrada y salida */
+        const vh = innerHeight;
+        const inSpan = Math.max(1, vh * (1 - REV_IN_END));
+        const outSpan = Math.max(1, vh * REV_OUT_AT);
+        const rects = revealEls.map(el => el.getBoundingClientRect());
+        for (let i = 0; i < revealEls.length; i++) {
+          const r = rects[i];
+          let pIn = (vh - r.top) / inSpan;         /* 0 abajo -> 1 ya dentro */
+          let pOut = r.bottom / outSpan;           /* 1 dentro -> 0 fuera por arriba */
+          pIn = pIn < 0 ? 0 : pIn > 1 ? 1 : pIn;
+          pOut = pOut < 0 ? 0 : pOut > 1 ? 1 : pOut;
+          let p = pIn < pOut ? pIn : pOut;
+          p = p * p * (3 - 2 * p);                 /* suavizado */
+          if (Math.abs(p - revLast[i]) < 0.004) continue;   /* nada que repintar */
+          revLast[i] = p;
+          const st = revealEls[i].style;
+          st.setProperty("--p", p.toFixed(3));
+          st.setProperty("--ty",
+            ((1 - pIn) * 26 - (1 - pOut) * 18).toFixed(1) + "px");
+          st.setProperty("--bl", ((1 - p) * 6).toFixed(2) + "px");
         }
       }
 
@@ -2014,6 +2043,14 @@
         }
       }
 
+    }
+  }
+
+  function onScrollFx() {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      applyScrollFx();
       scrollTicking = false;
     });
   }
@@ -2021,7 +2058,7 @@
   if (!reduced) {
     addEventListener("scroll", onScrollFx, { passive: true });
     addEventListener("resize", onScrollFx);
-    onScrollFx();
+    applyScrollFx();          /* primera pasada ya, sin esperar fotograma */
   }
 
   /* ── Grano de película ───────────────────────────── */
