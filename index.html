@@ -299,12 +299,16 @@
   /* columnas alternas desplazadas: aspecto tejido
      (margin, no transform: el transform lo controla el parallax) */
   .hm-col:nth-child(even) { margin-top: -44px; }
-  .hm-col img {
+  /* Cada casilla es un sprite de 4x4 = 16 fotogramas del clip.
+     El scroll desplaza background-position para "reproducirlo". */
+  .hm-tile {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
     border-radius: 3px;
+    background-image: var(--sheet);
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+    background-position: 0% 0%;
   }
 
   /* velo: oscurece bordes y crea contraste tras el texto */
@@ -1068,32 +1072,32 @@
        no añade descargas: solo las adelanta. -->
   <div class="hero-mosaic" aria-hidden="true">
     <div class="hm-col">
-      <img src="assets/sky-the-two-embers.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/blacksad.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/spellbound.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/pocoyo-season-5.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/the-quintas-ghost.jpg" alt="" width="640" height="360" decoding="async">
+      <div class="hm-tile" style="--sheet:url(assets/seq/sky.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/blacksad.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/spellbound.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/pocoyo.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/quinta.jpg)"></div>
     </div>
     <div class="hm-col">
-      <img src="assets/swapped.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/the-quintas-ghost.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/glare.jpg" alt="" width="640" height="270" decoding="async">
-      <img src="assets/sky-the-two-embers.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/blacksad.jpg" alt="" width="640" height="360" decoding="async">
+      <div class="hm-tile" style="--sheet:url(assets/seq/swapped.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/quinta.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/glare.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/sky.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/blacksad.jpg)"></div>
     </div>
     <div class="hm-col">
-      <img src="assets/spellbound.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/pocoyo-season-5.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/blacksad.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/the-quintas-ghost.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/swapped.jpg" alt="" width="640" height="360" decoding="async">
+      <div class="hm-tile" style="--sheet:url(assets/seq/spellbound.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/pocoyo.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/blacksad.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/quinta.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/swapped.jpg)"></div>
     </div>
     <div class="hm-col">
-      <img src="assets/glare.jpg" alt="" width="640" height="270" decoding="async">
-      <img src="assets/sky-the-two-embers.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/swapped.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/spellbound.jpg" alt="" width="640" height="360" decoding="async">
-      <img src="assets/pocoyo-season-5.jpg" alt="" width="640" height="360" decoding="async">
+      <div class="hm-tile" style="--sheet:url(assets/seq/glare.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/sky.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/swapped.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/spellbound.jpg)"></div>
+      <div class="hm-tile" style="--sheet:url(assets/seq/pocoyo.jpg)"></div>
     </div>
   </div>
 
@@ -1877,6 +1881,13 @@
   const hmCols = Array.from(document.querySelectorAll(".hm-col"));
   /* cada columna deriva a distinta velocidad y sentido */
   const HM_RATES = [0.22, -0.14, 0.30, -0.19];
+
+  /* Scrubbing: cada casilla es un sprite 4x4 (16 fotogramas) que
+     avanza o retrocede según el scroll dentro de la portada. */
+  const HM_GRID = 4, HM_FRAMES = 16, HM_STEP = 100 / (HM_GRID - 1);
+  const hmTiles = Array.from(document.querySelectorAll(".hm-tile"))
+    .map((el, i) => ({ el, offset: (i * 5) % HM_FRAMES, last: -1 }));
+
   let scrollTicking = false;
 
   function onScrollFx() {
@@ -1911,6 +1922,20 @@
           const rate = HM_RATES[i % HM_RATES.length];
           hmCols[i].style.transform =
             "translate3d(0," + (h * rate).toFixed(1) + "px,0)";
+        }
+      }
+
+      if (hmTiles.length) {                        /* mosaico: avance de fotogramas */
+        const prog = innerHeight > 0 ? h / innerHeight : 0;   /* 0..1 en la portada */
+        const base = prog * (HM_FRAMES - 1) * 1.6;            /* algo más de recorrido */
+        for (let i = 0; i < hmTiles.length; i++) {
+          const t = hmTiles[i];
+          const f = (Math.round(base) + t.offset) % HM_FRAMES;
+          if (f === t.last) continue;                         /* evita repintados */
+          t.last = f;
+          t.el.style.backgroundPosition =
+            ((f % HM_GRID) * HM_STEP).toFixed(2) + "% " +
+            (Math.floor(f / HM_GRID) * HM_STEP).toFixed(2) + "%";
         }
       }
 
