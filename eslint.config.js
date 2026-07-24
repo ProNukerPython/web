@@ -14,7 +14,16 @@ export default [
         setTimeout: 'readonly',
         setInterval: 'readonly',
         clearTimeout: 'readonly',
-        clearInterval: 'readonly'
+        clearInterval: 'readonly',
+        localStorage: 'readonly',
+        CustomEvent: 'readonly',
+        IntersectionObserver: 'readonly',
+        HTMLImageElement: 'readonly',
+        requestAnimationFrame: 'readonly',
+        navigator: 'readonly',
+        module: 'readonly',
+        FormData: 'readonly',
+        DOMMatrix: 'readonly'
       }
     },
     rules: {

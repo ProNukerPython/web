@@ -26,8 +26,13 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   
-  <!-- Preload critical resources -->
+  <!-- Preload critical resources (fonts and video) -->
   <link rel="preload" href="assets/Reel-background.mp4" as="video" type="video/mp4">
+  <!-- Optimize font loading: Preconnect to Google Fonts and load only if used -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Example: Only include Inter if actually used in CSS -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"> -->
   <link rel="preload" href="theme.css" as="style">
   
   <!-- Stylesheets -->
@@ -54,21 +59,15 @@
     <div class="section-nav-dot" data-section="5" aria-label="Go to Contact section"></div>
   </div>
   
-  <!-- Section Controls -->
-  <div class="section-controls">
-    <button class="section-btn" id="prev-section" aria-label="Previous section">‹</button>
-    <button class="section-btn" id="next-section" aria-label="Next section">›</button>
-  </div>
-  
-  <!-- Auto-scroll Button -->
-  <button class="auto-scroll-btn" id="auto-scroll-btn" aria-label="Auto-scroll through sections">▶</button>
+
 
   <!-- Fixed Header with Navigation -->
-  <header class="fixed-header">>
-    <div class="header-title">
+  <header class="fixed-header">
+    <div class="header-title" id="header-title">
       <span class="header-title-marc">MARC</span>
       <span class="header-title-castellvi">CASTELLVI</span>
     </div>
+    <!-- If you want to use a custom font, ensure it is loaded above and used in your CSS -->
     
     <!-- Theme Toggle Button -->
     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
@@ -112,6 +111,76 @@
     </header>
   <section class="about-section section section-animate" id="about">
     <div class="about-container">
+    <div id="skills-float-window" class="skills-float-window" role="dialog" aria-modal="true" aria-labelledby="skills-title" tabindex="-1" hidden>
+      <button class="skills-float-close" id="skills-float-close" aria-label="Close skills window">×</button>
+      <h2 id="skills-title" class="skills-title">Skills & Tools</h2>
+      <ul class="simple-skills-list">
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>Nuke</title>
+              <path d="M12.293.004c6.625.162 11.865 5.664 11.703 12.29-.162 6.625-5.664 11.865-12.29 11.703C5.081 23.835-.159 18.333.003 11.707l.001-.025C.18 5.066 5.678-.158 12.293.004zm0 1.238c-5.941-.164-10.89 4.52-11.054 10.461s4.52 10.89 10.461 11.054c5.941.164 10.89-4.52 11.054-10.461l.001-.025c.15-5.932-4.53-10.866-10.462-11.029zm5.842 8.302h2.4c.976 0 .682-.873.682-.873a9.587 9.587 0 0 0-2.111-3.431l-.005.011a10.052 10.052 0 0 0-3.355-2.329.612.612 0 0 0-.894.622c-.044.802-.142 2.395-.142 2.395s.016.769-.627.769c-.813.011-1.489-.044-1.489-.044a2.314 2.314 0 0 1-1.255-.545L8.868 3.511a1.09 1.09 0 0 0-1.407-.196 9.758 9.758 0 0 0-4.713 5.384c-.256.714.333.806.731.806h6a2.086 2.086 0 0 1 1.68.627c.785.824 1.331 1.369 1.331 1.369s.48.54 1.26 1.358c.431.459.632 1.089.545 1.713 0 0-.295 5.744-.295 6-.027.398.038.993.769.775a9.756 9.756 0 0 0 5.618-4.424 1.091 1.091 0 0 0-.12-1.418l-2.471-2.607a2.303 2.303 0 0 1-.496-1.282s-.022-.682.033-1.489c.044-.643.802-.583.802-.583zm-2.362 1.374c-.475.469-1.484.229-2.22-.545-.736-.775-.924-1.801-.45-2.254.475-.453 1.502-.239 2.239.536.737.774.906 1.794.431 2.263z"/>
+            </svg>
+          </span>
+          Nuke
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>Autodesk Maya</title>
+              <path d="M4.348 0 .69 2.203v16.875l3.657-2.203h17.297V1.219c0-.67-.551-1.219-1.22-1.219H4.349zm18.297 3.75v14.125H4.627l-1.943 1.17v3.736c0 .67.55 1.219 1.218 1.219H23.31V3.75h-.664zm-14.471.025h2.937l1.885 7.508 1.977-7.48-.012-.028h2.857v9.354h-2.216v-6.04l-1.565 6.026v.014h-2.203l-1.656-6.28v6.28H8.174V3.775zm1.33 14.762h1.18l1.068 3.543h-.902l-.217-.773H9.568l-.197.773h-.88l1.013-3.543zm1.918 0h.932l.648 1.494.643-1.494h.894l-1.113 2.133v1.41h-.887v-1.406l-1.117-2.137zm3.826 0h1.18l1.068 3.543h-.9l-.217-.773h-1.065l-.197.773h-.88l1.011-3.543zm-5.156.582-.362 1.53h.73l-.368-1.53zm5.744 0-.36 1.53h.73l-.37-1.53z"/>
+            </svg>
+          </span>
+          Maya
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>Houdini</title>
+              <path d="M0 19.635V24h3.824A8.662 8.662 0 0 1 0 19.635zm16.042-4.555c0-4.037-3.253-7.92-8.111-8.089C4.483 6.873 1.801 8.136 0 10.005v4.209c1.224-3.549 4.595-5.158 7.419-5.128 3.531.041 6.251 2.703 6.275 5.72 0 2.878-1.183 4.992-4.436 5.516-1.774.296-4.548-.754-4.436-3.434.065-1.381 1.138-2.162 2.366-2.106-1.207 1.618.39 2.801 1.52 2.561a2.51 2.51 0 0 0 1.966-2.502c0-1.017-.958-2.662-3.333-2.6-2.936.068-4.785 2.183-4.85 4.797-.071 3.28 3.007 5.457 6.174 5.483 4.633.059 7.395-2.984 7.377-7.441zM0 0v6.906a12.855 12.855 0 0 1 7.931-2.609c6.801 0 11.134 4.762 11.131 10.765 0 4.17-1.946 7.308-4.995 8.938H24V0H0z"/>
+            </svg>
+          </span>
+          Houdini
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 17.469 17.469" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>Photoshop</title>
+              <path style="fill:currentColor;" d="M5.925,4.982c-0.442,0-0.742,0.043-0.898,0.087v2.841C5.213,7.952,5.44,7.966,5.754,7.966 c1.157,0,1.871-0.585,1.871-1.571C7.624,5.511,7.01,4.982,5.925,4.982z"/>
+              <path style="fill:currentColor;" d="M16.4,0.002H1.07C0.479,0.002,0,0.48,0,1.069v15.329c0,0.59,0.479,1.069,1.07,1.069H16.4 c0.59,0,1.069-0.479,1.069-1.069V1.07C17.469,0.48,16.99,0.002,16.4,0.002z M8.894,8.624c-0.741,0.7-1.842,1.014-3.125,1.014 c-0.287,0-0.543-0.014-0.743-0.043v3.442H2.869V3.541C3.54,3.428,4.482,3.342,5.811,3.342c1.341,0,2.299,0.256,2.94,0.771 c0.617,0.486,1.03,1.286,1.03,2.228S9.466,8.08,8.894,8.624z M12.145,13.179c-0.916,0-1.729-0.198-2.258-0.485l0.385-1.556 c0.4,0.241,1.229,0.527,1.873,0.527c0.655,0,0.927-0.228,0.927-0.586c0-0.356-0.214-0.527-1.027-0.799 c-1.442-0.485-2-1.271-1.986-2.099c0-1.298,1.114-2.286,2.842-2.286c0.814,0,1.542,0.187,1.97,0.4l-0.385,1.5 c-0.314-0.172-0.913-0.399-1.514-0.399c-0.527,0-0.826,0.214-0.826,0.571c0,0.328,0.269,0.499,1.126,0.8 c1.328,0.456,1.886,1.128,1.899,2.154C15.171,12.222,14.141,13.179,12.145,13.179z"/>
+            </svg>
+          </span>
+          Photoshop
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor">
+              <title>After Effects</title>
+              <path d="M177.275,213.286l19.188,60.088h-62.624l18.822-60.088c4.346-14.48,7.963-31.493,11.585-45.611h0.724 C168.588,181.793,172.572,198.444,177.275,213.286z M373.819,226.316c-27.513,0-39.095,24.978-40.907,43.074h77.465 C410.743,253.104,403.503,226.316,373.819,226.316z M511.5,85.667v340.667c0,46.842-38.325,85.167-85.167,85.167H85.667 C38.825,511.5,0.5,473.175,0.5,426.333V85.667C0.5,38.825,38.825,0.5,85.667,0.5h340.667C473.175,0.5,511.5,38.825,511.5,85.667z M273.928,376.182l-79.274-243.981h-56.834L59.63,376.182h45.973l20.997-69.14h77.465l22.082,69.14H273.928z M452.37,281.699 c0-38.73-18.826-85.79-76.019-85.79c-56.469,0-86.151,45.973-86.151,94.84c0,53.936,33.663,89.051,90.859,89.051 c25.338,0,46.334-4.708,61.538-10.862l-6.517-30.765c-13.395,5.064-28.236,7.959-48.871,7.959 c-28.232,0-53.208-13.752-54.298-45.61h118.011C451.646,296.541,452.37,290.025,452.37,281.699z"/>
+            </svg>
+          </span>
+          After Effects
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>Python</title>
+              <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>
+            </svg>
+          </span>
+          Python
+        </li>
+        <li>
+          <span class="skill-icon" style="display:inline-block;vertical-align:middle;width:28px;height:28px;">
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+              <title>GitHub</title>
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </span>
+          GitHub
+        </li>
+      </ul>
+    </div>
       <div class="about-image-content">
         <img src="assets/profileMarc.jpg"
           alt="Marc Castellví trabajando"
@@ -125,7 +194,7 @@
           Soy un artista de Lighting y Compositing apasionado por la imagen y la tecnología. Me especializo en Houdini (Solaris), Nuke y desarrollo de herramientas en Python para optimizar flujos de trabajo en producción 3D. Disfruto colaborando en equipos creativos y aportando soluciones técnicas y visuales en cada proyecto.
         </p>
         <div class="about-actions">
-          <a href="#contact" class="contact-btn">
+          <a href="#contact" class="action-btn">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
               <rect width="22" height="22" rx="6" fill="currentColor" opacity="0.2"/>
               <path d="M5 7.5l6 5 6-5" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -133,6 +202,7 @@
             </svg>
             Get In Touch
           </a>
+          <button class="action-btn skills-float-btn" id="skills-float-btn" type="button" aria-haspopup="dialog" aria-controls="skills-float-window">Skills & Tools</button>
         </div>
       </div>
     </div>
@@ -169,159 +239,142 @@
       </ol>
     </div>
   </section>
-  <section id="projects" class="projects-section section scrollable section-animate" aria-labelledby="projects-title">
+  <section id="projects" class="projects-section section scrollable section-animate center-reel-content" aria-labelledby="projects-title">
     <div class="section-content">
       <div class="projects-container">
-      <div class="projects-section-label">
+        <div class="projects-section-label"></div>
+        <div class="reel-video-wrapper" id="reel-video-wrapper">
+          <img class="reel-reel-label" src="assets/watch-my-reel.png" alt="Watch my reel label" loading="lazy" decoding="async" />
+          <img class="reel-preview" src="assets\\MoreProjects-2.jpg" alt="Reel preview" loading="lazy" decoding="async" />
+          <div class="reel-play-card" id="reel-play-card" tabindex="0" aria-label="Play reel" role="button">
+            <button class="reel-play-btn" id="reel-play-btn" aria-label="Play reel" tabindex="-1">
+              <svg class="reel-play-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="32" fill="none"/>
+                <polygon points="25,18 25,46 48,32" fill="white"/>
+              </svg>
+            </button>
+          </div>
+          <video class="reel-video" id="reel-video" width="100%" controls poster="assets/reel-preview.avif" preload="none" loading="lazy">
+            <source src="assets/Reel-background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
+      <!-- Scroll indicator removed -->
+    </div>
+  </section>
 
-      <div class="reel-video-wrapper" id="reel-video-wrapper">
-        <img class="reel-preview" src="assets\MoreProjects-2.jpg" alt="Reel preview" loading="lazy" decoding="async" />
-        <button class="reel-play-btn" id="reel-play-btn" aria-label="Play reel">
-          <span class="reel-text">See my work</span>
-          <svg class="reel-play-icon" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="32" fill="none"/>
-            <polygon points="25,18 25,46 48,32" fill="white"/>
-          </svg>
-        </button>
-        <video class="reel-video" id="reel-video" width="100%" controls poster="assets/reel-preview.avif" preload="none" loading="lazy">
-          <source src="assets/Reel-background.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <p class="projects-intro">
-        <svg class="projects-intro-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" style="vertical-align:middle;margin-right:0.5em;">
-          <circle cx="11" cy="11" r="10" stroke="#00c6fb" stroke-width="2"/>
-          <path d="M6 12l3 3 7-7" stroke="#00c6fb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        A selection of my recent work in lighting, compositing, and tool development. Click on each project for more details.
-      </p>
-      <div class="projects-list">
-        <div class="carousel-container">
-          <div class="carousel-track" id="carousel-track">
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Spellbound</h3>
-                <div class="project-role">Lisghting Assistant</div>
-                <div class="project-meta">Skydance Animation · 2024</div>
-                <p class="project-desc">
-                  Feature film. Responsible for lookdev, lighting, and compositing of key sequences using Houdini Solaris and Nuke.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Pookoo</h3>
-                <div class="project-role">Lighting TD & Pipeline Tools</div>
-                <div class="project-meta">Skydance Animation · 2022</div>
-                <p class="project-desc">
-                  Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Personal Short</h3>
-                <div class="project-role">Director · Lighting & Comp</div>
-                <div class="project-meta">2021</div>
-                <p class="project-desc">
-                  Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Sky: The two embers</h3>
-                <div class="project-role">Lighting & Compositing</div>
-                <div class="project-meta">Personal · 2020</div>
-                <p class="project-desc">
-                  Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets\QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">The Quinta's Ghost</h3>
-                <div class="project-role">CG Lighting & Lookdev</div>
-                <div class="project-meta">Freelance · 2023</div>
-                <p class="project-desc">
-                  Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
-                </p>
-              </div>
-            </article>
-            <article class="project-card">
-              <div class="project-thumb">
-                <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
-              </div>
-              <div class="project-info">
-                <h3 class="project-name">Personal Projects and Colaborations</h3>
-                <div class="project-role">Lighting, Tools & Experiments</div>
-                <div class="project-meta">Ongoing</div>
-                <p class="project-desc">
-                  A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
-                </p>
-              </div>
-            </article>
+  <!-- New Project Cards Section (moved above projects) -->
+  <section id="project-cards" class="project-cards-section section section-animate scrollable" aria-labelledby="project-cards-title">
+  <div class="section-content">
+    <!-- Projects Intro Restored -->
+    <div class="projects-intro">
+      <h3 class="projects-intro-title">Featured Projects</h3>
+      <div class="projects-intro-flex">
+        <div class="projects-intro-flex-row">
+          <span class="projects-intro-icon" aria-hidden="true">
+            <!-- Blue Tick SVG Icon -->
+            <svg width="24" height="24" viewBox="0 0 48 48" fill="00c6fb" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="22" fill="#00c6fb"/>
+              <circle cx="24" cy="24" r="20" fill="000"/>
+              <path d="M34 18L22 30L16 24" stroke="#00c6fb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div class="projects-intro-text">
+            <p class="projects-intro-desc">A curated selection of my lighting, compositing, and technical art work. Explore the gallery below to see highlights from professional and personal projects.</p>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator" id="projects-scroll-indicator">
-      <div class="scroll-text">Scroll to see more<br>projects</div>
-    </div>
-    </div>
-  </section>
-  
-  <section id="skills" class="skills-section section section-animate" aria-labelledby="skills-title">
-    <div class="skills-container">
-      <h2 id="skills-title" class="skills-title">Skills & Tools</h2>
-      <p class="skills-intro">
-        Technologies and software I work with daily to create stunning visuals and efficient workflows.
-      </p>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3 class="skill-category-title">3D & Compositing</h3>
-          <ul class="skill-list">
-            <li class="skill-item">Nuke</li>
-            <li class="skill-item">Maya</li>
-            <li class="skill-item">Houdini</li>
-            <li class="skill-item">Arnold</li>
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3 class="skill-category-title">Post-Production</h3>
-          <ul class="skill-list">
-            <li class="skill-item">Photoshop</li>
-            <li class="skill-item">After Effects</li>
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3 class="skill-category-title">Development</h3>
-          <ul class="skill-list">
-            <li class="skill-item">Python</li>
-            <li class="skill-item">GitHub</li>
-          </ul>
-        </div>
+    <div class="carousel-container" id="carousel-container">
+      <div class="carousel-track" id="carousel-track">
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/Spellbound-2.jpg" alt="Spellbound Lighting & Compositing" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Spellbound</h3>
+            <div class="project-role">Lighting Assistant</div>
+            <div class="project-meta">Skydance Animation · 2024</div>
+            <p class="project-desc">
+              Helping lighting Artist to move forward with some problems on scenes related to Houdini Solaris, Training shots and applying feedback notes.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/pookoo-2.jpg" alt="Pookoo Lighting & Tools" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Pookoo</h3>
+            <div class="project-role">Lighting TD & Pipeline Tools</div>
+            <div class="project-meta">Skydance Animation · 2022</div>
+            <p class="project-desc">
+              Developed custom Python tools for lighting pipeline and contributed to final compositing shots.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/Glare-2.png" alt="Personal Short Film" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Short</h3>
+            <div class="project-role">Director · Lighting & Comp</div>
+            <div class="project-meta">2021</div>
+            <p class="project-desc">
+              Directed and executed all aspects of a short CG film, focusing on cinematic lighting and color grading.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/sky-2.png" alt="Animated series: Sky The two embers" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Sky: The two embers</h3>
+            <div class="project-role">Lighting & Compositing</div>
+            <div class="project-meta">Personal · 2020</div>
+            <p class="project-desc">
+              Created atmospheric lighting and advanced compositing for a moody, award-winning short film.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/QuintasGhost-2.jpg" alt="ShortFilm: The Quinta's Ghost" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">The Quinta's Ghost</h3>
+            <div class="project-role">CG Lighting & Lookdev</div>
+            <div class="project-meta">Freelance · 2023</div>
+            <p class="project-desc">
+              Designed photoreal lighting and lookdev for a high-end product commercial using Houdini and Redshift.
+            </p>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb">
+            <img src="assets/MoreProjects-2.jpg" alt="Personal Projects and colaborations" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">Personal Projects and Colaborations</h3>
+            <div class="project-role">Lighting, Tools & Experiments</div>
+            <div class="project-meta">Ongoing</div>
+            <p class="project-desc">
+              A selection of self-driven explorations in lighting, procedural tools, and creative coding. Includes Houdini, Nuke, and Python experiments.
+            </p>
+          </div>
+        </article>
+      </div>
+      <!-- Carousel arrow navigation -->
+      <div class="carousel-arrows">
+        <button class="carousel-arrow carousel-arrow-left" id="carousel-arrow-left" aria-label="Scroll to previous project">‹</button>
+        <button class="carousel-arrow carousel-arrow-right" id="carousel-arrow-right" aria-label="Scroll to next project">›</button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
   
   <section class="Nuke Tools section section-animate" id="Tools-section" aria-labelledby="nuke-tools-title">
     <div class="nuke-tools-container">
@@ -357,15 +410,15 @@
           Reach out via your preferred channel below!
         </div>
         <div class="contact-buttons">
-          <a class="contact-btn" href="mailto:vmarccastellvi@gmail.com" target="_blank" rel="noopener">
+          <a class="action-btn" href="mailto:vmarccastellvi@gmail.com" target="_blank" rel="noopener">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect width="22" height="22" rx="6" fill="#007aff"/><path d="M5 7.5l6 5 6-5" stroke="#fff" stroke-width="1.5" fill="none"/><rect x="5" y="7" width="12" height="8" rx="2" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
             Email
           </a>
-          <a class="contact-btn" href="tel:+34625118830">
+          <a class="action-btn" href="tel:+34625118830">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect width="22" height="22" rx="6" fill="#007aff"/><path d="M7 6l2 2c.5.5.5 1.5 0 2l-1 1c1.5 2.5 3.5 4.5 6 6l1-1c.5-.5 1.5-.5 2 0l2 2" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
             Phone
           </a>
-          <a class="contact-btn" href="https://www.linkedin.com/in/marc-castellvi-vila/" target="_blank" rel="noopener">
+          <a class="action-btn" href="https://www.linkedin.com/in/marc-castellvi-vila/" target="_blank" rel="noopener">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect width="22" height="22" rx="6" fill="#007aff"/><path d="M7 9v6M7 7v.01M11 15v-3a2 2 0 1 1 4 0v3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             LinkedIn
           </a>
