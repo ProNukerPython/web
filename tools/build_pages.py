@@ -162,8 +162,8 @@ the foundation of how I build and debug comp setups today.</p>
         "video": ("youtube", "glgmAwRDP8s"),
         "video_label": "Watch the Swapped trailer on YouTube",
         "image": "/assets/swapped.jpg",
-        "image_alt": "Still from Swapped (Netflix) — compositing tools and DiMatte workflow by Marc Castellví at Skydance Animation",
-        "summary": "Compositing Trainee on Skydance Animation's feature for Netflix: compositing tools development and ownership of the DiMatte workflow.",
+        "image_alt": "Still from Swapped (Netflix) — compositing tools development by Marc Castellví at Skydance Animation",
+        "summary": "Compositing Trainee on Skydance Animation's feature for Netflix: compositing tools development, and early help setting up the DiMatte workflow.",
         "body": """
 <h2>What was my role?</h2>
 <p>As a <strong>Compositing Trainee</strong> at Skydance Animation Madrid I worked on
@@ -174,16 +174,17 @@ technical side of the comp department.</p>
 <ul>
   <li><strong>Compositing tools development</strong> — building Nuke tools and gizmos for
       the comp team, streamlining repetitive setups across shots.</li>
-  <li><strong>The DiMatte workflow</strong> — I owned the digital matte (DiMatte) workflow
-      end to end: how mattes were generated, named, routed and consumed inside the
-      comp templates, so every artist got consistent, predictable mattes in every shot.</li>
+  <li><strong>The DiMatte workflow</strong> — helped kick off the digital matte
+      (DiMatte) workflow in its early stage: exploring how mattes would be
+      generated, named and routed inside the comp templates before it was
+      handed on to be taken further.</li>
 </ul>
 
 <h2>Challenges</h2>
-<p>Owning a workflow used by an entire department means designing for the whole
-team, not for yourself: clear naming conventions, defensive tools that fail
-loudly, and documentation that a busy artist can absorb in two minutes. That
-was the biggest lesson of this production.</p>
+<p>Helping shape a workflow meant thinking about the whole comp team from the
+start, not just my own shots: clear naming conventions, tools that fail loudly
+rather than silently, and setups an artist can pick up quickly. That was the
+biggest lesson of this production.</p>
 """,
     },
     {
@@ -527,7 +528,7 @@ enjoy improving both.</p>
   <li><strong>Compositing Artist | TD</strong> — Cocolilo Animation (Mar 2025 — Jul 2025).
       Compositing and Nuke pipeline development for <em>Pocoyó</em> season 5.</li>
   <li><strong>Compositing Trainee</strong> — Skydance Animation, Madrid (May 2024 — Jul 2024).
-      Compositing tools and the DiMatte workflow on <em>Swapped</em> (Netflix).</li>
+      Compositing tools development, and early help setting up the DiMatte workflow on <em>Swapped</em> (Netflix).</li>
   <li><strong>Lighting Assistant</strong> — Skydance Animation, Madrid (Jan 2024 — May 2024).
       Scene prep, renders and layer QC on <em>Spellbound</em> (Netflix).</li>
   <li><strong>Bachelor's Degree</strong> — La Salle BCN, Barcelona (2019 — 2023).
@@ -655,7 +656,8 @@ mathematically exact. Verify it with a difference against the beauty on every
 show setup, and automate that check if you can.</p>
 
 <h2>3. Mattes are a workflow, not a node</h2>
-<p>On <a href="/projects/swapped/">Swapped</a> I owned the DiMatte workflow, and it
+<p>On <a href="/projects/swapped/">Swapped</a> I helped kick off the DiMatte
+workflow in its early stage, and it
 changed how I think about mattes. Cryptomatte is great for ad-hoc picking, but
 a production needs <strong>named, versioned, consistent mattes</strong> that arrive in
 every shot the same way. Define naming conventions early, build the template to
