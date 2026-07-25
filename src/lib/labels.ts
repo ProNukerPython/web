@@ -1,6 +1,7 @@
 import type {
   Authenticity,
   CompletenessSegment,
+  ComponentImportance,
   CopyCondition,
   ListingStatus,
   MarketplacePlatform,
@@ -71,4 +72,12 @@ export const PRICE_VERDICT_LABELS: Record<PriceVerdict, string> = {
   FAIR: "Precio correcto",
   EXPENSIVE: "Caro",
   VERY_EXPENSIVE: "Muy caro",
+};
+
+export const COMPONENT_IMPORTANCE_LABELS: Record<ComponentImportance, string> = {
+  CRITICAL: "Crítico",
+  HIGH: "Alto",
+  MEDIUM: "Medio",
+  LOW: "Bajo",
+  OPTIONAL: "Opcional",
 };
