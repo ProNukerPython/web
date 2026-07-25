@@ -32,8 +32,9 @@ export type DashboardProgressInput = {
   primaryCopies: ReadonlyArray<{
     gameEditionId: string;
     isPrimary: boolean;
-    completenessPercent: number;
+    completenessPercent: number | null;
     referencePriceCents: number | null;
+    estimatedValueCents?: number | null;
   }>;
   investedCents: number;
 };
@@ -63,10 +64,12 @@ export function buildDashboardProgress(
   const estimatedValueCents = collectionEstimatedValueCents(
     input.primaryCopies.map((copy) => ({
       isPrimary: copy.isPrimary,
-      estimatedValueCents: estimateCopyValueCents(
-        copy.referencePriceCents,
-        copy.completenessPercent,
-      ),
+      estimatedValueCents:
+        copy.estimatedValueCents ??
+        estimateCopyValueCents(
+          copy.referencePriceCents,
+          copy.completenessPercent ?? 0,
+        ),
     })),
   );
 

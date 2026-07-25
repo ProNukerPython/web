@@ -15,9 +15,11 @@ import { formatCentsEs, formatDateEs } from "@/lib/format";
 import {
   COMPLETENESS_SEGMENT_LABELS,
   COMPONENT_IMPORTANCE_LABELS,
+  COPY_CONDITION_LABELS,
   LISTING_STATUS_LABELS,
   MARKETPLACE_LABELS,
 } from "@/lib/labels";
+import type { CopyCondition } from "@prisma/client";
 
 export function EditionDetailView({ data }: { data: EditionDetailData }) {
   const imageSrc = data.imageUrl ?? "/placeholders/games/generic.svg";
@@ -69,15 +71,62 @@ export function EditionDetailView({ data }: { data: EditionDetailData }) {
             ) : null}
             {data.completenessPercent !== null ? (
               <p className="text-sm">
-                Completitud de tu copia:{" "}
+                Completitud de tu copia principal:{" "}
                 <span className="font-medium tabular-nums">
                   {data.completenessPercent}%
                 </span>
               </p>
             ) : null}
+            <Link
+              href={`/games/${data.id}?action=add-copy`}
+              className="inline-flex h-8 items-center rounded-lg bg-primary px-2.5 text-sm text-primary-foreground hover:bg-primary/80"
+            >
+              Añadir copia
+            </Link>
           </div>
         </div>
       </div>
+
+      <Card className="border-border/80">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Tus copias</CardTitle>
+          <CardDescription>
+            Puedes tener varias copias; solo la principal cuenta para el progreso.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {data.ownedCopies.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aún no tienes copias de esta edición.
+            </p>
+          ) : (
+            data.ownedCopies.map((copy) => (
+              <Link
+                key={copy.id}
+                href={`/collection/${copy.id}`}
+                className="flex items-center justify-between gap-3 rounded-lg border border-border/60 px-3 py-2 text-sm hover:border-primary/40"
+              >
+                <div>
+                  <p className="font-medium">
+                    {COPY_CONDITION_LABELS[copy.condition as CopyCondition]}
+                    {copy.isPrimary ? " · Principal" : " · Duplicado"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Completitud{" "}
+                    {copy.completenessPercent === null
+                      ? "sin checklist"
+                      : `${copy.completenessPercent}%`}
+                    {copy.pricePaidCents !== null
+                      ? ` · ${formatCentsEs(copy.pricePaidCents, data.currency)}`
+                      : ""}
+                  </p>
+                </div>
+                <span className="text-xs text-primary">Ver</span>
+              </Link>
+            ))
+          )}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-3">
         <PriceCard

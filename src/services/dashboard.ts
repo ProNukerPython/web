@@ -43,6 +43,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
           gameEditionId: true,
           isPrimary: true,
           completenessPercent: true,
+          estimatedValueCents: true,
           gameEdition: {
             select: { referencePriceCents: true },
           },
@@ -96,12 +97,15 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
       platformSlug: edition.platform.slug,
       platformName: edition.platform.name,
     })),
-    primaryCopies: ownedCopies.map((copy) => ({
-      gameEditionId: copy.gameEditionId,
-      isPrimary: copy.isPrimary,
-      completenessPercent: copy.completenessPercent,
-      referencePriceCents: copy.gameEdition.referencePriceCents,
-    })),
+    primaryCopies: ownedCopies
+      .filter((copy) => copy.isPrimary)
+      .map((copy) => ({
+        gameEditionId: copy.gameEditionId,
+        isPrimary: true,
+        completenessPercent: copy.completenessPercent,
+        referencePriceCents: copy.gameEdition.referencePriceCents,
+        estimatedValueCents: copy.estimatedValueCents,
+      })),
     investedCents: purchaseAgg._sum.totalCents ?? 0,
   });
 

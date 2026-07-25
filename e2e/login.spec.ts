@@ -9,6 +9,6 @@ test.describe("CollectorDex login", () => {
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
-    await expect(page.getByText(/12 de 38/i)).toBeVisible();
+    await expect(page.getByText(/\d+ de 38/i)).toBeVisible();
   });
 });

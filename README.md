@@ -64,3 +64,4 @@ Abre [http://localhost:3000](http://localhost:3000).
 - No hay scraping ni APIs privadas de marketplaces en el MVP.
 - Las portadas usan placeholders locales (`public/placeholders`).
 - El modelo es multiusuario; el seed crea un usuario demo.
+- Hay un índice único parcial en PostgreSQL (`owned_copies_one_primary_per_user_edition`) que garantiza como máximo una copia principal por usuario y edición. Prisma no puede declararlo en el schema; está en la migración SQL.

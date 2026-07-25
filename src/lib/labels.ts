@@ -21,10 +21,31 @@ export const COPY_CONDITION_LABELS: Record<CopyCondition, string> = {
 
 export const AUTHENTICITY_LABELS: Record<Authenticity, string> = {
   UNCHECKED: "No comprobada",
-  PROBABLY_ORIGINAL: "Probablemente original",
-  VERIFIED_ORIGINAL: "Original verificado",
+  PROBABLY_AUTHENTIC: "Probablemente auténtica",
+  VERIFIED_AUTHENTIC: "Autenticidad verificada",
   DOUBTFUL: "Dudosa",
   REPRODUCTION: "Reproducción",
+};
+
+export const COMPONENT_PRESENCE_LABELS: Record<
+  import("@prisma/client").ComponentPresence,
+  string
+> = {
+  PRESENT: "Presente",
+  ABSENT: "Ausente",
+  UNKNOWN: "Desconocido",
+  REPLACEMENT: "Reemplazo / reproducción",
+};
+
+export const COMPLETENESS_DESCRIPTOR_LABELS: Record<
+  import("@prisma/client").CompletenessDescriptor,
+  string
+> = {
+  COMPLETE: "Completa",
+  ALMOST_COMPLETE: "Casi completa",
+  PARTIAL: "Parcial",
+  GAME_ONLY: "Solo juego",
+  NO_CHECKLIST: "Sin checklist",
 };
 
 export const WISHLIST_PRIORITY_LABELS: Record<WishlistPriority, string> = {

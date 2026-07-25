@@ -93,10 +93,25 @@ enum CopyCondition {
 
 enum Authenticity {
   UNCHECKED
-  PROBABLY_ORIGINAL
-  VERIFIED_ORIGINAL
+  PROBABLY_AUTHENTIC
+  VERIFIED_AUTHENTIC
   DOUBTFUL
   REPRODUCTION
+}
+
+enum ComponentPresence {
+  PRESENT
+  ABSENT
+  UNKNOWN
+  REPLACEMENT
+}
+
+enum CompletenessDescriptor {
+  COMPLETE
+  ALMOST_COMPLETE
+  PARTIAL
+  GAME_ONLY
+  NO_CHECKLIST
 }
 
 enum WishlistPriority {
@@ -249,12 +264,14 @@ model ComponentDefinition {
 }
 
 model EditionComponent {
-  id                    String @id @default(uuid()) @db.Uuid
-  gameEditionId         String @db.Uuid
-  componentDefinitionId String @db.Uuid
+  id                    String  @id @default(uuid()) @db.Uuid
+  gameEditionId         String  @db.Uuid
+  componentDefinitionId String  @db.Uuid
   /// Weight used for completeness scoring (higher = more important)
-  weight                Int    @default(1)
+  weight                Int     @default(1)
   isRequired            Boolean @default(true)
+  sortOrder             Int     @default(0)
+  description           String?
   notes                 String?
 
   gameEdition         GameEdition         @relation(fields: [gameEditionId], references: [id], onDelete: Cascade)
@@ -326,42 +343,47 @@ model CollectionEntry {
 }
 
 model OwnedCopy {
-  id                String         @id @default(uuid()) @db.Uuid
-  userId            String         @db.Uuid
-  gameEditionId     String         @db.Uuid
-  condition         CopyCondition
-  regionLabel       String?
-  language          String         @default("es")
-  pricePaidCents    Int?
-  currency          Currency       @default(EUR)
-  purchasedAt       DateTime?
-  purchasePlatform  MarketplacePlatform?
-  sellerName        String?
-  listingUrl        String?
-  notes             String?        @db.Text
-  photoUrls         String[]       @default([])
-  authenticity      Authenticity   @default(UNCHECKED)
-  completenessPercent Int          @default(0)
-  isPrimary         Boolean        @default(true)
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  id                    String                  @id @default(uuid()) @db.Uuid
+  userId                String                  @db.Uuid
+  gameEditionId         String                  @db.Uuid
+  condition             CopyCondition
+  regionLabel           String?
+  language              String                  @default("es")
+  pricePaidCents        Int?
+  estimatedValueCents   Int?
+  currency              Currency                @default(EUR)
+  purchasedAt           DateTime?
+  purchasePlatform      MarketplacePlatform?
+  sellerName            String?
+  listingUrl            String?
+  serialNumber          String?
+  notes                 String?                 @db.Text
+  photoUrls             String[]                @default([])
+  authenticity          Authenticity            @default(UNCHECKED)
+  /// Null when the edition has no checklist configured
+  completenessPercent   Int?
+  completenessDescriptor CompletenessDescriptor @default(NO_CHECKLIST)
+  isPrimary             Boolean                 @default(false)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
 
-  user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gameEdition GameEdition         @relation(fields: [gameEditionId], references: [id], onDelete: Restrict)
-  components OwnedCopyComponent[]
-  purchases  Purchase[]
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameEdition GameEdition          @relation(fields: [gameEditionId], references: [id], onDelete: Restrict)
+  components  OwnedCopyComponent[]
+  purchases   Purchase[]
 
   @@index([userId])
   @@index([gameEditionId])
   @@index([userId, gameEditionId])
+  @@index([userId, isPrimary])
   @@map("owned_copies")
 }
 
 model OwnedCopyComponent {
-  id                    String  @id @default(uuid()) @db.Uuid
-  ownedCopyId           String  @db.Uuid
-  componentDefinitionId String  @db.Uuid
-  isPresent             Boolean @default(false)
+  id                    String            @id @default(uuid()) @db.Uuid
+  ownedCopyId           String            @db.Uuid
+  componentDefinitionId String            @db.Uuid
+  presence              ComponentPresence @default(UNKNOWN)
   condition             CopyCondition?
   notes                 String?
 

@@ -1,5 +1,7 @@
 import {
   defaultCartridgeComponents,
+  fireRedLeafGreenComponents,
+  gameBoyComponents,
   heartGoldSoulSilverComponents,
   switchPhysicalComponents,
   type EditionComponentSeed,
@@ -34,6 +36,18 @@ const platformMap = {
   switch: "nintendo-switch",
 } as const;
 
+function componentsFor(
+  slug: string,
+  platformKey: keyof typeof platformMap,
+): EditionComponentSeed[] {
+  if (platformKey === "switch") return switchPhysicalComponents;
+  if (platformKey === "gb" || platformKey === "gbc") return gameBoyComponents;
+  if (slug === "rojo-fuego" || slug === "verde-hoja") {
+    return fireRedLeafGreenComponents;
+  }
+  return defaultCartridgeComponents;
+}
+
 function ed(
   slug: string,
   name: string,
@@ -43,7 +57,6 @@ function ed(
   referencePriceCents: number,
   targetPriceCents: number,
   maxPriceCents: number,
-  isSwitch = false,
 ): SeedEdition {
   return {
     gameSlug: slug,
@@ -59,7 +72,7 @@ function ed(
     referencePriceCents,
     targetPriceCents,
     maxPriceCents,
-    components: isSwitch ? switchPhysicalComponents : defaultCartridgeComponents,
+    components: componentsFor(slug, platformKey),
     description: `Edición física principal — ${name}. Precios orientativos de ejemplo.`,
   };
 }
@@ -122,12 +135,12 @@ export const seedEditions: SeedEdition[] = [
   ed("luna", "Pokémon Luna", 7, 2016, "3ds", 8000, 6000, 11000),
   ed("ultrasol", "Pokémon Ultrasol", 7, 2017, "3ds", 11000, 8500, 14000),
   ed("ultraluna", "Pokémon Ultraluna", 7, 2017, "3ds", 11000, 8500, 14000),
-  ed("lets-go-pikachu", "Pokémon: Let’s Go, Pikachu!", 7, 2018, "switch", 12000, 9000, 15000, true),
-  ed("lets-go-eevee", "Pokémon: Let’s Go, Eevee!", 7, 2018, "switch", 12000, 9000, 15000, true),
+  ed("lets-go-pikachu", "Pokémon: Let’s Go, Pikachu!", 7, 2018, "switch", 12000, 9000, 15000),
+  ed("lets-go-eevee", "Pokémon: Let’s Go, Eevee!", 7, 2018, "switch", 12000, 9000, 15000),
 
   // Gen VIII
-  ed("espada", "Pokémon Espada", 8, 2019, "switch", 10000, 7500, 13000, true),
-  ed("escudo", "Pokémon Escudo", 8, 2019, "switch", 10000, 7500, 13000, true),
+  ed("espada", "Pokémon Espada", 8, 2019, "switch", 10000, 7500, 13000),
+  ed("escudo", "Pokémon Escudo", 8, 2019, "switch", 10000, 7500, 13000),
   ed(
     "diamante-brillante",
     "Pokémon Diamante Brillante",
@@ -137,7 +150,6 @@ export const seedEditions: SeedEdition[] = [
     11000,
     8500,
     14000,
-    true,
   ),
   ed(
     "perla-reluciente",
@@ -148,7 +160,6 @@ export const seedEditions: SeedEdition[] = [
     11000,
     8500,
     14000,
-    true,
   ),
   ed(
     "leyendas-arceus",
@@ -159,12 +170,11 @@ export const seedEditions: SeedEdition[] = [
     13000,
     10000,
     16000,
-    true,
   ),
 
   // Gen IX
-  ed("escarlata", "Pokémon Escarlata", 9, 2022, "switch", 14000, 11000, 17000, true),
-  ed("purpura", "Pokémon Púrpura", 9, 2022, "switch", 14000, 11000, 17000, true),
+  ed("escarlata", "Pokémon Escarlata", 9, 2022, "switch", 14000, 11000, 17000),
+  ed("purpura", "Pokémon Púrpura", 9, 2022, "switch", 14000, 11000, 17000),
   ed(
     "leyendas-z-a",
     "Leyendas Pokémon: Z-A",
@@ -174,7 +184,6 @@ export const seedEditions: SeedEdition[] = [
     16000,
     13000,
     20000,
-    true,
   ),
 ];
 

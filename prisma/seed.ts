@@ -2,6 +2,7 @@ import "dotenv/config";
 import {
   Authenticity,
   CompletenessSegment,
+  ComponentPresence,
   CopyCondition,
   ListingStatus,
   MarketplacePlatform,
@@ -17,6 +18,7 @@ import {
 import { seedPlatforms } from "../src/data/seed/platforms";
 import { seedRegions } from "../src/data/seed/regions";
 import { listingTotalCents } from "../src/domain/calculations";
+import { calculateCopyCompleteness } from "../src/domain/completeness/calculate";
 
 const prisma = new PrismaClient();
 
@@ -124,6 +126,8 @@ async function main() {
           componentDefinitionId: definition.id,
           weight: comp.weight,
           isRequired: comp.isRequired ?? true,
+          sortOrder: comp.sortOrder ?? 0,
+          description: comp.description,
         },
       });
     }
@@ -167,9 +171,119 @@ async function main() {
     });
   }
 
-  const ownedSlugs = [
-    "rojo-pal-es",
-    "azul-pal-es",
+  const editionsBySlug = Object.fromEntries(
+    allEditions.map((edition) => [edition.slug, edition]),
+  );
+
+  async function createDemoCopy(options: {
+    slug: string;
+    condition: CopyCondition;
+    authenticity: Authenticity;
+    isPrimary: boolean;
+    pricePaidCents: number;
+    estimatedValueCents?: number;
+    purchasedAt: Date;
+    notes: string;
+    presenceBySlug: Record<string, ComponentPresence>;
+  }) {
+    const edition = editionsBySlug[options.slug];
+    if (!edition) return null;
+
+    const definitions = await prisma.componentDefinition.findMany();
+    const defById = Object.fromEntries(definitions.map((d) => [d.id, d]));
+
+    const componentInputs = edition.editionComponents.map((ec) => {
+      const def = defById[ec.componentDefinitionId];
+      const presence =
+        options.presenceBySlug[def?.slug ?? ""] ?? ComponentPresence.UNKNOWN;
+      return {
+        editionComponent: ec,
+        definitionSlug: def?.slug ?? "",
+        name: def?.name ?? "Componente",
+        presence,
+      };
+    });
+
+    const completeness = calculateCopyCompleteness(
+      componentInputs.map((item) => ({
+        id: item.editionComponent.componentDefinitionId,
+        name: item.name,
+        weight: item.editionComponent.weight,
+        isRequired: item.editionComponent.isRequired,
+        presence: item.presence,
+      })),
+    );
+
+    const copy = await prisma.ownedCopy.create({
+      data: {
+        userId: user.id,
+        gameEditionId: edition.id,
+        condition: options.condition,
+        language: "es",
+        regionLabel: "PAL España",
+        pricePaidCents: options.pricePaidCents,
+        estimatedValueCents: options.estimatedValueCents,
+        currency: "EUR",
+        purchasedAt: options.purchasedAt,
+        purchasePlatform: MarketplacePlatform.WALLAPOP,
+        authenticity: options.authenticity,
+        completenessPercent: completeness.percent,
+        completenessDescriptor: completeness.descriptor,
+        isPrimary: options.isPrimary,
+        notes: options.notes,
+        photoUrls: [],
+        components: {
+          create: componentInputs.map((item) => ({
+            componentDefinitionId: item.editionComponent.componentDefinitionId,
+            presence: item.presence,
+          })),
+        },
+      },
+    });
+
+    return copy;
+  }
+
+  // Complete primary copy (Rojo)
+  await createDemoCopy({
+    slug: "rojo-pal-es",
+    condition: CopyCondition.VERY_GOOD,
+    authenticity: Authenticity.VERIFIED_AUTHENTIC,
+    isPrimary: true,
+    pricePaidCents: 14000,
+    estimatedValueCents: 17000,
+    purchasedAt: new Date("2024-06-15"),
+    notes: "Copia principal completa de demostración.",
+    presenceBySlug: {
+      cartridge: ComponentPresence.PRESENT,
+      "outer-box": ComponentPresence.PRESENT,
+      "inner-tray": ComponentPresence.PRESENT,
+      manual: ComponentPresence.PRESENT,
+      inserts: ComponentPresence.PRESENT,
+    },
+  });
+
+  // Partial primary copy (Azul) with missing inserts/tray and a replacement manual
+  await createDemoCopy({
+    slug: "azul-pal-es",
+    condition: CopyCondition.GOOD,
+    authenticity: Authenticity.PROBABLY_AUTHENTIC,
+    isPrimary: true,
+    pricePaidCents: 13500,
+    estimatedValueCents: 12000,
+    purchasedAt: new Date("2024-08-20"),
+    notes: "Copia parcial: manual de reemplazo y bandeja ausente.",
+    presenceBySlug: {
+      cartridge: ComponentPresence.PRESENT,
+      "outer-box": ComponentPresence.PRESENT,
+      "inner-tray": ComponentPresence.ABSENT,
+      manual: ComponentPresence.REPLACEMENT,
+      inserts: ComponentPresence.ABSENT,
+    },
+  });
+
+  // More simple owned primaries
+  for (const slug of [
     "amarillo-pal-es",
     "oro-pal-es",
     "plata-pal-es",
@@ -180,53 +294,64 @@ async function main() {
     "x-pal-es",
     "espada-pal-es",
     "escarlata-pal-es",
-  ];
-
-  for (const slug of ownedSlugs) {
-    const edition = allEditions.find((e) => e.slug === slug);
-    if (!edition) continue;
-
-    const copy = await prisma.ownedCopy.create({
-      data: {
-        userId: user.id,
-        gameEditionId: edition.id,
-        condition: slug.includes("rojo") ? "VERY_GOOD" : "GOOD",
-        language: "es",
-        pricePaidCents: Math.round((edition.referencePriceCents ?? 10000) * 0.85),
-        currency: "EUR",
-        purchasedAt: new Date("2024-06-15"),
-        purchasePlatform: MarketplacePlatform.WALLAPOP,
-        authenticity: Authenticity.PROBABLY_ORIGINAL,
-        completenessPercent: 90,
-        isPrimary: true,
-        notes: "Copia de ejemplo del seed (datos orientativos).",
-        photoUrls: [],
+  ]) {
+    await createDemoCopy({
+      slug,
+      condition: CopyCondition.GOOD,
+      authenticity: Authenticity.PROBABLY_AUTHENTIC,
+      isPrimary: true,
+      pricePaidCents: Math.round(
+        ((editionsBySlug[slug]?.referencePriceCents ?? 10000) * 0.85),
+      ),
+      purchasedAt: new Date("2024-09-01"),
+      notes: "Copia de ejemplo del seed (datos orientativos).",
+      presenceBySlug: {
+        cartridge: ComponentPresence.PRESENT,
+        disc: ComponentPresence.PRESENT,
+        "outer-box": ComponentPresence.PRESENT,
+        "inner-tray": ComponentPresence.PRESENT,
+        manual: ComponentPresence.PRESENT,
+        inserts: ComponentPresence.ABSENT,
       },
     });
-
-    let presentWeight = 0;
-    let totalWeight = 0;
-    for (const ec of edition.editionComponents) {
-      // Deterministic: high-weight components present; light inserts often missing
-      const present = ec.weight >= 2;
-      totalWeight += ec.weight;
-      if (present) presentWeight += ec.weight;
-      await prisma.ownedCopyComponent.create({
-        data: {
-          ownedCopyId: copy.id,
-          componentDefinitionId: ec.componentDefinitionId,
-          isPresent: present,
-        },
-      });
-    }
-
-    const completeness =
-      totalWeight === 0 ? 0 : Math.round((presentWeight / totalWeight) * 100);
-    await prisma.ownedCopy.update({
-      where: { id: copy.id },
-      data: { completenessPercent: completeness },
-    });
   }
+
+  // Edition with two copies: primary complete-ish + duplicate loose cart
+  await createDemoCopy({
+    slug: "platino-pal-es",
+    condition: CopyCondition.VERY_GOOD,
+    authenticity: Authenticity.PROBABLY_AUTHENTIC,
+    isPrimary: true,
+    pricePaidCents: 19000,
+    estimatedValueCents: 21000,
+    purchasedAt: new Date("2025-01-10"),
+    notes: "Platino principal casi completo.",
+    presenceBySlug: {
+      cartridge: ComponentPresence.PRESENT,
+      "outer-box": ComponentPresence.PRESENT,
+      "inner-tray": ComponentPresence.PRESENT,
+      manual: ComponentPresence.PRESENT,
+      inserts: ComponentPresence.UNKNOWN,
+    },
+  });
+
+  await createDemoCopy({
+    slug: "platino-pal-es",
+    condition: CopyCondition.ACCEPTABLE,
+    authenticity: Authenticity.UNCHECKED,
+    isPrimary: false,
+    pricePaidCents: 6000,
+    estimatedValueCents: 7000,
+    purchasedAt: new Date("2025-02-01"),
+    notes: "Duplicado: solo cartucho.",
+    presenceBySlug: {
+      cartridge: ComponentPresence.PRESENT,
+      "outer-box": ComponentPresence.ABSENT,
+      "inner-tray": ComponentPresence.ABSENT,
+      manual: ComponentPresence.ABSENT,
+      inserts: ComponentPresence.ABSENT,
+    },
+  });
 
   const soulSilver = allEditions.find((e) => e.slug === "soulsilver-pal-es");
   const cristal = allEditions.find((e) => e.slug === "cristal-pal-es");
@@ -308,7 +433,7 @@ async function main() {
         description:
           "Anuncio de ejemplo (manual). Incluye caja, manual y Pokéwalker. Precios orientativos.",
         apparentCondition: CopyCondition.VERY_GOOD,
-        estimatedAuthenticity: Authenticity.PROBABLY_ORIGINAL,
+        estimatedAuthenticity: Authenticity.PROBABLY_AUTHENTIC,
         status: ListingStatus.ACTIVE,
         completenessSegment: CompletenessSegment.CIB_COMPLETE,
         publishedAt: new Date("2025-11-01"),
@@ -396,11 +521,13 @@ async function main() {
     });
   }
 
+  const ownedCount = await prisma.ownedCopy.count({ where: { userId: user.id } });
+
   console.log("✅ Seed complete");
   console.log(`   User: ${email}`);
   console.log(`   Password: ${password}`);
   console.log(`   Editions: ${allEditions.length}`);
-  console.log(`   Owned (sample): ${ownedSlugs.length}`);
+  console.log(`   Owned copies: ${ownedCount}`);
 }
 
 main()

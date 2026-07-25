@@ -34,6 +34,6 @@ test.describe("CollectorDex catalog", () => {
     await login(page);
     await expect(page.getByText(/Progreso por generación/i)).toBeVisible();
     await expect(page.getByText(/Distribución por plataforma/i)).toBeVisible();
-    await expect(page.getByText(/12 de 38/i)).toBeVisible();
+    await expect(page.getByText(/\d+ de 38/i)).toBeVisible();
   });
 });

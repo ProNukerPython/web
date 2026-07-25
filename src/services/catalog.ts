@@ -86,10 +86,12 @@ export async function getCatalogPageData(
     ownedIds.add(copy.gameEditionId);
     if (copy.isPrimary) {
       const current = completenessByEdition.get(copy.gameEditionId) ?? 0;
-      completenessByEdition.set(
-        copy.gameEditionId,
-        Math.max(current, copy.completenessPercent),
-      );
+      if (copy.completenessPercent !== null) {
+        completenessByEdition.set(
+          copy.gameEditionId,
+          Math.max(current, copy.completenessPercent),
+        );
+      }
     }
   }
 
@@ -192,6 +194,13 @@ export type EditionDetailData = {
     platform: MarketplacePlatform | null;
     isIndicative: boolean;
   }>;
+  ownedCopies: Array<{
+    id: string;
+    condition: string;
+    completenessPercent: number | null;
+    isPrimary: boolean;
+    pricePaidCents: number | null;
+  }>;
 };
 
 export async function getEditionDetail(
@@ -221,7 +230,6 @@ export async function getEditionDetail(
       ownedCopies: {
         where: { userId },
         orderBy: [{ isPrimary: "desc" }, { createdAt: "asc" }],
-        take: 1,
       },
       wishlistEntries: {
         where: { userId },
@@ -234,9 +242,12 @@ export async function getEditionDetail(
     return null;
   }
 
-  const primaryCopy = edition.ownedCopies[0] ?? null;
+  const primaryCopy =
+    edition.ownedCopies.find((copy) => copy.isPrimary) ??
+    edition.ownedCopies[0] ??
+    null;
   let status: CollectionStatus = "pending";
-  if (primaryCopy) {
+  if (edition.ownedCopies.length > 0) {
     status = "owned";
   } else if (edition.wishlistEntries.length > 0) {
     status = "wishlist";
@@ -288,6 +299,13 @@ export async function getEditionDetail(
       completenessSegment: observation.completenessSegment,
       platform: observation.platform,
       isIndicative: observation.isIndicative,
+    })),
+    ownedCopies: edition.ownedCopies.map((copy) => ({
+      id: copy.id,
+      condition: copy.condition,
+      completenessPercent: copy.completenessPercent,
+      isPrimary: copy.isPrimary,
+      pricePaidCents: copy.pricePaidCents,
     })),
   };
 }
