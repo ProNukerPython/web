@@ -4,6 +4,7 @@ import type { NextAuthConfig } from "next-auth";
  * Edge-compatible Auth.js config (no Prisma / Node-only imports).
  */
 export const authConfig = {
+  trustHost: true,
   pages: {
     signIn: "/login",
   },
