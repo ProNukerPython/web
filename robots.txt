@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://marc-castellvi.com/sitemap.xml
