@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví</title>
-<meta name="description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<title>What I've Learned About Compositing Workflows in Nuke for Animation | Marc Castellví</title>
+<meta name="description" content="What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.">
 <link rel="canonical" href="https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/site.css">
@@ -14,12 +14,12 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/">
 <meta property="og:site_name" content="Marc Castellví — Portfolio">
-<meta property="og:title" content="How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví">
-<meta property="og:description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<meta property="og:title" content="What I've Learned About Compositing Workflows in Nuke for Animation | Marc Castellví">
+<meta property="og:description" content="What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.">
 <meta property="og:image" content="https://marc-castellvi.com/assets/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="How I Build a Compositing Workflow in Nuke for Animation Features | Marc Castellví">
-<meta name="twitter:description" content="A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.">
+<meta name="twitter:title" content="What I've Learned About Compositing Workflows in Nuke for Animation | Marc Castellví">
+<meta name="twitter:description" content="What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.">
 <meta name="twitter:image" content="https://marc-castellvi.com/assets/og-card.png">
 <script type="application/ld+json">
 {
@@ -41,7 +41,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "How I Build a Compositing Workflow in Nuke for Animation Features"
+      "name": "What I've Learned About Compositing Workflows in Nuke for Animation"
     }
   ]
 }
@@ -51,8 +51,8 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "@id": "https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/#article",
-  "headline": "How I Build a Compositing Workflow in Nuke for Animation Features",
-  "description": "A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.",
+  "headline": "What I've Learned About Compositing Workflows in Nuke for Animation",
+  "description": "What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.",
   "url": "https://marc-castellvi.com/blog/nuke-compositing-workflow-animation/",
   "datePublished": "2026-07-22",
   "dateModified": "2026-07-22",
@@ -96,19 +96,19 @@
 </nav>
 
 <main class="page">
-<div class="breadcrumbs mono" aria-label="Breadcrumb"><a href="/"><span class="l-en">Home</span><span class="l-es">Inicio</span></a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span><span class="l-en">How I Build a Compositing Workflow in Nuke for Animation Features</span><span class="l-es">Cómo monto un workflow de compositing en Nuke para largometrajes de animación</span></span></div>
+<div class="breadcrumbs mono" aria-label="Breadcrumb"><a href="/"><span class="l-en">Home</span><span class="l-es">Inicio</span></a><span class="sep">/</span><a href="/blog/">Blog</a><span class="sep">/</span><span><span class="l-en">What I've Learned About Compositing Workflows in Nuke for Animation</span><span class="l-es">Lo que he aprendido sobre workflows de compositing en Nuke para animación</span></span></div>
 <article class="prose">
 <span class="kicker mono">BLOG</span>
 <div class="l-en">
-<h1 class="display">How I Build a Compositing Workflow in Nuke for Animation Features</h1>
+<h1 class="display">What I've Learned About Compositing Workflows in Nuke for Animation</h1>
 <p class="meta">By Marc Castellví · July 22, 2026</p>
 
 <p>Over the last few years I've worked on the comp side of animated features
 and series at <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
-Studios and Cocolilo Animation — sometimes as a shot artist, often as the
-person building the templates and tools the rest of the team relies on. This
-article is a practical summary of how I approach a Nuke compositing workflow
-for animation, and the decisions that matter most.</p>
+Studios and Cocolilo Animation. I haven't designed a studio's compositing
+workflow myself, but working inside several of them, and helping with some of
+their tools, has taught me a lot about what makes one work. This article is a
+summary of what I've learned and what I think matters most.</p>
 
 <h2>1. Start from the template, not the shot</h2>
 <p>In animation, comp is a volume game: hundreds of shots that share the same
@@ -173,15 +173,15 @@ productions? Check my <a href="/projects/">projects</a> or
 
 </div>
 <div class="l-es" lang="es">
-<h1 class="display">Cómo monto un workflow de compositing en Nuke para largometrajes de animación</h1>
+<h1 class="display">Lo que he aprendido sobre workflows de compositing en Nuke para animación</h1>
 <p class="meta">Por Marc Castellví · 22 de julio de 2026</p>
 
 <p>En los últimos años he trabajado en la parte de comp de largometrajes y series
 de animación en <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
-Studios y Cocolilo Animation — a veces como artista de planos y a menudo
-construyendo los templates y las tools de las que depende el resto del equipo.
-Este artículo es un resumen práctico de cómo planteo un workflow de compositing
-en Nuke para animación y de las decisiones que más importan.</p>
+Studios y Cocolilo Animation. No he diseñado yo el workflow de compositing de
+ningún estudio, pero trabajar dentro de varios, y ayudar con algunas de sus
+tools, me ha enseñado mucho sobre qué hace que uno funcione. Este artículo es un
+resumen de lo que he aprendido y de lo que creo que más importa.</p>
 
 <h2>1. Empieza por el template, no por el plano</h2>
 <p>En animación, el comp es un juego de volumen: cientos de planos que comparten

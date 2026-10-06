@@ -661,20 +661,20 @@ link to the full video and a detailed breakdown page.</p>
 ARTICLES = [
     {
         "slug": "nuke-compositing-workflow-animation",
-        "title": "How I Build a Compositing Workflow in Nuke for Animation Features",
+        "title": "What I've Learned About Compositing Workflows in Nuke for Animation",
         "date": "2026-07-22",
         "date_h": "July 22, 2026",
-        "title_es": "Cómo monto un workflow de compositing en Nuke para largometrajes de animación",
+        "title_es": "Lo que he aprendido sobre workflows de compositing en Nuke para animación",
         "date_h_es": "22 de julio de 2026",
-        "description_es": "Una mirada práctica a cómo estructuro los workflows de compositing en Nuke para largometrajes y series de animación: templates, AOVs multipass, Cryptomatte, DiMattes y las tools que mantienen a un equipo de comp rápido y consistente.",
-        "description": "A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.",
+        "description_es": "Lo que he aprendido trabajando en comp de largometrajes y series de animación, y lo que creo que importa en un workflow de compositing en Nuke: templates, AOVs multipass, Cryptomatte, DiMattes y tools.",
+        "description": "What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.",
         "body": """
 <p>Over the last few years I've worked on the comp side of animated features
 and series at <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
-Studios and Cocolilo Animation — sometimes as a shot artist, often as the
-person building the templates and tools the rest of the team relies on. This
-article is a practical summary of how I approach a Nuke compositing workflow
-for animation, and the decisions that matter most.</p>
+Studios and Cocolilo Animation. I haven't designed a studio's compositing
+workflow myself, but working inside several of them, and helping with some of
+their tools, has taught me a lot about what makes one work. This article is a
+summary of what I've learned and what I think matters most.</p>
 
 <h2>1. Start from the template, not the shot</h2>
 <p>In animation, comp is a volume game: hundreds of shots that share the same
@@ -740,10 +740,10 @@ productions? Check my <a href="/projects/">projects</a> or
         "body_es": """
 <p>En los últimos años he trabajado en la parte de comp de largometrajes y series
 de animación en <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
-Studios y Cocolilo Animation — a veces como artista de planos y a menudo
-construyendo los templates y las tools de las que depende el resto del equipo.
-Este artículo es un resumen práctico de cómo planteo un workflow de compositing
-en Nuke para animación y de las decisiones que más importan.</p>
+Studios y Cocolilo Animation. No he diseñado yo el workflow de compositing de
+ningún estudio, pero trabajar dentro de varios, y ayudar con algunas de sus
+tools, me ha enseñado mucho sobre qué hace que uno funcione. Este artículo es un
+resumen de lo que he aprendido y de lo que creo que más importa.</p>
 
 <h2>1. Empieza por el template, no por el plano</h2>
 <p>En animación, el comp es un juego de volumen: cientos de planos que comparten
