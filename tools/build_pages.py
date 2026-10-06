@@ -17,11 +17,11 @@ ROOT = os.path.join(os.path.dirname(__file__), "..")
 NAV = """<nav class="site-nav" aria-label="Main navigation">
   <a class="brand" href="/">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
   <ul>
-    <li><a href="/about/"{c_about}>About</a></li>
-    <li><a href="/projects/"{c_projects}>Projects</a></li>
-    <li><a href="/reel/"{c_reel}>Reel</a></li>
+    <li><a href="/#sobre-mi"{c_about}>About</a></li>
+    <li><a href="/#experiencia">Experience</a></li>
+    <li><a href="/#proyectos"{c_projects}>Projects</a></li>
     <li><a href="/blog/"{c_blog}>Blog</a></li>
-    <li><a href="/contact/"{c_contact}>Contact</a></li>
+    <li><a href="/#contacto"{c_contact}>Contact</a></li>
   </ul>
 </nav>"""
 
