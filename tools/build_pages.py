@@ -661,13 +661,13 @@ link to the full video and a detailed breakdown page.</p>
 ARTICLES = [
     {
         "slug": "nuke-compositing-workflow-animation",
-        "title": "What I've Learned About Compositing Workflows in Nuke for Animation",
+        "title": "How I Build a Compositing Workflow in Nuke for Animation Features",
         "date": "2026-07-22",
         "date_h": "July 22, 2026",
-        "title_es": "Lo que he aprendido sobre workflows de compositing en Nuke para animación",
+        "title_es": "Cómo monto un workflow de compositing en Nuke para largometrajes de animación",
         "date_h_es": "22 de julio de 2026",
-        "description_es": "Lo que he aprendido trabajando en comp de largometrajes y series de animación, y lo que creo que importa en un workflow de compositing en Nuke: templates, AOVs multipass, Cryptomatte, DiMattes y tools.",
-        "description": "What I've learned working in comp on animated features and series, and what I think matters in a Nuke compositing workflow: templates, multipass AOVs, Cryptomatte, DiMattes and tools.",
+        "description_es": "Una mirada práctica a cómo montar un workflow de compositing en Nuke para largometrajes y series de animación — templates, AOVs multipass, Cryptomatte, DiMattes y tools — a partir de lo que he aprendido en producción.",
+        "description": "A practical look at building a Nuke compositing workflow for animated features and series — templates, multipass AOVs, Cryptomatte, DiMattes and tools — based on what I've learned in production.",
         "body": """
 <p>Over the last few years I've worked on the comp side of animated features
 and series at <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
