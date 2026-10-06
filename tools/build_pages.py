@@ -16,14 +16,51 @@ ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 NAV = """<nav class="site-nav" aria-label="Main navigation">
   <a class="brand" href="/">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
+  <div class="nav-right">
   <ul>
-    <li><a href="/#sobre-mi"{c_about}>About</a></li>
-    <li><a href="/#experiencia">Experience</a></li>
-    <li><a href="/#proyectos"{c_projects}>Projects</a></li>
+    <li><a href="/#sobre-mi"{c_about}><span class="l-en">About</span><span class="l-es">Sobre mí</span></a></li>
+    <li><a href="/#experiencia"><span class="l-en">Experience</span><span class="l-es">Experiencia</span></a></li>
+    <li><a href="/#proyectos"{c_projects}><span class="l-en">Projects</span><span class="l-es">Proyectos</span></a></li>
     <li><a href="/blog/"{c_blog}>Blog</a></li>
-    <li><a href="/#contacto"{c_contact}>Contact</a></li>
-  </ul>
+    <li><a href="/#contacto"{c_contact}><span class="l-en">Contact</span><span class="l-es">Contacto</span></a></li>
+  </ul>{lang_btn}
+  </div>
 </nav>"""
+
+LANG_BTN = """
+  <button class="lang-btn" id="lang-toggle" type="button" aria-label="Switch language">ES</button>"""
+
+# Bilingual pages (blog) share the home page's language preference
+# (localStorage "lang"); text exists twice, as .l-en / .l-es.
+LANG_HEAD = """<script>
+  (function () {
+    var lang = "en";
+    try { lang = localStorage.getItem("lang") || "en"; } catch (e) {}
+    lang = lang === "es" ? "es" : "en";
+    document.documentElement.setAttribute("data-lang", lang);
+    document.documentElement.setAttribute("lang", lang);
+  })();
+</script>"""
+
+LANG_SCRIPT = """<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("lang-toggle");
+    function apply(lang) {
+      root.setAttribute("data-lang", lang);
+      root.setAttribute("lang", lang);
+      btn.textContent = lang === "es" ? "EN" : "ES";
+      try { localStorage.setItem("lang", lang); } catch (e) {}
+    }
+    apply(root.getAttribute("data-lang") === "es" ? "es" : "en");
+    btn.addEventListener("click", function () {
+      apply(root.getAttribute("data-lang") === "es" ? "en" : "es");
+    });
+  })();
+</script>"""
+
+def bi(en, es):
+    """Inline text in both languages."""
+    return f'<span class="l-en">{en}</span><span class="l-es">{es}</span>'
 
 FOOTER = """<footer class="site-footer">
   <nav aria-label="Site pages">
@@ -41,6 +78,8 @@ FOOTER = """<footer class="site-footer">
 def breadcrumb_ld(crumbs):
     items = []
     for i, (name, url) in enumerate(crumbs, 1):
+        if isinstance(name, tuple):
+            name = name[0]
         item = {"@type": "ListItem", "position": i, "name": name}
         if url:
             item["item"] = SITE + url
@@ -49,12 +88,12 @@ def breadcrumb_ld(crumbs):
 
 
 def render(path, title, description, body, crumbs, extra_ld=None, og_image=OG_IMAGE,
-           og_type="website", wide=False, active=None):
+           og_type="website", wide=False, active=None, bilingual=False):
     url = SITE + path
     nav = NAV.format(**{
         f"c_{k}": (' aria-current="page"' if k == active else "")
         for k in ["about", "projects", "reel", "blog", "contact"]
-    })
+    }, lang_btn=LANG_BTN if bilingual else "")
     ld_blocks = [breadcrumb_ld(crumbs)]
     if extra_ld:
         ld_blocks.extend(extra_ld if isinstance(extra_ld, list) else [extra_ld])
@@ -63,7 +102,9 @@ def render(path, title, description, body, crumbs, extra_ld=None, og_image=OG_IM
         for b in ld_blocks
     )
     crumbs_html = '<span class="sep">/</span>'.join(
-        (f'<a href="{u}">{n}</a>' if u else f"<span>{n}</span>") for n, u in crumbs
+        (f'<a href="{u}">{bi(*n) if isinstance(n, tuple) else n}</a>' if u
+         else f"<span>{bi(*n) if isinstance(n, tuple) else n}</span>")
+        for n, u in crumbs
     )
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -89,6 +130,7 @@ def render(path, title, description, body, crumbs, extra_ld=None, og_image=OG_IM
 <meta name="twitter:description" content="{description}">
 <meta name="twitter:image" content="{og_image}">
 {ld_html}
+{LANG_HEAD if bilingual else ""}
 </head>
 <body>
 {nav}
@@ -99,6 +141,7 @@ def render(path, title, description, body, crumbs, extra_ld=None, og_image=OG_IM
 </main>
 
 {FOOTER}
+{LANG_SCRIPT if bilingual else ""}
 </body>
 </html>
 """
@@ -621,14 +664,17 @@ ARTICLES = [
         "title": "How I Build a Compositing Workflow in Nuke for Animation Features",
         "date": "2026-07-22",
         "date_h": "July 22, 2026",
-        "description": "A practical look at how I structure Nuke compositing workflows for animated features and series: templates, multipass AOVs, Cryptomatte, DiMattes and the tools that keep a comp team fast and consistent.",
+        "title_es": "Cómo monto un workflow de compositing en Nuke para largometrajes de animación",
+        "date_h_es": "22 de julio de 2026",
+        "description_es": "Una mirada práctica a cómo montar un workflow de compositing en Nuke para largometrajes y series de animación — templates, AOVs multipass, Cryptomatte, DiMattes y tools — a partir de lo que he aprendido en producción.",
+        "description": "A practical look at building a Nuke compositing workflow for animated features and series — templates, multipass AOVs, Cryptomatte, DiMattes and tools — based on what I've learned in production.",
         "body": """
 <p>Over the last few years I've worked on the comp side of animated features
 and series at <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
-Studios and Cocolilo Animation — sometimes as a shot artist, often as the
-person building the templates and tools the rest of the team relies on. This
-article is a practical summary of how I approach a Nuke compositing workflow
-for animation, and the decisions that matter most.</p>
+Studios and Cocolilo Animation. I haven't designed a studio's compositing
+workflow myself, but working inside several of them, and helping with some of
+their tools, has taught me a lot about what makes one work. This article is a
+summary of what I've learned and what I think matters most.</p>
 
 <h2>1. Start from the template, not the shot</h2>
 <p>In animation, comp is a volume game: hundreds of shots that share the same
@@ -691,6 +737,76 @@ automated, artists spend their day on what actually shows up on screen.</p>
 productions? Check my <a href="/projects/">projects</a> or
 <a href="/contact/">get in touch</a>.</em></p>
 """,
+        "body_es": """
+<p>En los últimos años he trabajado en la parte de comp de largometrajes y series
+de animación en <a href="/projects/spellbound/">Skydance Animation</a>, Illusorium
+Studios y Cocolilo Animation. No he diseñado yo el workflow de compositing de
+ningún estudio, pero trabajar dentro de varios, y ayudar con algunas de sus
+tools, me ha enseñado mucho sobre qué hace que uno funcione. Este artículo es un
+resumen de lo que he aprendido y de lo que creo que más importa.</p>
+
+<h2>1. Empieza por el template, no por el plano</h2>
+<p>En animación, el comp es un juego de volumen: cientos de planos que comparten
+la misma estructura de render. Lo que más rinde con diferencia es invertir en un
+buen <strong>template de plano</strong> — un script de Nuke que ya sabe leer los pases
+del show, reconstruir el beauty y encaminar mattes y elementos de FX, para que
+el artista abra un plano y empiece a tomar decisiones creativas desde el primer
+minuto en vez de conectar nodos.</p>
+<p>Un buen template tiene tres propiedades:</p>
+<ul>
+  <li><strong>Estructura predecible</strong> — todos los planos se ven igual, así que
+      cualquiera puede abrir el script de otro y saber dónde está cada cosa.</li>
+  <li><strong>Valores por defecto seguros</strong> — la salida del template sin tocar ya
+      debería parecerse mucho al render de lighting. El comp suma, no repara.</li>
+  <li><strong>Vías de escape</strong> — los artistas tienen que poder salirse del template
+      en los planos hero sin pelearse con él.</li>
+</ul>
+
+<h2>2. Respeta la estructura de AOVs</h2>
+<p>Haber trabajado como <a href="/projects/spellbound/">lighting assistant</a> antes
+de pasar a comp — sobre todo arreglando problemas de noise y de iluminación para
+que los planos llegaran bien a comp — me enseñó a tratar la estructura de AOVs
+del render como un contrato entre departamentos. El template de comp reconstruye
+el beauty a partir de light groups y AOVs, lo que da al comp muchísimo control
+para gradear — pero solo si la reconstrucción es matemáticamente exacta.
+Compruébalo con una diferencia contra el beauty en cada setup de show, y
+automatiza esa comprobación si puedes.</p>
+
+<h2>3. Los mattes son un workflow, no un nodo</h2>
+<p>En <a href="/projects/swapped/">Swapped</a> ayudé con la automatización de
+DiMattes añadiendo rutas a una tool existente, y creé una pequeña tool de Nuke
+que manda rutas a una tool del pipeline para que se puedan eliminar assets de
+los Cryptomattes sin abrir Houdini. Eso cambió mi forma de ver los mattes.
+Cryptomatte es genial para seleccionar sobre la marcha, pero una producción
+necesita <strong>mattes consistentes</strong> que lleguen igual a todos los planos, un
+template que los consuma automáticamente y una forma obvia para que los artistas
+arreglen un matte sin salir de Nuke ni editar a mano archivos del pipeline.</p>
+
+<h2>4. Lleva decisiones de look a comp cuando sale más barato</h2>
+<p>Algunos ajustes de look no necesitan un re-render. En el
+<a href="/projects/blacksad/">fan art de Blacksad</a> desarrollé una tool de STMaps
+triplanares que usa los pases de Position y Normals para aplicar texturas 2D
+directamente en comp, siguiendo a los assets durante todo el plano. Ese tipo de
+tool convierte una ida y vuelta de texturas y render de días en minutos dentro
+de Nuke. Todos los shows tienen unas cuantas oportunidades así — búscalas.</p>
+
+<h2>5. Automatiza el 20% aburrido</h2>
+<p>Como TD en <a href="/projects/pocoyo-season-5/">la temporada 5 de Pocoyó</a> mi
+trabajo consistía básicamente en quitar fricción: preparación automática de
+scripts, gestión de nodos read/write, versionado y entregas. Python dentro de
+Nuke se amortiza al momento en trabajo episódico. Mi regla: si un artista hace
+los mismos cinco clics en cada plano, eso es una tool.</p>
+
+<h2>Para cerrar</h2>
+<p>La parte artística y la técnica del compositing no son trabajos separados — los
+mejores equipos de comp en los que he estado tratan el pipeline como parte de la
+imagen. Si el template es sólido, los mattes son fiables y lo aburrido está
+automatizado, los artistas dedican el día a lo que realmente sale en pantalla.</p>
+
+<p><em>¿Quieres hablar de workflows de comp o ver esto aplicado a producciones
+reales? Echa un vistazo a mis <a href="/projects/">proyectos</a> o
+<a href="/contact/">escríbeme</a>.</em></p>
+""",
     },
 ]
 
@@ -699,12 +815,19 @@ def article_page(a):
     path = f"/blog/{a['slug']}/"
     body = f"""<article class="prose">
 <span class="kicker mono">BLOG</span>
+<div class="l-en">
 <h1 class="display">{a['title']}</h1>
 <p class="meta">By Marc Castellví · {a['date_h']}</p>
 {a['body']}
+</div>
+<div class="l-es" lang="es">
+<h1 class="display">{a['title_es']}</h1>
+<p class="meta">Por Marc Castellví · {a['date_h_es']}</p>
+{a['body_es']}
+</div>
 </article>
 
-<p style="margin-top:2.4rem"><a class="btn" href="/blog/">← All articles</a></p>
+<p style="margin-top:2.4rem"><a class="btn" href="/blog/">{bi("← All articles", "← Todos los artículos")}</a></p>
 """
     ld = {
         "@context": "https://schema.org",
@@ -715,7 +838,7 @@ def article_page(a):
         "url": SITE + path,
         "datePublished": a["date"],
         "dateModified": a["date"],
-        "inLanguage": "en",
+        "inLanguage": ["en", "es"],
         "image": OG_IMAGE,
         "author": {"@id": PERSON_ID},
         "publisher": {"@id": PERSON_ID},
@@ -726,10 +849,11 @@ def article_page(a):
         title=f"{a['title']} | Marc Castellví",
         description=a["description"],
         body=body,
-        crumbs=[("Home", "/"), ("Blog", "/blog/"), (a["title"], None)],
+        crumbs=[(("Home", "Inicio"), "/"), ("Blog", "/blog/"), ((a["title"], a["title_es"]), None)],
         extra_ld=ld,
         og_type="article",
         active="blog",
+        bilingual=True,
     )
 
 
@@ -737,15 +861,18 @@ def blog_index():
     cards = []
     for a in ARTICLES:
         cards.append(f"""<article class="card">
-  <span class="studio">{a['date_h']}</span>
-  <h2><a class="title-link" href="/blog/{a['slug']}/">{a['title']}</a></h2>
-  <p>{a['description']}</p>
+  <span class="studio">{bi(a['date_h'], a['date_h_es'])}</span>
+  <h2><a class="title-link" href="/blog/{a['slug']}/">{bi(a['title'], a['title_es'])}</a></h2>
+  <p>{bi(a['description'], a['description_es'])}</p>
 </article>""")
     body = f"""<span class="kicker mono">BLOG</span>
-<h1 class="display">VFX &amp; Compositing Blog</h1>
-<p class="lede">Technical articles about Nuke compositing, lighting and pipeline
+<h1 class="display">{bi("VFX &amp; Compositing Blog", "Blog de VFX y compositing")}</h1>
+<p class="lede l-en">Technical articles about Nuke compositing, lighting and pipeline
 tools for animation, written from real production experience at Skydance
 Animation, Illusorium Studios and Cocolilo Animation.</p>
+<p class="lede l-es" lang="es">Artículos técnicos sobre compositing en Nuke, lighting y
+tools de pipeline para animación, escritos desde experiencia real de producción
+en Skydance Animation, Illusorium Studios y Cocolilo Animation.</p>
 
 <div class="card-grid">
 {chr(10).join(cards)}
@@ -758,7 +885,7 @@ Animation, Illusorium Studios and Cocolilo Animation.</p>
         "url": SITE + "/blog/",
         "name": "Marc Castellví — VFX & Compositing Blog",
         "description": "Technical articles about Nuke compositing, lighting and pipeline tools for animation.",
-        "inLanguage": "en",
+        "inLanguage": ["en", "es"],
         "author": {"@id": PERSON_ID},
         "blogPost": [
             {"@type": "TechArticle", "headline": a["title"], "url": SITE + f"/blog/{a['slug']}/", "datePublished": a["date"]}
@@ -770,10 +897,11 @@ Animation, Illusorium Studios and Cocolilo Animation.</p>
         title="Blog | Marc Castellví — Nuke Compositing & VFX Articles",
         description="Technical articles by Marc Castellví about Nuke compositing, lighting and pipeline tools for animation, from real production experience.",
         body=body,
-        crumbs=[("Home", "/"), ("Blog", None)],
+        crumbs=[(("Home", "Inicio"), "/"), ("Blog", None)],
         extra_ld=ld,
         wide=True,
         active="blog",
+        bilingual=True,
     )
 
 
