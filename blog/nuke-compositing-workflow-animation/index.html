@@ -72,11 +72,11 @@
 <nav class="site-nav" aria-label="Main navigation">
   <a class="brand" href="/">MARC CASTELLVÍ<span class="dot"> ●</span> COMP</a>
   <ul>
-    <li><a href="/about/">About</a></li>
-    <li><a href="/projects/">Projects</a></li>
-    <li><a href="/reel/">Reel</a></li>
+    <li><a href="/#sobre-mi">About</a></li>
+    <li><a href="/#experiencia">Experience</a></li>
+    <li><a href="/#proyectos">Projects</a></li>
     <li><a href="/blog/" aria-current="page">Blog</a></li>
-    <li><a href="/contact/">Contact</a></li>
+    <li><a href="/#contacto">Contact</a></li>
   </ul>
 </nav>
 
@@ -113,20 +113,22 @@ wiring nodes.</p>
 
 <h2>2. Respect the AOV structure</h2>
 <p>Having worked as a <a href="/projects/spellbound/">lighting assistant</a> before
-moving to comp, I learned to treat the render's AOV structure as a contract
+moving to comp — mostly fixing noise and lighting problems so shots reached
+comp in good shape — I learned to treat the render's AOV structure as a contract
 between departments. The comp template rebuilds the beauty from light groups
 and AOVs, which gives comp enormous grading power — but only if the rebuild is
 mathematically exact. Verify it with a difference against the beauty on every
 show setup, and automate that check if you can.</p>
 
 <h2>3. Mattes are a workflow, not a node</h2>
-<p>On <a href="/projects/swapped/">Swapped</a> I helped kick off the DiMatte
-workflow in its early stage, and it
-changed how I think about mattes. Cryptomatte is great for ad-hoc picking, but
-a production needs <strong>named, versioned, consistent mattes</strong> that arrive in
-every shot the same way. Define naming conventions early, build the template to
-consume them automatically, and give artists one obvious tool to request or
-generate a matte that doesn't exist yet.</p>
+<p>On <a href="/projects/swapped/">Swapped</a> I helped with the DiMatte automation
+by adding paths to an existing tool, and built a small Nuke tool that sends
+paths to a pipeline tool so assets can be removed from the Cryptomattes without
+opening Houdini. It changed how I think about mattes. Cryptomatte is great for
+ad-hoc picking, but a production needs <strong>consistent mattes</strong> that arrive in
+every shot the same way, a template that consumes them automatically, and an
+obvious way for artists to fix a matte without leaving Nuke or editing
+pipeline files by hand.</p>
 
 <h2>4. Move look decisions into comp when it's cheaper</h2>
 <p>Some look tweaks don't need a re-render. On the
