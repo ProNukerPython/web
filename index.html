@@ -263,6 +263,8 @@
     text-decoration: none;
   }
   nav ul a:hover { color: var(--amber); }
+  nav ul a.nav-blog { color: var(--amber); }
+  nav ul a.nav-blog::before { content: "● "; }
 
   /* ── Hero ──────────────────────────────────────── */
   header.hero {
@@ -1088,7 +1090,7 @@
       <li><a href="#sobre-mi"><span class="l-en">About</span><span class="l-es">Sobre mí</span></a></li>
       <li><a href="#experiencia"><span class="l-en">Experience</span><span class="l-es">Experiencia</span></a></li>
       <li><a href="#proyectos"><span class="l-en">Projects</span><span class="l-es">Proyectos</span></a></li>
-      <li><a href="/blog/">Blog</a></li>
+      <li><a class="nav-blog" href="/blog/">Blog</a></li>
       <li><a href="#contacto"><span class="l-en">Contact</span><span class="l-es">Contacto</span></a></li>
     </ul>
     <button class="lang-btn mono" id="lang-toggle" type="button" aria-label="Switch language">ES</button>
@@ -1295,12 +1297,13 @@
               <span class="place">Skydance Animation · Madrid</span>
             </div>
           </div>
-          <p class="desc l-en">Compositing tools development on
-             <em>Swapped</em> (Netflix), helping kick off the DiMatte
-             workflow in its early stage.</p>
-          <p class="desc l-es">Desarrollo de tools de compositing en
-             <em>Swapped</em> (Netflix), ayudando en el arranque del
-             flujo de DiMattes.</p>
+          <p class="desc l-en">On <em>Swapped</em> (Netflix) I helped with the
+             DiMatte automation by adding paths to an existing tool, and built a
+             Nuke tool to remove assets from Cryptomattes without opening Houdini.</p>
+          <p class="desc l-es">En <em>Swapped</em> (Netflix) ayudé con la
+             automatización de DiMattes añadiendo rutas a una tool existente, y
+             creé una tool de Nuke para eliminar assets de los Cryptomattes sin
+             entrar en Houdini.</p>
         </article>
 
         <article class="job reveal">
@@ -1313,11 +1316,12 @@
             </div>
           </div>
           <p class="desc l-en">Support for the lighting team on <em>Spellbound</em>
-             (Netflix): scene prep, renders and quality control of the layers
-             that later live in the comp.</p>
+             (Netflix), mostly fixing noise and lighting issues so every shot
+             reached comp in good shape; also scene prep, renders and layer QC.</p>
           <p class="desc l-es">Apoyo al equipo de lighting en <em>Spellbound</em>
-             (Netflix): preparación de escenas, renders y control de calidad
-             de las capas que después viven en el comp.</p>
+             (Netflix), sobre todo arreglando problemas de noise y de iluminación
+             para que cada plano llegara bien a comp; también preparación de
+             escenas, renders y QC de capas.</p>
         </article>
 
         <article class="job reveal">
@@ -1433,18 +1437,19 @@
         </article>
         <article class="proj reveal">
           <a class="thumb-link" href="/projects/swapped/" aria-label="View the Swapped project page">
-            <img class="thumb" src="assets/swapped.jpg" alt="Still from Swapped (Netflix) — compositing tools development by Marc Castellví at Skydance Animation" width="640" height="360" loading="lazy" decoding="async">
+            <img class="thumb" src="assets/swapped.jpg" alt="Still from Swapped (Netflix) — Nuke tools work by Marc Castellví at Skydance Animation" width="640" height="360" loading="lazy" decoding="async">
           </a>
           <span class="ptc mono">SKYDANCE ANIMATION</span>
           <h3 class="display"><a href="/projects/swapped/">Swapped · Netflix</a></h3>
-          <p class="l-en">Compositing Trainee. Compositing tools development,
-             and helped kick off the DiMatte workflow on Skydance's feature
-             for Netflix.</p>
-          <p class="l-es">Compositing Trainee. Desarrollo de tools de
-             compositing y ayuda en el arranque del flujo de DiMattes en el
-             largometraje de Skydance para Netflix.</p>
+          <p class="l-en">Compositing Trainee. Helped automate DiMattes and
+             built a Nuke tool to remove assets from Cryptomattes without
+             opening Houdini, on Skydance's feature for Netflix.</p>
+          <p class="l-es">Compositing Trainee. Ayuda en la automatización de
+             DiMattes y una tool de Nuke para eliminar assets de los
+             Cryptomattes sin entrar en Houdini, en el largometraje de
+             Skydance para Netflix.</p>
           <div class="tags">
-            <span class="tag">Nuke</span><span class="tag">Tools</span><span class="tag">DiMattes</span><span class="tag">Netflix</span>
+            <span class="tag">Nuke</span><span class="tag">Tools</span><span class="tag">DiMattes</span><span class="tag">Cryptomatte</span><span class="tag">Netflix</span>
           </div>
           <div class="links"><a href="/projects/swapped/"><span class="l-en">Breakdown →</span><span class="l-es">Ver proyecto →</span></a><a href="https://www.youtube.com/watch?v=glgmAwRDP8s" target="_blank" rel="noopener"><span class="l-en">Watch on YouTube ↗</span><span class="l-es">Ver en YouTube ↗</span></a></div>
         </article>
@@ -1503,11 +1508,12 @@
           </a>
           <span class="ptc mono">SKYDANCE ANIMATION</span>
           <h3 class="display"><a href="/projects/spellbound/">Spellbound · Netflix</a></h3>
-          <p class="l-en">Lighting Assistant. Support for the lighting team on
-             Skydance's feature for Netflix: scenes, renders and layer QC.</p>
-          <p class="l-es">Lighting Assistant. Apoyo al equipo de iluminación en el
-             largometraje de Skydance para Netflix: escenas, renders y QC
-             de capas.</p>
+          <p class="l-en">Lighting Assistant on Skydance's feature for Netflix:
+             mostly fixing noise and lighting issues so shots reached comp in
+             good shape.</p>
+          <p class="l-es">Lighting Assistant en el largometraje de Skydance para
+             Netflix: sobre todo arreglando problemas de noise y de iluminación
+             para que los planos llegaran bien a comp.</p>
           <div class="tags">
             <span class="tag">Lighting</span><span class="tag"><span class="l-en">Feature film</span><span class="l-es">Largometraje</span></span><span class="tag">Netflix</span>
           </div>
@@ -1632,8 +1638,8 @@
     { kind: "yt", vid: "glgmAwRDP8s", start: 11, dur: 25,
       studio: "SKYDANCE ANIMATION", title: "Swapped · Netflix", altKey: "Swapped", page: "/projects/swapped/",
       url: "https://www.youtube.com/watch?v=glgmAwRDP8s",
-      en: "Compositing Trainee. Compositing tools development; helped kick off the DiMatte workflow.",
-      es: "Compositing Trainee. Desarrollo de tools de compositing; ayuda en el arranque del flujo de DiMattes." },
+      en: "Compositing Trainee. Helped automate DiMattes; built a Nuke tool to remove assets from Cryptomattes without opening Houdini.",
+      es: "Compositing Trainee. Ayuda en la automatización de DiMattes; tool de Nuke para eliminar assets de los Cryptomattes sin entrar en Houdini." },
     { kind: "yt", vid: "ptLECQo71WE", start: 10, dur: 25,
       studio: "COCOLILO ANIMATION", title: "Pocoyó — Season 5", altKey: "Pocoyo", page: "/projects/pocoyo-season-5/",
       url: "https://www.youtube.com/watch?v=ptLECQo71WE",
@@ -1652,8 +1658,8 @@
     { kind: "yt", vid: "jGQiq1ZuCW8", start: 0,  dur: 25,
       studio: "SKYDANCE ANIMATION", title: "Spellbound · Netflix", altKey: "Spellbound", page: "/projects/spellbound/",
       url: "https://www.youtube.com/watch?v=jGQiq1ZuCW8",
-      en: "Lighting Assistant: scene prep, renders and QC of the layers that later live in the comp.",
-      es: "Lighting Assistant: preparación de escenas, renders y control de calidad de capas." },
+      en: "Lighting Assistant: mostly fixing noise and lighting issues so shots reached comp in good shape.",
+      es: "Lighting Assistant: sobre todo arreglando problemas de noise y de iluminación para que los planos llegaran bien a comp." },
     { kind: "vimeo", vid: "886479681", start: 5, dur: 25,
       studio: "LA SALLE BCN", title: "GLARE", altKey: "GLARE", page: "/projects/glare/",
       url: "https://vimeo.com/886479681",

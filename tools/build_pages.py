@@ -125,23 +125,23 @@ PROJECTS = [
         "video_label": "Watch the Spellbound trailer on YouTube",
         "image": "/assets/spellbound.jpg",
         "image_alt": "Still from Spellbound (Netflix) — lighting work by Marc Castellví at Skydance Animation",
-        "summary": "Lighting Assistant on Skydance Animation's feature film for Netflix: scene preparation, renders and quality control of the render layers that later live in the comp.",
+        "summary": "Lighting Assistant on Skydance Animation's feature film for Netflix: mostly fixing noise and lighting issues so every shot reached comp in good shape, plus scene prep, renders and layer QC.",
         "body": """
 <h2>What was my role?</h2>
 <p>I joined Skydance Animation Madrid as a <strong>Lighting Assistant</strong> on
 <em>Spellbound</em>, the studio's animated feature released on Netflix. I supported
-the lighting team during the final stretch of production: preparing scenes,
-launching and wrangling renders, and doing quality control on the render layers
-before they moved downstream to compositing.</p>
+the lighting team during the final stretch of production. Most of my time went
+into fixing noise and lighting problems in shots, making sure each one reached
+compositing in good shape.</p>
 
 <h2>What I worked on</h2>
 <ul>
-  <li><strong>Scene prep</strong> — getting lighting scenes ready for the artists: correct
-      assets, caches and setups in place so shots could be lit without friction.</li>
-  <li><strong>Renders</strong> — submitting, monitoring and re-queuing renders across the
-      farm, keeping shot delivery on schedule.</li>
-  <li><strong>Layer QC</strong> — checking AOVs and render passes for errors (missing
-      passes, NaNs, artifacts) before they reached the comp department.</li>
+  <li><strong>Noise fixes</strong> — finding and fixing noise problems in renders so shots
+      didn't arrive at comp with noisy passes.</li>
+  <li><strong>Lighting fixes</strong> — solving lighting problems in shots so they reached
+      the comp department correctly.</li>
+  <li><strong>Scene prep, renders and layer QC</strong> — preparing scenes, launching
+      renders and checking the render layers before they moved downstream.</li>
 </ul>
 
 <h2>Why it mattered for my compositing career</h2>
@@ -158,12 +158,12 @@ the foundation of how I build and debug comp setups today.</p>
         "role": "Compositing Trainee",
         "dates": "May 2024 — Jul 2024",
         "software": "Nuke · Python",
-        "tags": ["Nuke", "Tools", "DiMattes", "Netflix"],
+        "tags": ["Nuke", "Tools", "DiMattes", "Cryptomatte", "Netflix"],
         "video": ("youtube", "glgmAwRDP8s"),
         "video_label": "Watch the Swapped trailer on YouTube",
         "image": "/assets/swapped.jpg",
-        "image_alt": "Still from Swapped (Netflix) — compositing tools development by Marc Castellví at Skydance Animation",
-        "summary": "Compositing Trainee on Skydance Animation's feature for Netflix: compositing tools development, and early help setting up the DiMatte workflow.",
+        "image_alt": "Still from Swapped (Netflix) — Nuke tools work by Marc Castellví at Skydance Animation",
+        "summary": "Compositing Trainee on Skydance Animation's feature for Netflix: helped with the DiMatte automation by adding paths to an existing tool, and built a Nuke tool to remove assets from Cryptomattes without opening Houdini.",
         "body": """
 <h2>What was my role?</h2>
 <p>As a <strong>Compositing Trainee</strong> at Skydance Animation Madrid I worked on
@@ -172,19 +172,19 @@ technical side of the comp department.</p>
 
 <h2>What I worked on</h2>
 <ul>
-  <li><strong>Compositing tools development</strong> — building Nuke tools and gizmos for
-      the comp team, streamlining repetitive setups across shots.</li>
-  <li><strong>The DiMatte workflow</strong> — helped kick off the digital matte
-      (DiMatte) workflow in its early stage: exploring how mattes would be
-      generated, named and routed inside the comp templates before it was
-      handed on to be taken further.</li>
+  <li><strong>DiMatte automation</strong> — helped with the automation of DiMattes by
+      adding paths to a tool the team already had in place.</li>
+  <li><strong>Cryptomatte asset removal from Nuke</strong> — built a Nuke tool that sends
+      paths to an existing pipeline tool so assets can be removed from the
+      Cryptomattes, without having to open Houdini or edit the file where
+      those paths were listed.</li>
 </ul>
 
-<h2>Challenges</h2>
-<p>Helping shape a workflow meant thinking about the whole comp team from the
-start, not just my own shots: clear naming conventions, tools that fail loudly
-rather than silently, and setups an artist can pick up quickly. That was the
-biggest lesson of this production.</p>
+<h2>What I learned</h2>
+<p>Both tasks meant building on top of tools that already existed rather than
+reinventing them: small, focused additions that let a comp artist make a
+routine fix without leaving Nuke. That was the biggest lesson of this
+production.</p>
 """,
     },
     {
@@ -528,9 +528,9 @@ enjoy improving both.</p>
   <li><strong>Compositing Artist | TD</strong> — Cocolilo Animation (Mar 2025 — Jul 2025).
       Compositing and Nuke pipeline development for <em>Pocoyó</em> season 5.</li>
   <li><strong>Compositing Trainee</strong> — Skydance Animation, Madrid (May 2024 — Jul 2024).
-      Compositing tools development, and early help setting up the DiMatte workflow on <em>Swapped</em> (Netflix).</li>
+      Helped automate DiMattes and built a Nuke tool to remove assets from Cryptomattes without opening Houdini, on <em>Swapped</em> (Netflix).</li>
   <li><strong>Lighting Assistant</strong> — Skydance Animation, Madrid (Jan 2024 — May 2024).
-      Scene prep, renders and layer QC on <em>Spellbound</em> (Netflix).</li>
+      Fixing noise and lighting issues so shots reached comp in good shape, plus scene prep, renders and layer QC, on <em>Spellbound</em> (Netflix).</li>
   <li><strong>Bachelor's Degree</strong> — La Salle BCN, Barcelona (2019 — 2023).
       Animation, Interactive Technology, Video Graphics and Special Effects.</li>
 </ul>
@@ -649,20 +649,22 @@ wiring nodes.</p>
 
 <h2>2. Respect the AOV structure</h2>
 <p>Having worked as a <a href="/projects/spellbound/">lighting assistant</a> before
-moving to comp, I learned to treat the render's AOV structure as a contract
+moving to comp — mostly fixing noise and lighting problems so shots reached
+comp in good shape — I learned to treat the render's AOV structure as a contract
 between departments. The comp template rebuilds the beauty from light groups
 and AOVs, which gives comp enormous grading power — but only if the rebuild is
 mathematically exact. Verify it with a difference against the beauty on every
 show setup, and automate that check if you can.</p>
 
 <h2>3. Mattes are a workflow, not a node</h2>
-<p>On <a href="/projects/swapped/">Swapped</a> I helped kick off the DiMatte
-workflow in its early stage, and it
-changed how I think about mattes. Cryptomatte is great for ad-hoc picking, but
-a production needs <strong>named, versioned, consistent mattes</strong> that arrive in
-every shot the same way. Define naming conventions early, build the template to
-consume them automatically, and give artists one obvious tool to request or
-generate a matte that doesn't exist yet.</p>
+<p>On <a href="/projects/swapped/">Swapped</a> I helped with the DiMatte automation
+by adding paths to an existing tool, and built a small Nuke tool that sends
+paths to a pipeline tool so assets can be removed from the Cryptomattes without
+opening Houdini. It changed how I think about mattes. Cryptomatte is great for
+ad-hoc picking, but a production needs <strong>consistent mattes</strong> that arrive in
+every shot the same way, a template that consumes them automatically, and an
+obvious way for artists to fix a matte without leaving Nuke or editing
+pipeline files by hand.</p>
 
 <h2>4. Move look decisions into comp when it's cheaper</h2>
 <p>Some look tweaks don't need a re-render. On the
