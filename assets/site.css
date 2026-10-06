@@ -278,3 +278,27 @@ footer.site-footer {
 footer.site-footer nav { display: flex; gap: 1.2rem; flex-wrap: wrap; text-transform: uppercase; }
 footer.site-footer a { color: var(--muted); text-decoration: none; }
 footer.site-footer a:hover { color: var(--amber); }
+
+/* ── Languages (blog pages: .l-en / .l-es, same toggle as the home) ── */
+.l-es { display: none; }
+:root[data-lang="es"] .l-es { display: revert; }
+:root[data-lang="es"] .l-en { display: none; }
+nav.site-nav .nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 2.5vw, 1.6rem);
+  flex-wrap: wrap;
+}
+.lang-btn {
+  font-family: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  padding: 0.32rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.lang-btn:hover { color: var(--amber); border-color: var(--amber); }
