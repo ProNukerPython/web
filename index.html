@@ -939,8 +939,8 @@
   .proj h3 a:hover { color: var(--amber); }
   .proj .links { display: flex; gap: 1.1rem; flex-wrap: wrap; }
   .proj p { margin: 0; color: var(--muted); font-size: 0.92rem; flex: 1; }
-  /* metadatos en texto plano: NUKE · TOOLS · NETFLIX */
-  .tags { display: flex; flex-wrap: wrap; gap: 0.15rem 0; }
+  /* metadatos en texto plano, separados por aire (sin píldoras) */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; }
   .tag {
     font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
     font-size: 0.66rem;
@@ -948,7 +948,6 @@
     text-transform: uppercase;
     color: var(--muted);
   }
-  .tag + .tag::before { content: "·"; margin: 0 0.55em; opacity: 0.7; }
 
   /* ── Skills + contacto ─────────────────────────── */
   .skills-grid {
